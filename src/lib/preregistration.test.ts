@@ -13,6 +13,7 @@ test("registration requires an exact canonical 49-case baseline and frozen decis
   cpSync(join(original, "data"), join(temporary, "data"), {recursive:true});
   try {
     process.chdir(temporary);
+    rmSync("data/decisions_v1.json", {force:true});
     assert.throws(() => registrationInputs());
     const records = CaseRecord.array().parse(JSON.parse(readFileSync("data/cases.frozen.json", "utf8")));
     const baseline = records.filter(r => ["dev", "eval"].includes(r.set_name)).map(r => ({case_id:r.card.id, decision:"deny", clauses:["§1"], reason:"Automated validation fixture only.", votes:[], dissent:[]}));
