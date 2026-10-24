@@ -24,10 +24,12 @@ async function main() {
   };
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
-  const handlers: JobHandlers = { provision, review };
+  const handlers: JobHandlers = { provision };
   console.log(`handlers: ${Object.keys(handlers).join(", ")}`);
   try {
-    await runWorker(handlers, { signal: stop.signal, repository: { claimNextJob: claimReviewWorkerJob, finishJob, failJob } });
+    const enabledHandlers = { ...handlers, review };
+    console.log(`enabled handlers: ${Object.keys(enabledHandlers).join(", ")}`);
+    await runWorker(enabledHandlers, { signal: stop.signal, repository: { claimNextJob: claimReviewWorkerJob, finishJob, failJob } });
     console.log("worker stopped");
   } finally {
     process.off("SIGINT", shutdown);
