@@ -2,7 +2,7 @@ import { randomBytes } from "node:crypto";
 import { CaseCard } from "../src/lib/case-schema";
 import { getSql } from "../src/lib/db";
 import { appendLedger, createCase, enqueueJob, getCase, insertDecision } from "../src/lib/repo";
-import { moneyToCents, whop, whopAccountId } from "../src/lib/whop";
+import { usableSandboxPayment } from "../src/lib/sandbox-payment";
 
 // Turns one prepared case that real reviewers decided against the AI into a demo request on the sandbox
 // store, so the whole loop (AI denial -> human verdict -> refund) can be shown on a status page.
@@ -86,14 +86,7 @@ async function main() {
   }
 
   // The refund comes out of a real sandbox payment that no other case uses.
-  const payment = await whop("sandbox").payments.retrieve({ id: paymentId });
-  if (payment.account_id !== whopAccountId("sandbox") || payment.status !== "paid" || !payment.refundable) {
-    throw new Error(`${paymentId} is not a paid, refundable payment on our sandbox account`);
-  }
-  const linked = await sql`SELECT id FROM cases WHERE whop_payment_id = ${paymentId}`;
-  if (linked.length) throw new Error(`${paymentId} is already linked to ${linked[0].id}`);
-  const amountCents = moneyToCents(payment.usd_total ?? payment.total);
-  if (!amountCents) throw new Error(`${paymentId} has no amount`);
+  const amountCents = await usableSandboxPayment(paymentId);
 
   const source = await getCase(sourceId);
   const [v1] = await sql`SELECT * FROM decisions WHERE case_id = ${sourceId} AND agent_version = 'v1'`;
@@ -126,6 +119,7 @@ async function main() {
     clauses: [],
     reason: `${n} of ${n} independent reviewer${n === 1 ? "" : "s"} approved this refund under the store's policy.`,
     votes: {
+      source: "human_review",
       sourceCase: sourceId,
       // Only a short prefix of each Terac submission ID is kept, enough to tell reviewers apart.
       reviewers: candidate.reviewers.map((r) => ({ reviewer: `${r.id.slice(0, 6)}…`, decision: r.decision, reason: r.reason })),

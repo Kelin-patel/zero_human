@@ -3,7 +3,9 @@ import type { TokenUsage } from "../../src/lib/llm";
 import { decide, type DeskResult } from "../../src/lib/refund-desk";
 import {
   appendLedger,
+  enqueueJob,
   getCase,
+  getDecision,
   getPolicy,
   hasDecision,
   insertDecision,
@@ -34,11 +36,10 @@ export async function decideCase(job: JobRow): Promise<void> {
   if (!stored) throw new Error(`case ${caseId} not found`);
   // Prepared evaluation cases are decided only by the frozen batch runs, never here.
   if (stored.set_name !== "demo" && stored.set_name !== "live") throw new Error(`case ${caseId} is not a customer request`);
-  if (stored.status !== "new") return;
   const env = stored.set_name === "demo" ? "sandbox" : "live";
 
   // A retry after a crash must not pay for the model calls twice.
-  if (!(await hasDecision(caseId, "live"))) {
+  if (stored.status === "new" && !(await hasDecision(caseId, "live"))) {
     if (stored.policyId == null) throw new Error(`case ${caseId} has no policy`);
     const policy = await getPolicy(stored.policyId);
     if (!policy) throw new Error(`policy ${stored.policyId} not found`);
@@ -84,5 +85,23 @@ export async function decideCase(job: JobRow): Promise<void> {
     }
     console.log(`decide: ${caseId} -> ${row.decision} (${costCents} cents)`);
   }
-  await setCaseStatus(caseId, "decided");
+
+  // An approval on a request with a real payment is carried out by the executor, within the merchant's limits.
+  // Outside the block above so a retry after a crash still queues it, exactly once.
+  if (stored.whopPaymentId) {
+    const live = await getDecision(caseId, "live");
+    if (live?.decision === "approve") {
+      const finalized = await insertDecision({
+        caseId,
+        agentVersion: "final",
+        decision: "approve",
+        clauses: live.clauses,
+        reason: `approved by the AI support desk under ${live.clauses.join(", ") || "the store's policy"}`,
+        votes: { source: "ai_desk" },
+      });
+      if (finalized) await enqueueJob("execute", { caseId });
+    }
+  }
+  // Never move an appealed or resolved case back.
+  if (stored.status === "new") await setCaseStatus(caseId, "decided");
 }

@@ -138,6 +138,16 @@ export async function hasDecision(caseId: string, agentVersion: AgentVersion): P
   return rows.length > 0;
 }
 
+export async function getDecision(
+  caseId: string,
+  agentVersion: AgentVersion,
+): Promise<{ decision: DecisionValue; clauses: string[]; reason: string } | null> {
+  const sql = getSql();
+  const [row] = await sql`
+    SELECT decision, clauses, reason FROM decisions WHERE case_id = ${caseId} AND agent_version = ${agentVersion}`;
+  return row ? { decision: row.decision, clauses: row.clauses ?? [], reason: row.reason ?? "" } : null;
+}
+
 export async function setCaseStatus(id: string, status: string): Promise<void> {
   const sql = getSql();
   await sql`UPDATE cases SET status = ${status} WHERE id = ${id}`;
@@ -189,6 +199,7 @@ export interface CaseView {
   appealStatement: string | null;
   appealedAt: string | null;
   createdAt: string;
+  hasPayment: boolean;
   publicNote: string | null;
   decision: { decision: DecisionValue; clauses: string[]; reason: string; decidedAt: string } | null;
   humanVerdict: {
@@ -246,7 +257,10 @@ export async function getCaseView(id: string): Promise<CaseView | null> {
     createdAt: iso(c.created_at) as string,
     publicNote: c.public_note ?? null,
     decision: d ? { decision: d.decision, clauses: d.clauses ?? [], reason: d.reason ?? "", decidedAt: iso(d.created_at) as string } : null,
-    humanVerdict: f
+    hasPayment: Boolean(c.whop_payment_id),
+    // A final decision that only confirms the AI desk's own approval is not a human verdict.
+    humanVerdict:
+      f && f.votes?.source !== "ai_desk"
       ? {
           decision: f.decision,
           reason: f.reason ?? "",
