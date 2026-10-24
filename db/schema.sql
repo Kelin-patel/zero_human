@@ -165,6 +165,20 @@ create unique index if not exists webhook_events_webhook_id_key on webhook_event
 -- Existing tables: sandbox ledger rows never count as revenue
 alter table ledger add column if not exists env text default 'live';
 
+-- Reviewer slots. Test slots occupy a separate range so they never consume real seats.
+create table if not exists task_assignments (
+  slot int primary key,
+  enabled boolean not null default true,
+  submission_id text unique,
+  task_id text,
+  is_test boolean not null default false,
+  assigned_at timestamptz
+);
+alter table reviews add column if not exists is_test boolean not null default false;
+alter table task_responses add column if not exists is_test boolean not null default false;
+
+alter table task_assignments add column if not exists enabled boolean not null default true;
+
 -- Customer appeals of a denied decision
 alter table cases add column if not exists appeal_statement text;
 alter table cases add column if not exists appealed_at timestamptz;

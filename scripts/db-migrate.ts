@@ -23,6 +23,7 @@ const EXPECTED_TABLES = [
   "policies",
   "reviews",
   "task_responses",
+  "task_assignments",
   "terac_jobs",
   "webhook_events",
 ];

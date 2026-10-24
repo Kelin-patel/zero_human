@@ -1,0 +1,218 @@
+{
+  "cards_per_reviewer": 8,
+  "cases_sha256": "d48ac95bf219a98a40f9219482263f0d93a44032124c0c82fdac7d306b832662",
+  "participants": 11,
+  "schema_version": 1,
+  "seed": 20261024,
+  "slots": [
+    {
+      "case_ids": [
+        "case_eval_18",
+        "case_eval_25",
+        "case_eval_21",
+        "case_eval_11",
+        "case_eval_10",
+        "case_dev_17",
+        "case_gold_1",
+        "case_dev_04"
+      ],
+      "overflow": false,
+      "slot": 1
+    },
+    {
+      "case_ids": [
+        "case_eval_05",
+        "case_dev_05",
+        "case_eval_15",
+        "case_eval_03",
+        "case_dev_09",
+        "case_gold_2",
+        "case_eval_19",
+        "case_eval_12"
+      ],
+      "overflow": false,
+      "slot": 2
+    },
+    {
+      "case_ids": [
+        "case_eval_16",
+        "case_gold_3",
+        "case_eval_13",
+        "case_dev_11",
+        "case_dev_22",
+        "case_eval_20",
+        "case_eval_02",
+        "case_eval_23"
+      ],
+      "overflow": false,
+      "slot": 3
+    },
+    {
+      "case_ids": [
+        "case_dev_07",
+        "case_eval_14",
+        "case_gold_4",
+        "case_eval_17",
+        "case_dev_13",
+        "case_eval_04",
+        "case_eval_24",
+        "case_eval_06"
+      ],
+      "overflow": false,
+      "slot": 4
+    },
+    {
+      "case_ids": [
+        "case_dev_08",
+        "case_eval_22",
+        "case_eval_27",
+        "case_gold_1",
+        "case_dev_06",
+        "case_eval_07",
+        "case_eval_08",
+        "case_eval_26"
+      ],
+      "overflow": false,
+      "slot": 5
+    },
+    {
+      "case_ids": [
+        "case_eval_11",
+        "case_dev_02",
+        "case_dev_12",
+        "case_eval_18",
+        "case_eval_09",
+        "case_gold_2",
+        "case_eval_21",
+        "case_eval_01"
+      ],
+      "overflow": false,
+      "slot": 6
+    },
+    {
+      "case_ids": [
+        "case_dev_01",
+        "case_eval_03",
+        "case_gold_3",
+        "case_eval_19",
+        "case_eval_10",
+        "case_dev_16",
+        "case_eval_12",
+        "case_eval_25"
+      ],
+      "overflow": false,
+      "slot": 7
+    },
+    {
+      "case_ids": [
+        "case_eval_15",
+        "case_eval_05",
+        "case_eval_16",
+        "case_gold_4",
+        "case_eval_13",
+        "case_dev_19",
+        "case_dev_18",
+        "case_eval_02"
+      ],
+      "overflow": false,
+      "slot": 8
+    },
+    {
+      "case_ids": [
+        "case_eval_14",
+        "case_dev_20",
+        "case_eval_20",
+        "case_eval_17",
+        "case_gold_1",
+        "case_eval_23",
+        "case_dev_15",
+        "case_eval_04"
+      ],
+      "overflow": false,
+      "slot": 9
+    },
+    {
+      "case_ids": [
+        "case_eval_24",
+        "case_gold_2",
+        "case_dev_21",
+        "case_eval_07",
+        "case_eval_22",
+        "case_eval_08",
+        "case_dev_14",
+        "case_eval_06"
+      ],
+      "overflow": false,
+      "slot": 10
+    },
+    {
+      "case_ids": [
+        "case_eval_27",
+        "case_dev_10",
+        "case_dev_03",
+        "case_gold_3",
+        "case_eval_11",
+        "case_eval_26",
+        "case_eval_01",
+        "case_eval_09"
+      ],
+      "overflow": false,
+      "slot": 11
+    },
+    {
+      "case_ids": [
+        "case_eval_24",
+        "case_eval_18",
+        "case_eval_22",
+        "case_eval_01",
+        "case_eval_03"
+      ],
+      "overflow": true,
+      "slot": 12
+    },
+    {
+      "case_ids": [
+        "case_eval_09",
+        "case_eval_21",
+        "case_eval_15",
+        "case_eval_23",
+        "case_eval_06"
+      ],
+      "overflow": true,
+      "slot": 13
+    },
+    {
+      "case_ids": [
+        "case_eval_12",
+        "case_eval_10",
+        "case_eval_03",
+        "case_eval_26",
+        "case_eval_13"
+      ],
+      "overflow": true,
+      "slot": 14
+    },
+    {
+      "case_ids": [
+        "case_eval_11",
+        "case_eval_16",
+        "case_eval_06",
+        "case_eval_23",
+        "case_eval_27"
+      ],
+      "overflow": true,
+      "slot": 15
+    },
+    {
+      "case_ids": [
+        "case_eval_14",
+        "case_eval_26",
+        "case_eval_02",
+        "case_eval_13",
+        "case_eval_17"
+      ],
+      "overflow": true,
+      "slot": 16
+    }
+  ]
+}

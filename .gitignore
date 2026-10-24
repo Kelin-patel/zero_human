@@ -50,6 +50,8 @@ solari-smoke.png
 *.png.local
 .mplconfig/
 .desk-checks/
+.baseline-runs/
+.terac-local/
 .case-generation.lock
 .case-generation/
 data/.case-generation-*/
