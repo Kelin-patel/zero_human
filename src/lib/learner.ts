@@ -25,6 +25,17 @@ export const LearnerOutput = z.object({
 });
 export type LearnerOutput = z.infer<typeof LearnerOutput>;
 
+export function assertLearningWindow(args: {
+  dryRun: boolean; nowMs: number; cutoffMs: number; roundStatus: string;
+  completedParticipants: number; targetParticipants: number;
+}): void {
+  if (args.dryRun) return;
+  const targetReached = args.roundStatus === "paused" && args.targetParticipants > 0 && args.completedParticipants >= args.targetParticipants;
+  if (args.nowMs < args.cutoffMs && !targetReached) {
+    throw new Error("Human collection is still open. Use a dry run until the registered cutoff or completed target pause.");
+  }
+}
+
 export const HumanLabel = z.enum(["approve", "deny", "need_more_evidence"]);
 
 export interface ReviewerSlot { submissionId: string; slot: number; isTest: boolean }
@@ -68,7 +79,7 @@ export function selectLearnerInputs(args: {
 
   // Only primary slots carry a gold card; overflow slots are evaluation-only and never feed the learner.
   const inPrimary = new Set(args.reviewers
-    .filter(r => r.isTest === args.useTestRows && primary.has(r.slot - (r.isTest ? TEST_SLOT_OFFSET : 0)))
+    .filter(r => r.isTest === args.useTestRows && r.submissionId.startsWith("test_") === args.useTestRows && primary.has(r.slot - (r.isTest ? TEST_SLOT_OFFSET : 0)))
     .map(r => r.submissionId));
   // A missing gold answer or need_more_evidence on gold is a failure, so only an explicit pass counts.
   const passedGold = new Set(args.gold.filter(g => g.goldPassed === true).map(g => g.submissionId));

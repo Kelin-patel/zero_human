@@ -4,7 +4,8 @@ import { resolve } from "node:path";
 import { canonicalJson, sha256 } from "../src/lib/case-generation";
 import { readFrozenBundle } from "../src/lib/case-files";
 import { getSql } from "../src/lib/db";
-import { LEARNER_DRY_RUN_FILE, LearnerOutput, learnerPrompt, renderNotes, selectLearnerInputs, validateLearnerOutput } from "../src/lib/learner";
+import { LEARNER_DRY_RUN_FILE, LearnerOutput, assertLearningWindow, learnerPrompt, renderNotes, selectLearnerInputs, validateLearnerOutput } from "../src/lib/learner";
+import { STOP_AT } from "../src/lib/terac-data";
 import { MODEL, structured } from "../src/lib/llm";
 import { loadPreparedInputs, validateBaseline } from "../src/lib/prepared-baseline";
 
@@ -31,14 +32,19 @@ async function main() {
       (SELECT count(*)::int FROM decisions WHERE agent_version = 'v2') AS decisions`;
     if (existing.notes > 0 || existing.decisions > 0) throw new Error("v2 notes or decisions already exist; the learner runs once.");
   }
-  const [round] = await sql`SELECT status FROM terac_jobs WHERE purpose = 'eval_round' ORDER BY id DESC LIMIT 1`;
+  const [round] = await sql`SELECT status, num_participants, meta->>'completedSubmissions' AS completed, now() AS observed_at FROM terac_jobs WHERE purpose = 'eval_round' ORDER BY id DESC LIMIT 1`;
+  assertLearningWindow({dryRun, nowMs: round?.observed_at ? new Date(round.observed_at).getTime() : Date.now(),
+    cutoffMs: Date.parse(STOP_AT), roundStatus: round?.status ?? "none",
+    completedParticipants: Number(round?.completed ?? 0), targetParticipants: Number(round?.num_participants ?? 0)});
   console.log(`[learn] review round status: ${round?.status ?? "none"}; rows: ${useTestRows ? "test" : "human"}; dry run: ${dryRun}`);
 
   // Only development and gold rows are queried. Evaluation labels never leave the database here.
   const reviewers = await sql`SELECT submission_id, slot, is_test FROM task_assignments WHERE submission_id IS NOT NULL`;
-  const gold = await sql`SELECT terac_submission_id, gold_passed FROM reviews WHERE is_gold AND is_test = ${useTestRows}`;
+  const gold = await sql`SELECT terac_submission_id, gold_passed FROM reviews WHERE is_gold AND is_test = ${useTestRows}
+    AND (${useTestRows} OR created_at <= ${STOP_AT}::timestamptz)`;
   const labels = await sql`SELECT terac_submission_id, case_id, decision, reason, confidence FROM reviews
-    WHERE case_id = ANY(${devIds}::text[]) AND NOT is_gold AND is_test = ${useTestRows}`;
+    WHERE case_id = ANY(${devIds}::text[]) AND NOT is_gold AND is_test = ${useTestRows}
+      AND (${useTestRows} OR created_at <= ${STOP_AT}::timestamptz)`;
   const selected = selectLearnerInputs({
     primarySlots, devCards, baseline, useTestRows,
     reviewers: reviewers.map(r => ({ submissionId: r.submission_id, slot: Number(r.slot), isTest: r.is_test })),
