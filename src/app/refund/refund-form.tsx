@@ -11,6 +11,15 @@ interface OrderOption {
   suggestedStatement: string;
 }
 
+function Spinner() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden className="h-4 w-4 animate-spin">
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeOpacity="0.3" strokeWidth="3" />
+      <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default function RefundForm({ orders, maxChars }: { orders: OrderOption[]; maxChars: number }) {
   const router = useRouter();
   const [orderId, setOrderId] = useState<string | null>(null);
@@ -45,60 +54,75 @@ export default function RefundForm({ orders, maxChars }: { orders: OrderOption[]
   }
 
   return (
-    <form onSubmit={submit} className="flex flex-col gap-6">
-      <fieldset className="flex flex-col gap-3">
-        <legend className="mb-2 font-medium">1. Your order</legend>
-        {orders.map((order) => (
-          <label
-            key={order.id}
-            className={`flex cursor-pointer flex-col gap-1 rounded-lg border p-4 ${
-              orderId === order.id
-                ? "border-zinc-900 bg-zinc-50 dark:border-zinc-100 dark:bg-zinc-900"
-                : "border-zinc-200 dark:border-zinc-800"
-            }`}
-          >
-            <span className="flex items-start justify-between gap-4">
-              <span className="flex items-center gap-3">
-                <input
-                  type="radio"
-                  name="order"
-                  value={order.id}
-                  checked={orderId === order.id}
-                  onChange={() => pick(order)}
-                  className="h-4 w-4"
-                />
-                <span className="font-medium">{order.product}</span>
+    <form onSubmit={submit} className="panel flex flex-col">
+      <fieldset className="flex min-w-0 flex-col gap-3 p-5 sm:p-6">
+        <legend className="float-left mb-3 w-full text-sm font-medium text-ink">1. Choose an order</legend>
+        {orders.map((order) => {
+          const selected = orderId === order.id;
+          return (
+            <label
+              key={order.id}
+              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors duration-150 focus-within:ring-2 focus-within:ring-brand/30 ${
+                selected ? "border-ink bg-card ring-1 ring-ink" : "border-rule bg-card hover:bg-subtle"
+              }`}
+            >
+              <input
+                type="radio"
+                name="order"
+                value={order.id}
+                checked={selected}
+                onChange={() => pick(order)}
+                className="sr-only"
+              />
+              <span
+                aria-hidden
+                className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full border ${
+                  selected ? "border-ink" : "border-rule-strong"
+                }`}
+              >
+                {selected && <span className="h-2 w-2 rounded-full bg-ink" />}
               </span>
-              <span className="shrink-0 tabular-nums">${order.priceUsd.toFixed(2)}</span>
-            </span>
-            <span className="pl-7 text-sm text-zinc-600 dark:text-zinc-400">{order.summary}</span>
-          </label>
-        ))}
+              <span className="flex min-w-0 flex-1 flex-col gap-1">
+                <span className="font-medium text-ink">{order.product}</span>
+                <span className="text-sm leading-relaxed text-ink-2">{order.summary}</span>
+              </span>
+              <span className="shrink-0 font-mono text-sm tabular-nums text-ink">${order.priceUsd.toFixed(2)}</span>
+            </label>
+          );
+        })}
       </fieldset>
 
-      <label className="flex flex-col gap-2">
-        <span className="font-medium">2. What happened?</span>
+      <label className="flex flex-col gap-2 border-t border-rule p-5 sm:p-6">
+        <span className="text-sm font-medium text-ink">2. Tell us what happened</span>
         <textarea
           value={statement}
           onChange={(e) => setStatement(e.target.value.slice(0, maxChars))}
           rows={5}
           placeholder="Explain why you'd like a refund. Please don't include contact or card details."
-          className="rounded-lg border border-zinc-300 bg-transparent p-3 text-base dark:border-zinc-700"
+          className="block w-full resize-y rounded-lg border border-rule-strong bg-card p-3 text-[15px] leading-relaxed text-ink transition-colors duration-150 placeholder:text-ink-3 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
         />
-        <span className="self-end text-xs text-zinc-500 tabular-nums">
+        <span className="self-end font-mono text-xs tabular-nums text-ink-3">
           {statement.length}/{maxChars}
         </span>
       </label>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <p role="alert" className="mx-5 mb-1 rounded-lg bg-bad-soft px-3 py-2 text-sm text-bad sm:mx-6">
+          {error}
+        </p>
+      )}
 
-      <button
-        type="submit"
-        disabled={submitting || !orderId || statement.trim().length < 10}
-        className="rounded-lg bg-zinc-900 px-5 py-3 font-medium text-white disabled:opacity-40 dark:bg-zinc-100 dark:text-zinc-900"
-      >
-        {submitting ? "Sending…" : "Request refund"}
-      </button>
+      <div className="flex flex-col gap-3 border-t border-rule p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <p className="text-sm text-ink-3">An AI support desk decides first. You can ask for a human review.</p>
+        <button
+          type="submit"
+          disabled={submitting || !orderId || statement.trim().length < 10}
+          className="btn-primary justify-center disabled:cursor-not-allowed"
+        >
+          {submitting && <Spinner />}
+          {submitting ? "Sending…" : "Submit request"}
+        </button>
+      </div>
     </form>
   );
 }
