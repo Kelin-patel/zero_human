@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local-only folders and assistant instruction files
+internal/
+AGENTS.md
+CLAUDE.md
+.venv/
+__pycache__/
+solari-smoke.png
