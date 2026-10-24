@@ -29,6 +29,7 @@ const VARS = [
   "WHOP_BUSINESS_ID",
   "WHOP_WEBHOOK_SECRET",
   "WHOP_SANDBOX_API_KEY",
+  "WHOP_SANDBOX_BUSINESS_ID",
   "WHOP_SANDBOX_WEBHOOK_SECRET",
   "ANTHROPIC_API_KEY",
   "EXA_API_KEY",
@@ -109,12 +110,13 @@ async function main() {
       if (status !== 200 || !account.id?.startsWith("biz_")) {
         return report(name, "fail", `accounts/me -> HTTP ${status} ${errorText(body)}`);
       }
-      const expected = env("WHOP_BUSINESS_ID");
-      if (mode === "live" && !expected) {
-        return report(name, "ok", `${account.id} "${account.title}" (put this in WHOP_BUSINESS_ID)`);
+      const idVar = mode === "live" ? "WHOP_BUSINESS_ID" : "WHOP_SANDBOX_BUSINESS_ID";
+      const expected = env(idVar);
+      if (!expected) {
+        return report(name, "ok", `${account.id} "${account.title}" (put this in ${idVar})`);
       }
-      if (mode === "live" && expected !== account.id) {
-        return report(name, "fail", `key belongs to ${account.id}, but WHOP_BUSINESS_ID is ${expected}`);
+      if (expected !== account.id) {
+        return report(name, "fail", `key belongs to ${account.id}, but ${idVar} is ${expected}`);
       }
       report(name, "ok", `${account.id} "${account.title}"`);
     });
