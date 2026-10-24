@@ -48,3 +48,4 @@ CLAUDE.md
 __pycache__/
 solari-smoke.png
 *.png.local
+.mplconfig/

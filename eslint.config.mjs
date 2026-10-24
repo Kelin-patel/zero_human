@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Python dependencies can include vendored JavaScript.
+    ".venv/**",
   ]),
 ]);
 
