@@ -9,7 +9,7 @@ import { createCase } from "./repo";
 export async function assertCollectionNotStarted(): Promise<void> {
   const sql = getSql();
   // Count collection activity without loading any human decisions or reasons.
-  const [row] = await sql`select count(*)::int as count from reviews where case_id ~ '^case_(dev|eval|gold)_'`;
+  const [row] = await sql`select count(*)::int as count from reviews where not is_test and case_id ~ '^case_(dev|eval|gold)_'`;
   if (Number(row.count) > 0) throw new CaseDataError("Human collection has started; new case generation is disabled.");
 }
 
