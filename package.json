@@ -9,6 +9,7 @@
     "lint": "eslint",
     "worker": "tsx worker/index.ts",
     "desk:try": "tsx scripts/try-desk.ts",
+    "agent:run": "tsx scripts/run-agent.ts",
     "test:desk": "node --import tsx --test src/lib/llm.test.ts src/lib/refund-desk.test.ts worker/runner.test.ts",
     "smoke:worker": "tsx scripts/worker-smoke.ts",
     "script": "tsx",
