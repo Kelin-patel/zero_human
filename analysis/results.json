@@ -15,9 +15,9 @@
     "Partial saved cards from a gold-passing reviewer remain eligible; missing gold is ineligible. Speed flags are descriptive, not additional exclusions.",
     "Amendment 1 added a broad online-shopping screener and the platform screening interview before recruitment, which may reduce completions before cutoff."
   ],
-  "chart_sha256": "378d5a2006c6c4a250e950ad42c8bbe846f734cdfae167b70fde30a9294522f9",
+  "chart_sha256": "a7a53ffdd5d1d022aea496e8bafe42a35b7208e136611c428dc155a5182acbdc",
   "comparison": null,
-  "cutoff_reached": false,
+  "cutoff_reached": true,
   "data_kind": "real_collection",
   "effective_cutoff_utc": "2026-10-24T21:30:00Z",
   "exclusions": {
@@ -30,7 +30,7 @@
     "policy.v1.md": "f7a43b279cb717b6b94d578e060bf92c5fd86f7d3d3701a870f815cb4114bf5a",
     "prepared-review.config.json": "36815b067145b1bc1a61a1f2d4731cd0cd64ea7c8174914d18c703ad7fd6c6bd"
   },
-  "generated_at": "2026-10-24T21:08:37.061391Z",
+  "generated_at": "2026-10-24T21:31:06.048543Z",
   "gold": {
     "denominator_reviewers": 0,
     "failed": 0,
@@ -295,11 +295,11 @@
   "registration_commit": "612bf79cf285d4af61e912e8c02406ec9b8ad4ad",
   "reviewers": [],
   "round": {
-    "last_polled_at": "2026-10-24T21:06:33.170Z",
+    "last_polled_at": "2026-10-24T21:30:37.815Z",
     "num_participants": 11,
-    "pause_reason": null,
-    "paused_at": null,
-    "status": "launched"
+    "pause_reason": "The registered recruitment stop time was reached.",
+    "paused_at": "2026-10-24T21:30:37.313Z",
+    "status": "paused"
   },
   "sample": {
     "ambiguity_rate_planned_cases": 0.0,
@@ -324,8 +324,8 @@
     "planned": 1,
     "saved": 0
   },
-  "status": "interim_collection",
-  "summary": "No held-out cases have two eligible prespecified reference ratings so far; collection is still in progress. 0 of 11 reviewers have completed their assigned cards. An error comparison, McNemar test and approval guardrail cannot yet be assessed. Test responses are excluded; no improvement is claimed.",
+  "status": "no_consensus",
+  "summary": "No held-out cases have two eligible prespecified reference ratings by the registered cutoff. 0 of 11 reviewers have completed their assigned cards. Error rates, McNemar, reviewer agreement, kappa and the approval guardrail are unavailable. Test responses are excluded; no improvement is claimed. The baseline, assignments and registered input hashes are verified; the human panel remains pending. Amendment 1 records the platform-required screener and screening interview before invitation.",
   "v2": {
     "artifact_available": false,
     "artifact_sha256": null,
