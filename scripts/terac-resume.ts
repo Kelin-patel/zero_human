@@ -19,7 +19,7 @@ async function main() {
   if (!row || !["paused", "resume_unknown"].includes(row.status)) throw new Error("Only the existing paused opportunity can be resumed.");
   const ready = row.meta?.followupWorker;
   if (ready?.stopAt !== FOLLOWUP_STOP_AT || !ready.readyAt || !Number.isFinite(Date.parse(ready.readyAt)) || Date.now() - Date.parse(ready.readyAt) > 600000) {
-    throw new Error("Restart the single updated worker on Varun's laptop first; its follow-up capability has not been recorded recently.");
+    throw new Error("Restart the single updated worker on the authenticated host first; its follow-up capability has not been recorded recently.");
   }
   assertTeracHost();
   const inspected = await runTerac(`Read terac_get_opportunity for opportunityId=${JSON.stringify(row.opportunity_id)}. Return {"opportunity":raw_response}. Do not change anything.`, ["terac_get_opportunity"]);

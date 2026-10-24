@@ -62,6 +62,10 @@ The ledger shows recorded actions and attempts, not a guarantee that every opera
 **0 of 11 reviewers completed by the registered 17:30 cutoff on October 24, 2026; 0 of 27 held-out cases have eligible human consensus.** Terac required the screener and screening review recorded in Amendment 1, delaying invitations. All 48 automated test responses were excluded. Error rates, McNemar, reviewer agreement, kappa and the approval guardrail are **unavailable**; this is not a zero-error result. No learned v2 comparison is available and no improvement is claimed.
 
 The baseline, assignments and registered input hashes are frozen and verified. The human panel remains pending. Answers saved after the cutoff remain outside the registered analysis, even when a late reviewer completes and is paid. See the [cutoff result](analysis/results.json), [status chart](analysis/chart.png) and [plain-language result](analysis/summary.md).
+### Exploratory follow-up
+
+After the registered N=0 result, a [timestamped follow-up note](data/PREREGISTRATION.md) authorizes continuing the same prepaid eleven-place panel, with unchanged assignments, screening and eligibility. This separate window begins at the confirmed resume time and has an **18:10 ET hard stop on October 24, 2026**. Its reports use `analysis/results_followup.json` and `data/decisions_v2_followup.json`; any findings are exploratory and do not replace the registered result above. [Follow-up commands and exclusions](analysis/USAGE.md#exploratory-follow-up).
+
 ## How we measured it
 
 We [registered the evaluation before collecting human answers](https://github.com/Kelin-patel/zero_human/blob/main/data/PREREGISTRATION.md), fixing the policy, prepared case set, split, baseline decisions, reviewer assignments and decision settings. The model and three-stance, dissent-and-revote architecture stay fixed. Only interpretation notes and worked examples from eligible **development** feedback can change between v1 and v2; held-out human answers are used only by the analysis program.

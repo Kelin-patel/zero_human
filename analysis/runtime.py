@@ -12,6 +12,7 @@ import subprocess
 
 ROOT = Path(__file__).resolve().parent.parent
 CUTOFF = datetime(2026, 10, 24, 21, 30, tzinfo=timezone.utc)
+FOLLOWUP_CUTOFF = datetime(2026, 10, 24, 22, 10, tzinfo=timezone.utc)
 REGISTERED = (
     "policy.v1.md", "cases.frozen.json", "prepared-review.config.json",
     "decisions_v1.json", "assignment.json",
@@ -39,6 +40,16 @@ def iso(value):
 
 def digest(raw):
     return hashlib.sha256(raw).hexdigest()
+
+
+def followup_window(inputs, round_info):
+    if "## Follow-up collection" not in inputs["protocol"] or "18:10 America/New_York" not in inputs["protocol"]:
+        raise ReportError("The public follow-up collection note is missing.")
+    window = (round_info or {}).get("followup") or {}
+    start, stop = timestamp(window.get("startedAt")), timestamp(window.get("stopAt"))
+    if not start or start < CUTOFF or start >= FOLLOWUP_CUTOFF or stop != FOLLOWUP_CUTOFF:
+        raise ReportError("The follow-up has no confirmed resume time and matching 18:10 hard stop.")
+    return start, stop
 
 
 def write_json(path, value):
