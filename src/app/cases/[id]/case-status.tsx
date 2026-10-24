@@ -16,6 +16,12 @@ const DECISION_LABEL: Record<string, { text: string; className: string }> = {
   need_more_evidence: { text: "Needs more evidence", className: "bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100" },
 };
 
+const EVIDENCE_LABELS: Record<string, string> = {
+  solari_check: "Course access check",
+  http_check: "Course access check",
+  exa_terms: "Store terms excerpt",
+};
+
 function Badge({ decision }: { decision: string }) {
   const label = DECISION_LABEL[decision] ?? { text: decision, className: "bg-zinc-200 text-zinc-900" };
   return <span className={`rounded-full px-3 py-1 text-sm font-medium ${label.className}`}>{label.text}</span>;
@@ -171,10 +177,23 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
         {view.evidence.length > 0 && (
           <Step title="Evidence checked" done>
             {view.evidence.map((e, i) => (
-              <p key={i}>
-                <span className="font-medium">{e.kind.replace(/_/g, " ")}:</span> {e.summary}
-                {e.httpStatus != null && <span className="text-zinc-500"> (HTTP {e.httpStatus})</span>}
-              </p>
+              <div key={i} className="flex flex-col gap-2">
+                <p className="whitespace-pre-wrap">
+                  <span className="font-medium">{EVIDENCE_LABELS[e.kind] ?? e.kind.replace(/_/g, " ")}:</span> {e.summary}
+                  {e.httpStatus != null && <span className="text-zinc-500"> (HTTP {e.httpStatus})</span>}
+                </p>
+                {e.url && <p className="break-all text-xs text-zinc-500">{e.url}</p>}
+                {e.screenshotUrl && (
+                  <a href={e.screenshotUrl} target="_blank" rel="noopener noreferrer" className="w-fit">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- screenshot bytes are served from our own API */}
+                    <img
+                      src={e.screenshotUrl}
+                      alt={`Screenshot of ${e.url ?? "the checked page"}`}
+                      className="max-h-48 w-auto rounded border border-zinc-200 dark:border-zinc-800"
+                    />
+                  </a>
+                )}
+              </div>
             ))}
           </Step>
         )}
