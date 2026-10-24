@@ -30,7 +30,7 @@
     "policy.v1.md": "f7a43b279cb717b6b94d578e060bf92c5fd86f7d3d3701a870f815cb4114bf5a",
     "prepared-review.config.json": "36815b067145b1bc1a61a1f2d4731cd0cd64ea7c8174914d18c703ad7fd6c6bd"
   },
-  "generated_at": "2026-10-24T21:00:03.406175Z",
+  "generated_at": "2026-10-24T21:08:37.061391Z",
   "gold": {
     "denominator_reviewers": 0,
     "failed": 0,
@@ -295,7 +295,7 @@
   "registration_commit": "612bf79cf285d4af61e912e8c02406ec9b8ad4ad",
   "reviewers": [],
   "round": {
-    "last_polled_at": "2026-10-24T20:57:25.349Z",
+    "last_polled_at": "2026-10-24T21:06:33.170Z",
     "num_participants": 11,
     "pause_reason": null,
     "paused_at": null,
@@ -327,6 +327,7 @@
   "status": "interim_collection",
   "summary": "No held-out cases have two eligible prespecified reference ratings so far; collection is still in progress. 0 of 11 reviewers have completed their assigned cards. An error comparison, McNemar test and approval guardrail cannot yet be assessed. Test responses are excluded; no improvement is claimed.",
   "v2": {
+    "artifact_available": false,
     "artifact_sha256": null,
     "complete": false,
     "expected_cases": 27,
