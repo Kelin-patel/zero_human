@@ -53,9 +53,14 @@ test("bad dates, certificate progress, mismatched access routes, and personal de
     { ...candidate, card: { ...candidate.card, records: { ...candidate.card.records, certificate_issued: true } } },
     { ...candidate, card: { ...candidate.card, records: { ...candidate.card.records, access_check: { ...candidate.card.records.access_check, http_status: 404 } } } },
     { ...candidate, card: { ...candidate.card, customer_statement: "My name is Jordan Smith." } },
+    { ...candidate, card: { ...candidate.card, customer_statement: "My name is Jordan Design." } },
+    { ...candidate, card: { ...candidate.card, customer_statement: "I am Jordan McDonald." } },
     { ...candidate, card: { ...candidate.card, customer_statement: "Call me at 212-555-0199." } },
     { ...candidate, card: { ...candidate.card, customer_statement: "Contact customer@example.test." } },
   ]) assert.ok(consistencyIssues(changed, baseUrl).length > 0);
+  assert.deepEqual(consistencyIssues({ ...candidate, card: { ...candidate.card, customer_statement: "The promised Client Contracts module and Email Automation lessons are missing." } }, baseUrl), []);
+  assert.deepEqual(consistencyIssues({ ...candidate, card: { ...candidate.card, customer_statement: "I signed in at noon. The Quarterly Tax and Scrum Fundamentals modules are unavailable." } }, baseUrl), []);
+  assert.deepEqual(consistencyIssues({ ...candidate, card: { ...candidate.card, customer_statement: "On October 21 I signed in. Since October 10 I have opened no lessons." } }, baseUrl), []);
   const source = fixtures();
   source[0].card.days_since_purchase = 10;
   assert.equal(selectCases(source, baseUrl).rejected.length, 1);

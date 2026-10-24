@@ -1,0 +1,139 @@
+[
+  {
+    "card": {
+      "customer_statement": "I paid twice for the same course yesterday. Please refund the extra charge.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "store_record",
+          "text": "Prepared payment records show two separate $79 charges for the same course on October 23, 2026. This request concerns only the duplicate charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "case_gold_1",
+      "price_usd": 79,
+      "product": "Intro to Product Design (video course)",
+      "purchased": "2026-10-23",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T12:00:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "duplicate_charge": true,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 0
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "expected": {
+      "decision": "approve"
+    },
+    "set_name": "gold"
+  },
+  {
+    "card": {
+      "customer_statement": "I completed this course months ago and received my certificate. I have changed my mind about keeping it; there is no content defect.",
+      "days_since_purchase": 210,
+      "evidence": [
+        {
+          "kind": "store_record",
+          "text": "Prepared purchase records show a March 28, 2026 purchase and an issued completion certificate. No delivery or description problem has been reported.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "case_gold_2",
+      "price_usd": 79,
+      "product": "Intro to Product Design (video course)",
+      "purchased": "2026-03-28",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T12:00:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": true,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 100
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "expected": {
+      "decision": "deny"
+    },
+    "set_name": "gold"
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this course three days ago but changed my mind. I have not started any lessons or downloaded bonus files.",
+      "days_since_purchase": 3,
+      "evidence": [
+        {
+          "kind": "store_record",
+          "text": "Prepared store records confirm 0% lesson progress and no bonus downloads since purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "case_gold_3",
+      "price_usd": 79,
+      "product": "Intro to Product Design (video course)",
+      "purchased": "2026-10-21",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T12:00:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 0
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "expected": {
+      "decision": "approve"
+    },
+    "set_name": "gold"
+  },
+  {
+    "card": {
+      "customer_statement": "The videos will not play on my laptop. I am using an outdated browser that the course does not support. Please refund my purchase.",
+      "days_since_purchase": 23,
+      "evidence": [
+        {
+          "kind": "store_record",
+          "text": "Prepared support records show the videos play in a supported browser. The access check returned HTTP 200. The customer confirms using an outdated browser. No store-side defect was found.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "case_gold_4",
+      "price_usd": 79,
+      "product": "Intro to Product Design (video course)",
+      "purchased": "2026-10-01",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T12:00:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "expected": {
+      "decision": "deny"
+    },
+    "set_name": "gold"
+  }
+]
