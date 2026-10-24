@@ -54,3 +54,13 @@ The participant platform refused the unscreened launch: launching without a scre
 - Qualifying answers: "Weekly or more", "A few times a month", "A few times a year". Rejecting answer: "Never".
 
 Because a screener is present, the platform runs its own short screening interview before inviting applicants. This may reduce completions before the cutoff. Everything else is unchanged: the US adult audience, interview task type with manual_review and completion-based approval, 11 participants at the same quoted price, 8 cards and 7 minutes, assignment, frozen inputs, baseline, metrics, exclusion rules and the 17:30 America/New_York stop time. The earlier statements that no screener is used are superseded by this amendment. The actual number of completions by the cutoff will be reported.
+
+## Follow-up collection — 2026-10-24 17:42:43 America/New_York
+
+The registered 17:30 result is unchanged: N = 0, as published. At 17:30, four applicants had passed screening and none had been invited. The operator authorized continuing the same already-paid eleven-place opportunity to obtain real feedback; resuming that paused opportunity is free.
+
+This is an **exploratory follow-up after the registered cutoff**, reported separately. Its window begins at the confirmed resume time recorded in the ledger and ends at **18:10 America/New_York on October 24, 2026 (22:10 UTC)**, or the same target of eleven completed participants if earlier. The worker re-pauses recruitment at 18:10. No extra paid round is authorized.
+
+The protocol, frozen inputs, baseline, assignment, two reference raters, eligibility, gold rules, general-population audience, screener, task, payment-by-completion and analytical methods remain the same. Test data remain excluded and eligibility is not loosened. Responses outside the follow-up window do not enter its learning or evaluation; late completed work is still paid.
+
+The original analytical guards and published result remain untouched. Follow-up learning and model outputs use a separate version, v2_followup. Artifacts are analysis/results_followup.json, analysis/chart_followup.png, analysis/summary_followup.md and data/decisions_v2_followup.json. They must identify this exploratory window and its actual resume time. If no eligible reference is obtained by 18:10, the follow-up also reports N = 0 and unavailable metrics. No improvement is claimed without an eligible paired comparison.

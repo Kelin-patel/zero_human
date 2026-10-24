@@ -4,7 +4,7 @@ import { execute } from "./executor";
 import { evidence } from "./handlers/evidence";
 import { provision } from "./handlers/provision";
 import { review } from "./handlers/review";
-import { claimReviewWorkerJob } from "../src/lib/review-orchestration";
+import { claimReviewWorkerJob, registerFollowupWorker } from "../src/lib/review-orchestration";
 import { finishJob, failJob } from "../src/lib/repo";
 import { runWorker, type JobHandlers } from "./runner";
 
@@ -20,6 +20,7 @@ async function main() {
   const sql = getSql();
   const rows = await sql`SELECT 1 AS ok`;
   console.log("db:", rows[0]);
+  await registerFollowupWorker();
   const stop = new AbortController();
   const shutdown = () => {
     if (!stop.signal.aborted) console.log("worker stopping after the current job");
