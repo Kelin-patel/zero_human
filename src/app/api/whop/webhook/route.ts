@@ -1,7 +1,7 @@
 import { getSql } from "@/lib/db";
 
-// Whop expects a 2xx within 10s, so the insert is capped below that.
-const INSERT_TIMEOUT_MS = 8000;
+// Whop expects a 2xx in under 5s, so the insert is capped below that.
+const INSERT_TIMEOUT_MS = 4000;
 
 export async function POST(request: Request) {
   // Read the raw body exactly as sent; signature verification needs these bytes unmodified.

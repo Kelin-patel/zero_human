@@ -47,3 +47,4 @@ CLAUDE.md
 .venv/
 __pycache__/
 solari-smoke.png
+*.png.local
