@@ -1,0 +1,1 @@
+No held-out cases have two eligible prespecified reference ratings so far; collection is still in progress. 0 of 11 reviewers have completed their assigned cards. An error comparison, McNemar test and approval guardrail cannot yet be assessed. Test responses are excluded; no improvement is claimed.

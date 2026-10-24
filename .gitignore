@@ -55,3 +55,6 @@ solari-smoke.png
 .case-generation.lock
 .case-generation/
 data/.case-generation-*/
+
+# Temporary report rendering
+analysis/.report-*/
