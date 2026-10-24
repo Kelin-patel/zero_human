@@ -2,7 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
 import type { z } from "zod";
 
-const MODEL = "claude-opus-5-5";
+export const MODEL = "claude-opus-5-5";
 
 let client: Anthropic | undefined;
 
@@ -17,50 +17,90 @@ export interface StructuredResult<T> {
   data: T | null;
   refused: boolean;
   stopReason: string | null;
-  usage: { input: number; output: number };
+  usage: TokenUsage;
+  attempts?: number;
+  models?: string[];
 }
 
-// One structured Claude call validated against a zod schema. Sampling parameters are never
-// sent (the API rejects them) and thinking is always on, so effort is the only quality knob.
-// A null result is retried once; after that the caller decides what a missing answer means.
-export async function structured<T>(args: {
+export interface TokenUsage {
+  input: number;
+  output: number;
+  cacheRead?: number;
+  cacheWrite5m?: number;
+  cacheWrite1h?: number;
+}
+
+export interface StructuredArgs<T> {
   schema: z.ZodType<T>;
   system: string;
   user: string;
   effort: Effort;
   maxTokens?: number;
   label?: string;
-}): Promise<StructuredResult<T>> {
-  const usage = { input: 0, output: 0 };
+}
+
+// Supplying an SDK client lets tests exercise the actual SDK parser with a fake HTTP transport.
+export function createStructuredCaller(sdk: Anthropic) {
+  return <T>(args: StructuredArgs<T>) => callStructured(sdk, args);
+}
+
+export function structured<T>(args: StructuredArgs<T>): Promise<StructuredResult<T>> {
+  return callStructured(getClient(), args);
+}
+
+async function callStructured<T>(sdk: Anthropic, args: StructuredArgs<T>): Promise<StructuredResult<T>> {
+  const usage: TokenUsage = { input: 0, output: 0 };
   let refused = false;
   let stopReason: string | null = null;
+  const models = new Set<string>();
+  const format = betaZodOutputFormat(args.schema);
+
+  // Keep malformed/refusal text from throwing inside the SDK parser: the response still
+  // contains billable usage. Configuration, transport and authentication errors still throw.
+  const nullableFormat = {
+    ...format,
+    parse(text: string): T | null {
+      let value: unknown;
+      try { value = JSON.parse(text); }
+      catch (error) {
+        if (error instanceof SyntaxError) return null;
+        throw error;
+      }
+      const parsed = args.schema.safeParse(value);
+      return parsed.success ? parsed.data : null;
+    },
+  };
 
   for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const res = await getClient().beta.messages.parse({
-        model: MODEL,
-        max_tokens: args.maxTokens ?? 16000,
-        betas: ["server-side-fallback-2026-07-01"],
-        fallbacks: "default",
-        system: args.system,
-        messages: [{ role: "user", content: args.user }],
-        output_config: { format: betaZodOutputFormat(args.schema), effort: args.effort },
-      });
-      usage.input += res.usage.input_tokens;
-      usage.output += res.usage.output_tokens;
-      stopReason = res.stop_reason;
-      refused = res.stop_reason === "refusal";
-      console.log(
-        `[llm] ${args.label ?? "call"} attempt=${attempt} stop=${res.stop_reason} in=${res.usage.input_tokens} out=${res.usage.output_tokens}`,
-      );
-      const data = refused ? null : (res.parsed_output ?? null);
-      if (data !== null) return { data, refused, stopReason, usage };
-    } catch (err) {
-      // API errors (auth, rate limits after SDK retries, bad requests) are real failures.
-      if (err instanceof Anthropic.APIError) throw err;
-      // Anything else is output that didn't validate against the schema: treat as no answer.
-      console.warn(`[llm] ${args.label ?? "call"} attempt=${attempt} unparseable output:`, err instanceof Error ? err.message : err);
+    const res = await sdk.beta.messages.parse({
+      model: MODEL,
+      max_tokens: args.maxTokens ?? 16000,
+      betas: ["server-side-fallback-2026-07-01"],
+      fallbacks: "default",
+      system: args.system,
+      messages: [{ role: "user", content: args.user }],
+      output_config: { format: nullableFormat, effort: args.effort },
+    });
+    usage.input += res.usage.input_tokens;
+    usage.output += res.usage.output_tokens;
+    const cache = res.usage.cache_creation;
+    const write1h = cache?.ephemeral_1h_input_tokens ?? 0;
+    const write5m = cache?.ephemeral_5m_input_tokens ?? Math.max(0, (res.usage.cache_creation_input_tokens ?? 0) - write1h);
+    usage.cacheRead = (usage.cacheRead ?? 0) + (res.usage.cache_read_input_tokens ?? 0);
+    usage.cacheWrite5m = (usage.cacheWrite5m ?? 0) + write5m;
+    usage.cacheWrite1h = (usage.cacheWrite1h ?? 0) + write1h;
+    models.add(res.model);
+    for (const block of res.content) {
+      if (block.type === "fallback") models.add(block.to.model);
     }
+    stopReason = res.stop_reason;
+    refused = res.stop_reason === "refusal";
+    console.log(
+      `[llm] ${args.label ?? "call"} attempt=${attempt} stop=${res.stop_reason} in=${res.usage.input_tokens} out=${res.usage.output_tokens}`,
+    );
+    // Truncated JSON must never become an authoritative decision, even if it happens to parse.
+    const data = res.stop_reason === "end_turn" ? (res.parsed_output ?? null) : null;
+    if (data !== null) return { data, refused, stopReason, usage, attempts: attempt, models: [...models] };
   }
-  return { data: null, refused, stopReason, usage };
+  return { data: null, refused, stopReason, usage, attempts: 2, models: [...models] };
 }
