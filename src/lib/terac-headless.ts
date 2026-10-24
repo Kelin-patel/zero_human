@@ -2,7 +2,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { z } from "zod";
 
 export const TeracTool = z.enum(["terac_get_context", "terac_create_opportunity", "terac_get_opportunity", "terac_update_opportunity",
-  "terac_launch_draft_opportunity", "terac_get_submissions", "terac_pause_opportunity", "terac_approve_submission"]);
+  "terac_launch_draft_opportunity", "terac_get_submissions", "terac_pause_opportunity", "terac_resume_opportunity", "terac_approve_submission"]);
 export type TeracTool = z.infer<typeof TeracTool>;
 
 export function assertTeracHost(): void {

@@ -6,6 +6,15 @@ import { readFileSync } from "node:fs";
 import { sha256 } from "./case-generation";
 import { Assignment } from "./task-assignment";
 import { completedReviewerIds } from "./review-completion";
+import { assertFollowupNote, collectionStopAt, FOLLOWUP_STOP_AT, isScheduledPause } from "./followup";
+
+export async function registerFollowupWorker(): Promise<void> {
+  if (!readFileSync("data/PREREGISTRATION.md", "utf8").includes("## Follow-up collection")) return;
+  assertFollowupNote();
+  await getSql()`UPDATE terac_jobs SET meta = coalesce(meta, '{}'::jsonb) ||
+    ${JSON.stringify({ followupWorker: { readyAt: new Date().toISOString(), stopAt: FOLLOWUP_STOP_AT } })}::jsonb
+    WHERE purpose = 'eval_round'`;
+}
 
 // Live appeals wait for their own orchestrator instead of being consumed by evaluation polling.
 export async function claimReviewWorkerJob(kinds: JobKind[]): Promise<JobRow | null> {
@@ -58,8 +67,11 @@ export async function pollReview(job: JobRow): Promise<void> {
   if (row.status === "completed") return;
   if (!["launched", "paused", "pause_unknown", "pausing"].includes(row.status)) throw new Error("Evaluation launch is not confirmed.");
   let paused = row.status === "paused";
-  if (!paused && (payload.action === "pause" || Date.now() >= Date.parse(STOP_AT) || ["pause_unknown", "pausing"].includes(row.status))) {
-    await pauseReview(teracJobId, "The registered recruitment stop time was reached."); paused = true;
+  const stopAt = collectionStopAt(row.meta);
+  const followup = stopAt !== STOP_AT;
+  if (followup) assertFollowupNote();
+  if (!paused && (isScheduledPause(payload.action, payload.collection, followup) || Date.now() >= Date.parse(stopAt) || ["pause_unknown", "pausing"].includes(row.status))) {
+    await pauseReview(teracJobId, followup ? "The exploratory follow-up recruitment stop time was reached." : "The registered recruitment stop time was reached."); paused = true;
   }
   const plan = row.meta?.plan as ReturnType<typeof parseOpportunity> | undefined;
   if (!plan || plan.id !== row.opportunity_id || plan.n !== row.num_participants) throw new Error("Stored evaluation plan does not match its opportunity.");
@@ -106,13 +118,13 @@ Do not read answers or apply any quality criterion. Return only {"submission": {
   }
   const completed = [...unique.values()].filter(item => ["completed", "approved"].includes(item.status)).length;
   await sql`UPDATE terac_jobs SET meta = coalesce(meta, '{}'::jsonb) || ${JSON.stringify({ submissions: [...unique.values()], completedSubmissions: completed, lastPolledAt: new Date().toISOString() })}::jsonb WHERE id = ${teracJobId}`;
-  if (!paused && (completed >= plan.n || Date.now() >= Date.parse(STOP_AT))) {
-    await pauseReview(teracJobId, completed >= plan.n ? "The target number of completed submissions was reached." : "The registered recruitment stop time was reached.");
+  if (!paused && (completed >= plan.n || Date.now() >= Date.parse(stopAt))) {
+    await pauseReview(teracJobId, completed >= plan.n ? "The target number of completed submissions was reached." : followup ? "The exploratory follow-up recruitment stop time was reached." : "The registered recruitment stop time was reached.");
     paused = true;
   }
   // Recruitment stops at the cutoff; people already working can finish and still be paid.
   if (paused && ![...unique.values()].some(item => ["screen_passed", "in_progress", "awaiting_review"].includes(item.status))) return;
-  const delay = paused ? 180 : Math.max(1, Math.min(180, Math.ceil((Date.parse(STOP_AT) - Date.now()) / 1000)));
+  const delay = paused ? 180 : Math.max(1, Math.min(180, Math.ceil((Date.parse(stopAt) - Date.now()) / 1000)));
   // Recording this poll and its successor together makes retries of a poll job idempotent.
   await sql`WITH polled AS (
     UPDATE terac_jobs SET meta = meta || ${JSON.stringify({ lastPollJobId: job.id })}::jsonb

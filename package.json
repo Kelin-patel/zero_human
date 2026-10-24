@@ -13,6 +13,7 @@
     "terac:draft": "tsx scripts/terac-draft.ts",
     "terac:launch": "tsx scripts/terac-launch.ts",
     "terac:pause": "tsx scripts/terac-pause.ts",
+    "terac:resume": "tsx scripts/terac-resume.ts",
     "test:review": "node --import tsx --test src/lib/prepared-baseline.test.ts src/lib/governor.test.ts src/lib/terac.test.ts src/lib/review-completion.test.ts",
     "test:desk": "node --import tsx --test src/lib/llm.test.ts src/lib/refund-desk.test.ts worker/runner.test.ts",
     "smoke:worker": "tsx scripts/worker-smoke.ts",
