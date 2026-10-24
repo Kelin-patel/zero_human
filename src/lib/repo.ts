@@ -4,8 +4,9 @@ import { getSql } from "./db";
 
 export type JobKind = "provision" | "decide" | "evidence" | "review" | "aggregate" | "execute" | "learn";
 export type SetName = "dev" | "eval" | "gold" | "live" | "demo";
-// v1 and v2 are the frozen evaluation runs; live decides customer and demo requests.
-export type AgentVersion = "v1" | "v2" | "live";
+// v1 and v2 are the frozen evaluation runs; live decides customer and demo requests;
+// final is the outcome of independent human review, the only decision the executor acts on.
+export type AgentVersion = "v1" | "v2" | "live" | "final";
 export type DecisionValue = "approve" | "deny" | "out_of_scope";
 
 // The fields this module reads from a case card. Cards carry more fields; all of them are stored.
@@ -188,14 +189,29 @@ export interface CaseView {
   appealStatement: string | null;
   appealedAt: string | null;
   createdAt: string;
+  publicNote: string | null;
   decision: { decision: DecisionValue; clauses: string[]; reason: string; decidedAt: string } | null;
-  evidence: { kind: string; summary: string | null; url: string | null; httpStatus: number | null; capturedAt: string }[];
+  humanVerdict: {
+    decision: DecisionValue;
+    reason: string;
+    reviewers: { reviewer: string; decision: string; reason: string }[];
+    decidedAt: string;
+  } | null;
+  evidence: {
+    kind: string;
+    summary: string | null;
+    url: string | null;
+    httpStatus: number | null;
+    screenshotUrl: string | null;
+    capturedAt: string;
+  }[];
   reviews: { decision: string; reason: string | null; createdAt: string }[];
   execution: {
     status: string;
     amountCents: number | null;
     environment: string | null;
     blockReason: string | null;
+    whopRefundId: string | null;
     createdAt: string;
   } | null;
 }
@@ -206,12 +222,15 @@ export async function getCaseView(id: string): Promise<CaseView | null> {
   const [c] = await sql`SELECT * FROM cases WHERE id = ${id} AND set_name = ANY(${PUBLIC_SETS})`;
   if (!c) return null;
   const [decisionRows, evidenceRows, reviewRows, executionRows] = await Promise.all([
-    sql`SELECT decision, clauses, reason, created_at FROM decisions WHERE case_id = ${id} AND agent_version = 'live'`,
-    sql`SELECT kind, summary, url, http_status, captured_at FROM evidence WHERE case_id = ${id} ORDER BY id`,
+    sql`SELECT agent_version, decision, clauses, reason, votes, created_at FROM decisions
+        WHERE case_id = ${id} AND agent_version IN ('live', 'final')`,
+    sql`SELECT kind, summary, url, http_status, screenshot_url, captured_at FROM evidence WHERE case_id = ${id} ORDER BY id`,
     sql`SELECT decision, reason, created_at FROM reviews WHERE case_id = ${id} AND NOT is_gold ORDER BY id`,
-    sql`SELECT status, amount_cents, environment, block_reason, created_at FROM executions WHERE case_id = ${id}`,
+    sql`SELECT status, amount_cents, environment, block_reason, whop_refund_id, created_at FROM executions
+        WHERE case_id = ${id}`,
   ]);
-  const d = decisionRows[0];
+  const d = decisionRows.find((row) => row.agent_version === "live");
+  const f = decisionRows.find((row) => row.agent_version === "final");
   const x = executionRows[0];
   return {
     id: c.id,
@@ -225,12 +244,22 @@ export async function getCaseView(id: string): Promise<CaseView | null> {
     appealStatement: c.appeal_statement,
     appealedAt: iso(c.appealed_at),
     createdAt: iso(c.created_at) as string,
+    publicNote: c.public_note ?? null,
     decision: d ? { decision: d.decision, clauses: d.clauses ?? [], reason: d.reason ?? "", decidedAt: iso(d.created_at) as string } : null,
+    humanVerdict: f
+      ? {
+          decision: f.decision,
+          reason: f.reason ?? "",
+          reviewers: (f.votes?.reviewers ?? []) as { reviewer: string; decision: string; reason: string }[],
+          decidedAt: iso(f.created_at) as string,
+        }
+      : null,
     evidence: evidenceRows.map((e) => ({
       kind: e.kind,
       summary: e.summary,
       url: e.url,
       httpStatus: e.http_status,
+      screenshotUrl: e.screenshot_url,
       capturedAt: iso(e.captured_at) as string,
     })),
     reviews: reviewRows.map((r) => ({ decision: r.decision, reason: r.reason, createdAt: iso(r.created_at) as string })),
@@ -240,6 +269,7 @@ export async function getCaseView(id: string): Promise<CaseView | null> {
           amountCents: x.amount_cents,
           environment: x.environment,
           blockReason: x.block_reason,
+          whopRefundId: x.whop_refund_id,
           createdAt: iso(x.created_at) as string,
         }
       : null,

@@ -182,3 +182,10 @@ alter table task_assignments add column if not exists enabled boolean not null d
 -- Customer appeals of a denied decision
 alter table cases add column if not exists appeal_statement text;
 alter table cases add column if not exists appealed_at timestamptz;
+
+-- Executions: what was sent to Whop and what came back
+alter table executions add column if not exists meta jsonb;
+alter table executions add column if not exists updated_at timestamptz;
+
+-- A short public label shown on a case's status page (for example, how a prepared case was reviewed)
+alter table cases add column if not exists public_note text;
