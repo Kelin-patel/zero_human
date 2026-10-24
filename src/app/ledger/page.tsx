@@ -3,6 +3,8 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { getSql } from "@/lib/db";
+import { LedgerFeed, type FeedRow } from "./ledger-feed";
+import { decisionTone, TONE_BADGE } from "./tone";
 
 export const metadata: Metadata = {
   title: "Public ledger | Second Instance",
@@ -25,7 +27,21 @@ const ACTOR_LABELS: Record<string, string> = {
 
 const timeEt = (value: Date) =>
   value.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
+const dateEt = (value: Date) =>
+  value.toLocaleDateString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric" });
 const money = (cents: number | null) => (cents == null ? "" : `$${(cents / 100).toFixed(2)}`);
+
+function Metric({ label, value, tone, note, index }: { label: string; value: string; tone?: string; note?: string; index: number }) {
+  // 2x2 on phones, one row from sm up; hairline rules between cells.
+  const rules = `${index % 2 === 1 ? "border-l" : index > 0 ? "sm:border-l" : ""} ${index >= 2 ? "border-t sm:border-t-0" : ""}`;
+  return (
+    <div className={`flex flex-col gap-1.5 border-rule p-4 sm:p-5 ${rules}`}>
+      <span className="text-sm text-ink-3">{label}</span>
+      <span className={`font-display text-[28px] font-semibold leading-none tracking-tight tabular-nums ${tone ?? "text-ink"}`}>{value}</span>
+      {note && <span className="text-xs text-ink-3">{note}</span>}
+    </div>
+  );
+}
 
 async function Round() {
   await connection();
@@ -34,22 +50,29 @@ async function Round() {
       meta->>'pausedAt' AS paused_at, meta->>'completedSubmissions' AS completed
     FROM terac_jobs WHERE purpose = 'eval_round' ORDER BY id DESC LIMIT 1`;
   if (!row) return null;
+  const status = String(row.status);
+  const tone = decisionTone(status);
   const fields: [string, string][] = [
-    ["Status", String(row.status)],
     ["Reviewers bought", String(row.num_participants)],
     ["Price per reviewer", money(row.quoted_cents_per_participant)],
+    ["Completed reviewers", row.completed ?? "0"],
     ["Launched", row.launched_at ? `${timeEt(new Date(row.launched_at))} ET` : "not yet"],
     ["Paused", row.paused_at ? `${timeEt(new Date(row.paused_at))} ET` : "not yet"],
-    ["Completed reviewers", row.completed ?? "0"],
   ];
   return (
-    <section className="rounded-xl border border-zinc-200 p-5 dark:border-zinc-800">
-      <h2 className="mb-3 font-semibold">Human review round on Terac</h2>
-      <dl className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm sm:grid-cols-3">
+    <section className="panel p-5">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="font-display text-base font-semibold tracking-tight text-ink">Human review round on Terac</h2>
+          <p className="text-sm text-ink-3">The latest panel of people the agent paid to check its decisions.</p>
+        </div>
+        <span className={`${TONE_BADGE[tone]} font-mono`}>{status}</span>
+      </div>
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-5">
         {fields.map(([label, value]) => (
           <div key={label}>
-            <dt className="text-zinc-500">{label}</dt>
-            <dd className="font-medium tabular-nums">{value}</dd>
+            <dt className="text-xs text-ink-3">{label}</dt>
+            <dd className="mt-1 font-mono text-sm tabular-nums text-ink">{value}</dd>
           </div>
         ))}
       </dl>
@@ -66,63 +89,98 @@ async function Entries({ searchParams }: { searchParams: Promise<{ view?: string
     ? await sql`SELECT id, actor, decision, reason, cost_cents, revenue_cents, env, created_at FROM ledger ORDER BY id DESC LIMIT 300`
     : await sql`SELECT id, actor, decision, reason, cost_cents, revenue_cents, env, created_at FROM ledger
         WHERE actor = ANY(${AGENT_ACTORS}) ORDER BY id ASC LIMIT 300`;
+
+  const feed: FeedRow[] = rows.map((r) => {
+    const at = new Date(r.created_at);
+    return {
+      id: Number(r.id),
+      actor: String(r.actor),
+      actorLabel: ACTOR_LABELS[r.actor] ?? String(r.actor),
+      decision: String(r.decision),
+      reason: r.reason == null ? "" : String(r.reason),
+      costCents: Number(r.cost_cents ?? 0) || 0,
+      revenueCents: Number(r.revenue_cents ?? 0) || 0,
+      env: r.env == null ? "" : String(r.env),
+      date: dateEt(at),
+      time: timeEt(at),
+    };
+  });
+
+  // Every figure below is summed from the rows on this page; nothing is estimated.
+  const spend = feed.reduce((s, r) => s + r.costCents, 0);
+  const liveRevenue = feed.filter((r) => r.env !== "sandbox").reduce((s, r) => s + r.revenueCents, 0);
+  const sandboxAmount = feed.filter((r) => r.env === "sandbox").reduce((s, r) => s + r.revenueCents, 0);
+  const executor = feed.filter((r) => r.actor === "executor");
+  const executed = executor.filter((r) => decisionTone(r.decision) === "ok").length;
+  const stopped = executor.filter((r) => decisionTone(r.decision) === "bad").length;
+
   const tab = (active: boolean) =>
-    `rounded-full px-3 py-1 text-sm ${active ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900" : "border border-zinc-300 dark:border-zinc-700"}`;
+    `rounded-md px-3 py-1.5 text-sm transition-colors duration-150 ${active ? "bg-card text-ink shadow-sm" : "text-ink-2 hover:text-ink"}`;
+
+  const metrics: { label: string; value: string; tone?: string; note?: string }[] = [
+    { label: "Decisions", value: String(feed.length), note: all ? "All entries in view" : "Agent decisions in view" },
+    { label: "Spend recorded", value: money(spend), note: "Sum of cost on these rows" },
+    {
+      label: "Live revenue",
+      value: money(liveRevenue),
+      note: sandboxAmount > 0 ? `Plus ${money(sandboxAmount)} sandbox, not revenue` : "Sandbox rows never count",
+    },
+  ];
+  if (executor.length > 0) {
+    metrics.push({ label: "Refunds executed / stopped", value: `${executed} / ${stopped}`, note: "Executor rows: executed vs blocked or failed" });
+  }
+
   return (
-    <section className="flex flex-col gap-4">
-      <nav className="flex flex-wrap gap-2">
-        <Link href="/ledger" className={tab(!all)}>Agent decisions (oldest first)</Link>
-        <Link href="/ledger?view=all" className={tab(all)}>All entries (newest first)</Link>
-      </nav>
-      {rows.length === 0 ? (
-        <p className="text-sm text-zinc-500">No entries yet.</p>
+    <section className="flex flex-col gap-6">
+      <div className={`panel grid grid-cols-2 ${metrics.length === 4 ? "sm:grid-cols-4" : "sm:grid-cols-3"}`}>
+        {metrics.map((m, i) => (
+          <Metric key={m.label} index={i} {...m} />
+        ))}
+      </div>
+
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <nav className="inline-flex gap-1 rounded-lg bg-subtle p-1">
+          <Link href="/ledger" className={tab(!all)}>Agent decisions <span className="hidden text-ink-3 sm:inline">· oldest first</span></Link>
+          <Link href="/ledger?view=all" className={tab(all)}>All entries <span className="hidden text-ink-3 sm:inline">· newest first</span></Link>
+        </nav>
+        <span className="text-xs text-ink-3">Times in ET · up to 300 rows</span>
+      </div>
+
+      {feed.length === 0 ? (
+        <div className="panel px-6 py-12 text-center text-sm text-ink-3">No entries yet.</div>
       ) : (
-        <ol className="flex flex-col divide-y divide-zinc-200 rounded-xl border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
-          {rows.map((r) => (
-            <li key={r.id} className="flex flex-col gap-1 p-4 sm:flex-row sm:gap-4">
-              <div className="flex shrink-0 flex-row gap-3 text-sm sm:w-56 sm:flex-col sm:gap-0">
-                <span className="tabular-nums text-zinc-500">{timeEt(new Date(r.created_at))} ET</span>
-                <span className="font-medium">{ACTOR_LABELS[r.actor] ?? r.actor}</span>
-              </div>
-              <div className="flex min-w-0 flex-1 flex-col gap-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded bg-zinc-100 px-2 py-0.5 font-mono text-sm dark:bg-zinc-800">{r.decision}</span>
-                  {r.env === "sandbox" && (
-                    <span className="rounded bg-amber-100 px-2 py-0.5 text-xs text-amber-900 dark:bg-amber-950 dark:text-amber-200">sandbox / prepared</span>
-                  )}
-                  {r.cost_cents > 0 && <span className="text-sm text-zinc-500">cost {money(r.cost_cents)}</span>}
-                  {r.revenue_cents > 0 && (r.env === "sandbox"
-                    ? <span className="text-sm text-zinc-500">sandbox amount {money(r.revenue_cents)} (not revenue)</span>
-                    : <span className="text-sm text-emerald-700 dark:text-emerald-400">revenue {money(r.revenue_cents)}</span>)}
-                </div>
-                <p className="line-clamp-3 whitespace-pre-wrap break-words text-sm text-zinc-700 dark:text-zinc-300">{r.reason}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <LedgerFeed rows={feed} />
       )}
     </section>
   );
 }
 
+function Skeleton({ label }: { label: string }) {
+  return (
+    <div className="panel p-5 text-sm text-ink-3" aria-busy="true">
+      {label}
+    </div>
+  );
+}
+
 export default function LedgerPage({ searchParams }: PageProps<"/ledger">) {
   return (
-    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-12">
+    <div className="container-page flex flex-col gap-8 py-10 sm:py-14">
       <header className="flex flex-col gap-3">
-        <p className="text-sm font-medium uppercase tracking-wide text-zinc-500">Second Instance</p>
-        <h1 className="text-3xl font-semibold tracking-tight">Public ledger</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <h1 className="font-display text-[32px] font-semibold leading-tight tracking-tight text-ink">Public ledger</h1>
+        <p className="max-w-2xl text-[15px] leading-relaxed text-ink-2">
           Every autonomous decision the agent makes is written here with its reason, cost and revenue: deciding refunds,
           buying human reviews within a budget, refusing or pausing, executing refunds and booking sales. Rows marked
           sandbox are prepared demo or evaluation activity and never count as revenue.
         </p>
+        <p className="text-sm text-ink-3">Updated as the agent acts</p>
       </header>
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading the review round…</p>}>
+      <Suspense fallback={<Skeleton label="Loading the review round…" />}>
         <Round />
       </Suspense>
-      <Suspense fallback={<p className="text-sm text-zinc-500">Loading entries…</p>}>
+      <Suspense fallback={<Skeleton label="Loading entries…" />}>
         <Entries searchParams={searchParams as Promise<{ view?: string }>} />
       </Suspense>
-    </main>
+    </div>
   );
 }

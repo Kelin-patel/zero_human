@@ -18,15 +18,17 @@ async function CaseLoader({ params }: Pick<PageProps<"/cases/[id]">, "params">) 
 
 export default function CasePage({ params }: PageProps<"/cases/[id]">) {
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-10">
-      <Suspense fallback={<p className="text-zinc-500">Loading your request…</p>}>
-        <CaseLoader params={params} />
-      </Suspense>
-      <p className="text-sm text-zinc-500">
-        <Link href="/refund" className="underline">
-          Start another demo request
-        </Link>
-      </p>
-    </main>
+    <div className="container-page py-10 sm:py-14">
+      <div className="flex flex-col gap-8">
+        <Suspense fallback={<p className="text-sm text-ink-3">Loading your request…</p>}>
+          <CaseLoader params={params} />
+        </Suspense>
+        <p className="text-sm">
+          <Link href="/refund" className="link">
+            Start another demo request
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }

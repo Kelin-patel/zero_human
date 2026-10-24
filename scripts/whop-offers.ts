@@ -13,6 +13,14 @@ try {
 
 const OFFERS = [
   {
+    sku: "starter",
+    title: "Second Instance Starter Check",
+    priceUsd: 5,
+    description:
+      "One AI refund decision from your store re-checked by an independent agent against your policy " +
+      "and the evidence, with a written second opinion.",
+  },
+  {
     sku: "pilot",
     title: "Second Instance Pilot",
     priceUsd: 29,
