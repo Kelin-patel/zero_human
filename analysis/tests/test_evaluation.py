@@ -48,6 +48,32 @@ def response(snapshot, slot, key):
 
 
 class EvaluationTests(unittest.TestCase):
+    def test_completed_database_outputs_wait_for_the_frozen_artifact(self):
+        snapshot = fixture()
+        snapshot["v2_artifact"] = {"available": False, "sha256": None}
+        result = evaluation.analyze_snapshot(INPUTS, snapshot)
+        self.assertEqual(result["status"], "awaiting_v2_artifact")
+        self.assertTrue(result["v2"]["complete"])
+        self.assertIsNone(result["comparison"])
+        self.assertIn("artifact is not yet available", result["summary"])
+        self.assertNotIn("run is incomplete", result["summary"])
+
+    def test_artifact_validation_requires_exact_case_coverage_and_database_match(self):
+        snapshot = fixture()
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "decisions_v2.json"
+            self.assertFalse(evaluation.validate_v2_artifact(INPUTS, snapshot["v2"], path)["available"])
+            path.write_text(json.dumps(snapshot["v2"]))
+            self.assertTrue(evaluation.validate_v2_artifact(INPUTS, snapshot["v2"], path)["available"])
+            changed = copy.deepcopy(snapshot["v2"])
+            changed[0]["decision"] = "deny" if changed[0]["decision"] == "approve" else "approve"
+            path.write_text(json.dumps(changed))
+            with self.assertRaisesRegex(ReportError, "differs from database"):
+                evaluation.validate_v2_artifact(INPUTS, snapshot["v2"], path)
+            path.write_text(json.dumps(snapshot["v2"][:-1]))
+            with self.assertRaisesRegex(ReportError, "exactly the 27"):
+                evaluation.validate_v2_artifact(INPUTS, snapshot["v2"], path)
+
     def test_exact_mcnemar_known_examples_and_no_discordance(self):
         self.assertAlmostEqual(evaluation.exact_mcnemar(9, 1), .021484375)
         self.assertAlmostEqual(evaluation.exact_mcnemar(1, 9), .021484375)

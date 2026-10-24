@@ -106,6 +106,19 @@ def validate_v2(inputs, rows):
     return predictions
 
 
+def validate_v2_artifact(inputs, rows, path):
+    if not path.exists():
+        return {"available": False, "sha256": None}
+    raw = path.read_bytes()
+    artifact = json.loads(raw)
+    if not isinstance(artifact, list) or sorted(r["case_id"] for r in artifact) != inputs["evaluation"]:
+        raise ReportError("The v2 artifact must contain exactly the 27 held-out cases.")
+    recorded = {r["case_id"]: r["decision"] for r in rows}
+    if any(recorded.get(r["case_id"]) != r["decision"] for r in artifact):
+        raise ReportError("The v2 artifact differs from database decisions.")
+    return {"available": True, "sha256": digest(raw)}
+
+
 def analyze_snapshot(inputs, snapshot):
     observed = timestamp(snapshot["observed_at"])
     excluded = Counter()
@@ -246,8 +259,9 @@ def analyze_snapshot(inputs, snapshot):
     v2 = validate_v2(inputs, snapshot.get("v2", []))
     baseline_metrics = score_agent(v1, reference) if reference else None
     v2_complete = len(v2) == len(inputs["evaluation"])
+    artifact_available = snapshot.get("v2_artifact", {}).get("available", True)
     comparison = None
-    if reference and v2_complete:
+    if reference and v2_complete and artifact_available:
         revised = score_agent(v2, reference)
         b = sum(v1[key] != target and v2[key] == target for key, target in reference.items())
         c = sum(v1[key] == target and v2[key] != target for key, target in reference.items())
@@ -264,7 +278,7 @@ def analyze_snapshot(inputs, snapshot):
     consensus = len(reference)
     ambiguity = sum(row["status"] == "ambiguous" for row in case_audit)
     after_cutoff = observed >= effective_cutoff
-    status = "interim_collection" if not after_cutoff else "no_consensus" if not reference else "awaiting_v2" if not v2_complete else "complete_partial" if complete < len(primary) else "complete"
+    status = "interim_collection" if not after_cutoff else "no_consensus" if not reference else "awaiting_v2" if not v2_complete else "awaiting_v2_artifact" if not artifact_available else "complete_partial" if complete < len(primary) else "complete"
     results = {
         "schema_version": 1, "data_kind": snapshot.get("data_kind", "synthetic_fixture"), "status": status,
         "generated_at": iso(observed), "registered_cutoff_utc": iso(CUTOFF), "effective_cutoff_utc": iso(effective_cutoff),
@@ -280,7 +294,8 @@ def analyze_snapshot(inputs, snapshot):
                  "invalid_metadata": gold_counts["invalid_gold_metadata"], "pass_rate_of_answered": gold_counts["passed"]/observed_gold if observed_gold else None,
                  "pass_rate_of_claimed": gold_counts["passed"]/len(main_reviewers) if main_reviewers else None},
         "agreement": agreement(pairs), "baseline_on_consensus": baseline_metrics, "comparison": comparison,
-        "v2": {"recorded_cases": len(v2), "expected_cases": len(inputs["evaluation"]), "complete": v2_complete},
+        "v2": {"recorded_cases": len(v2), "expected_cases": len(inputs["evaluation"]), "complete": v2_complete,
+               "artifact_available": artifact_available, "artifact_sha256": snapshot.get("v2_artifact", {}).get("sha256")},
         "exclusions": dict(sorted(excluded.items())), "missing_reference_ratings": dict(sorted(missing_reasons.items())),
         "reference_case_coverage": case_audit, "reviewers": reviewers, "spare_third_ratings": extras,
         "ambiguous_cases_by_v1_cited_clause": dict(sorted(ambiguous_clauses.items())),
@@ -306,6 +321,8 @@ def plain_summary(results):
     comparison = results["comparison"]
     if not comparison:
         errors = results["baseline_on_consensus"]["errors"]
+        if results["v2"]["complete"] and not results["v2"]["artifact_available"]:
+            return prefix + f"On {n} held-out cases with eligible human consensus {timing}, v1 made {errors} errors. All 27 v2 database outputs are present, but the frozen v2 artifact is not yet available. The paired comparison and approval guardrail remain pending; no improvement is claimed."
         return prefix + f"On {n} held-out cases with eligible human consensus {timing}, v1 made {errors} errors. The v2 run is incomplete ({results['v2']['recorded_cases']}/{results['v2']['expected_cases']} outputs), so the registered paired comparison and approval guardrail are unavailable. This is a partial pilot snapshot, not evidence of improvement."
     first, second = comparison["v1"], comparison["v2"]
     direction = "fell" if second["errors"] < first["errors"] else "rose" if second["errors"] > first["errors"] else "stayed unchanged"
@@ -350,7 +367,8 @@ def render_chart(results, path):
                 axis.errorbar(i, bottom, yerr=[[max(0, bottom-lo)], [max(0, hi-bottom)]], color="#172e3d", capsize=6, linewidth=1.5)
             axis.set_xticks([0, 1], [f"v1\n{metrics[0]['errors']}/{n} errors", f"v2\n{metrics[1]['errors']}/{n} errors" if comparison else "v2\npending"])
             if not comparison:
-                axis.text(1, .25, "Awaiting complete\nv2 outputs", ha="center", color="#647684")
+                pending = "Awaiting frozen\nv2 artifact" if results["v2"]["complete"] else "Awaiting complete\nv2 outputs"
+                axis.text(1, .25, pending, ha="center", color="#647684")
             axis.set_xlim(-.65, 1.65)
             axis.set_ylim(0, 1.08)
             axis.yaxis.set_major_formatter(PercentFormatter(1))
@@ -387,24 +405,10 @@ def main():
         snapshot["data_kind"] = "synthetic_fixture"
     else:
         snapshot = fetch_snapshot(inputs)
+        snapshot["v2_artifact"] = validate_v2_artifact(inputs, snapshot["v2"], ROOT / "data/decisions_v2.json")
     results = analyze_snapshot(inputs, snapshot)
     results["registration_commit"] = git_commit("data/PREREGISTRATION.md", first=True)
     results["protocol_current_commit"] = git_commit("data/PREREGISTRATION.md")
-    if not args.fixture:
-        v2_path = ROOT / "data/decisions_v2.json"
-        if v2_path.exists():
-            raw = v2_path.read_bytes()
-            artifact = json.loads(raw)
-            if not isinstance(artifact, list) or sorted(r["case_id"] for r in artifact) != inputs["evaluation"]:
-                raise ReportError("The v2 artifact must contain exactly the 27 held-out cases.")
-            recorded = {r["case_id"]: r["decision"] for r in snapshot["v2"]}
-            if any(recorded.get(r["case_id"]) != r["decision"] for r in artifact):
-                raise ReportError("The v2 artifact differs from database decisions.")
-            results["v2"]["artifact_sha256"] = digest(raw)
-        else:
-            results["v2"]["artifact_sha256"] = None
-            if results["status"] in {"complete", "complete_partial"}:
-                results["status"] = "awaiting_v2_artifact"
     args.output_dir.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix=".report-", dir=args.output_dir) as directory:
         staging = Path(directory)
