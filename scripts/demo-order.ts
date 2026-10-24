@@ -31,8 +31,10 @@ async function main() {
   const amountCents = await usableSandboxPayment(paymentId);
   const caseId = `case_${randomBytes(9).toString("base64url")}`;
   const base = (process.env.APP_BASE_URL ?? "").replace(/\/+$/, "");
-  // Priced at the sandbox payment it is linked to, so the executor's amount check matches.
-  const card = { ...buildDemoCard(order, caseId, value("--statement") ?? order.suggestedStatement, base), price_usd: amountCents / 100 };
+  // Priced at the sandbox payment it is linked to, so the records and the executor's amount check agree.
+  const card = buildDemoCard(order, caseId, value("--statement") ?? order.suggestedStatement, base, {
+    priceUsd: amountCents / 100,
+  });
   await createCase({ card, set_name: "demo" }, { merchantId: "demo", whopPaymentId: paymentId });
   await getSql()`UPDATE cases SET public_note = 'Prepared demo · fictional store · sandbox payment' WHERE id = ${caseId}`;
   await enqueueJob("decide", { caseId });

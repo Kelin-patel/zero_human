@@ -17,7 +17,7 @@ export interface DemoOrder {
     priorRefunds: number;
     accessPath: "/demo/course/ok" | "/demo/course/broken";
   };
-  evidence: (dates: { purchased: string; requested: string }) => { kind: string; text: string; path: string }[];
+  evidence: (facts: { purchased: string; requested: string; charge: string }) => { kind: string; text: string; path: string }[];
 }
 
 export const DEMO_ORDERS: DemoOrder[] = [
@@ -30,10 +30,10 @@ export const DEMO_ORDERS: DemoOrder[] = [
     suggestedStatement:
       "I bought this to automate our invoicing, but it covers basics I already know. I've only watched the first two lessons and haven't downloaded anything. Please refund me.",
     records: { progressPct: 8, bonusFilesDownloaded: false, certificateIssued: false, priorRefunds: 0, accessPath: "/demo/course/ok" },
-    evidence: ({ purchased }) => [
+    evidence: ({ purchased, charge }) => [
       { kind: "progress_record", text: "Account progress shows 8% complete: 2 of 25 lessons finished.", path: "/demo/course/ok" },
       { kind: "download_log", text: "The bonus templates bundle has zero download events on this purchase.", path: "/demo/course/ok" },
-      { kind: "order_record", text: `A single charge of 49.00 USD on ${purchased}. No prior refunds for this course.`, path: "/demo/terms" },
+      { kind: "order_record", text: `A single charge of ${charge} on ${purchased}. No prior refunds for this course.`, path: "/demo/terms" },
     ],
   },
   {
@@ -45,11 +45,11 @@ export const DEMO_ORDERS: DemoOrder[] = [
     suggestedStatement:
       "The Module 4 videos never load for me, on my laptop or my phone. I reported it to support 3 days ago and nothing has changed. I can't finish the course I paid for.",
     records: { progressPct: 30, bonusFilesDownloaded: false, certificateIssued: false, priorRefunds: 0, accessPath: "/demo/course/ok" },
-    evidence: ({ purchased, requested }) => [
+    evidence: ({ purchased, requested, charge }) => [
       { kind: "progress_record", text: "Account progress shows 30% complete: Modules 1-3 finished, no lessons in Modules 4-6 completed.", path: "/demo/course/ok" },
       { kind: "support_ticket", text: `A support ticket about Module 4 videos was opened 3 days before ${requested}. It has no reply and no recorded fix.`, path: "/demo/terms" },
       { kind: "access_check", text: "The course landing page returned HTTP 200. The check did not open individual Module 4 videos.", path: "/demo/course/ok" },
-      { kind: "order_record", text: `A single charge of 79.00 USD on ${purchased}. No prior refunds for this course.`, path: "/demo/terms" },
+      { kind: "order_record", text: `A single charge of ${charge} on ${purchased}. No prior refunds for this course.`, path: "/demo/terms" },
     ],
   },
   {
@@ -75,9 +75,9 @@ export const DEMO_ORDERS: DemoOrder[] = [
     suggestedStatement:
       "I finished the course but honestly it didn't help me at work as much as I hoped. I'd like a refund.",
     records: { progressPct: 96, bonusFilesDownloaded: true, certificateIssued: true, priorRefunds: 0, accessPath: "/demo/course/ok" },
-    evidence: ({ purchased }) => [
+    evidence: ({ purchased, charge }) => [
       { kind: "progress_record", text: "Account progress shows 96% complete. A completion certificate was issued.", path: "/demo/course/ok" },
-      { kind: "order_record", text: `A single charge of 99.00 USD on ${purchased}. No prior refunds for this course.`, path: "/demo/terms" },
+      { kind: "order_record", text: `A single charge of ${charge} on ${purchased}. No prior refunds for this course.`, path: "/demo/terms" },
     ],
   },
 ];
@@ -86,15 +86,25 @@ export const MAX_STATEMENT_CHARS = 600;
 
 const isoDate = (date: Date) => date.toISOString().slice(0, 10);
 
-/** Builds the case card for a visitor's request on one demo order. */
-export function buildDemoCard(order: DemoOrder, caseId: string, statement: string, baseUrl: string, now = new Date()): CaseCard {
+/**
+ * Builds the case card for a visitor's request on one demo order. `priceUsd` replaces the list price when the
+ * request is backed by a real payment, so every record on the card states the amount actually charged.
+ */
+export function buildDemoCard(
+  order: DemoOrder,
+  caseId: string,
+  statement: string,
+  baseUrl: string,
+  { now = new Date(), priceUsd = order.priceUsd }: { now?: Date; priceUsd?: number } = {},
+): CaseCard {
   const purchasedAt = new Date(now.getTime() - order.daysSincePurchase * 24 * 60 * 60 * 1000);
   const dates = { purchased: isoDate(purchasedAt), requested: isoDate(now) };
+  const charge = `${priceUsd.toFixed(2)} USD`;
   const url = (path: string) => `${baseUrl}${path}`;
   return CaseCard.parse({
     id: caseId,
     product: order.product,
-    price_usd: order.priceUsd,
+    price_usd: priceUsd,
     purchased: dates.purchased,
     requested: dates.requested,
     days_since_purchase: order.daysSincePurchase,
@@ -113,6 +123,6 @@ export function buildDemoCard(order: DemoOrder, caseId: string, statement: strin
     },
     customer_statement: statement,
     store_position: "The store has not approved this refund.",
-    evidence: order.evidence(dates).map((e) => ({ kind: e.kind, text: e.text, url: url(e.path) })),
+    evidence: order.evidence({ ...dates, charge }).map((e) => ({ kind: e.kind, text: e.text, url: url(e.path) })),
   });
 }
