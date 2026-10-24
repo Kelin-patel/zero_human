@@ -52,6 +52,10 @@ async function main() {
     labels: labels.map(l => ({ submissionId: l.terac_submission_id, caseId: l.case_id, decision: l.decision, reason: l.reason, confidence: l.confidence })),
   });
   console.log(`[learn] eligible reviewers=${selected.eligibleReviewers} dev labels=${selected.devLabels} agreements=${selected.agreements} disagreements=${selected.disagreements.length}`);
+  // The learner runs once. Storing empty notes without any human signal would use up that run.
+  if (!dryRun && selected.eligibleReviewers === 0) {
+    throw new Error("No eligible human reviewers yet (primary slot and passed gold); nothing was stored.");
+  }
 
   let output: LearnerOutput = { notes: [], examples: [] };
   let usage = { input: 0, output: 0 };
