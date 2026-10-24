@@ -1,5 +1,8 @@
 import { getSql } from "../src/lib/db";
 import { provision } from "./handlers/provision";
+import { review } from "./handlers/review";
+import { claimReviewWorkerJob } from "../src/lib/review-orchestration";
+import { finishJob, failJob } from "../src/lib/repo";
 import { runWorker, type JobHandlers } from "./runner";
 
 // Local runs read .env.local; a hosted worker gets its variables from the environment instead.
@@ -24,7 +27,9 @@ async function main() {
   const handlers: JobHandlers = { provision };
   console.log(`handlers: ${Object.keys(handlers).join(", ")}`);
   try {
-    await runWorker(handlers, { signal: stop.signal });
+    const enabledHandlers = { ...handlers, review };
+    console.log(`enabled handlers: ${Object.keys(enabledHandlers).join(", ")}`);
+    await runWorker(enabledHandlers, { signal: stop.signal, repository: { claimNextJob: claimReviewWorkerJob, finishJob, failJob } });
     console.log("worker stopped");
   } finally {
     process.off("SIGINT", shutdown);

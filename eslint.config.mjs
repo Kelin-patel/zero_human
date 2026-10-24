@@ -14,6 +14,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Python dependencies can include vendored JavaScript.
     ".venv/**",
+    ".terac-local/**",
+    ".baseline-runs/**",
   ]),
 ]);
 

@@ -5,6 +5,7 @@ import { randomBytes } from "node:crypto";
 import { getSql } from "../src/lib/db";
 import { claimNextJob, enqueueJob } from "../src/lib/repo";
 import { runWorker } from "../worker/runner";
+import { claimReviewWorkerJob } from "../src/lib/review-orchestration";
 
 loadEnvConfig(process.cwd());
 
@@ -49,6 +50,13 @@ async function main() {
     const [unhandled] = await sql`SELECT status, attempts FROM jobs WHERE id = ${waiting}`;
     assert.equal(unhandled.status, "queued");
     assert.equal(unhandled.attempts, 0);
+    const liveReview = await enqueueJob("review", { caseId: "demo_waiting", payload: { purpose: "live_review" } });
+    const evaluationPoll = await enqueueJob("review", { payload: { purpose: "eval_round", action: "poll", teracJobId: 1 } });
+    assert.equal((await claimReviewWorkerJob(["review"]))?.id, evaluationPoll);
+    assert.equal(await claimReviewWorkerJob(["review"]), null);
+    const [untouchedReview] = await sql`SELECT status, attempts FROM jobs WHERE id = ${liveReview}`;
+    assert.equal(untouchedReview.status, "queued");
+    assert.equal(untouchedReview.attempts, 0);
 
     const retryId = await enqueueJob("provision");
     for (let attempt = 1; attempt <= 5; attempt++) {
@@ -72,7 +80,7 @@ async function main() {
     const raceId = await enqueueJob("provision");
     const claims = await Promise.all([claimNextJob(["provision"]), claimNextJob(["provision"])]);
     assert.deepEqual(claims.filter(Boolean).map(job => job!.id), [raceId]);
-    console.log("Worker database checks passed: done, unhandled jobs, retries, final failure and atomic claiming.");
+    console.log("Worker database checks passed: done, unhandled/live-review jobs, retries, final failure and atomic claiming.");
   } finally {
     neonConfig.fetchFunction = originalFetch;
     // This schema contains only rows created by this script.
