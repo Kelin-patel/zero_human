@@ -45,3 +45,12 @@ Hashes are over exact file bytes (UTF-8, LF). These files must be committed on o
 | assignment.json | d77b876c0cff715a9853825a59824eb476df51e56af51a0ae69455cef0d74a93 |
 
 Any later deviation must be appended as a timestamped amendment without replacing this protocol.
+
+## Amendment 1 — 2026-10-24 16:43 America/New_York (before any human response)
+
+The participant platform refused the unscreened launch: launching without a screener is not enabled for this organization (PRECONDITION_FAILED). No participant was recruited and nothing was charged. To proceed, the draft now has exactly one broad screening question, added before launch:
+
+- Question: "How often do you buy things online?" (single choice)
+- Qualifying answers: "Weekly or more", "A few times a month", "A few times a year". Rejecting answer: "Never".
+
+Because a screener is present, the platform runs its own short screening interview before inviting applicants. This may reduce completions before the cutoff. Everything else is unchanged: the US adult audience, interview task type with manual_review and completion-based approval, 11 participants at the same quoted price, 8 cards and 7 minutes, assignment, frozen inputs, baseline, metrics, exclusion rules and the 17:30 America/New_York stop time. The earlier statements that no screener is used are superseded by this amendment. The actual number of completions by the cutoff will be reported.
