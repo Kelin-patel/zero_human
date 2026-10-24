@@ -23,6 +23,9 @@ test("registration requires an exact canonical 49-case baseline and frozen decis
     assert.match(text, /exact McNemar/); assert.match(text, /17:30/); assert.match(text, /is_test = true/);
     assert.match(text, /Overflow slots 12–16/); assert.match(text, /27 distinct evaluation and 22 distinct development/);
     assert.ok(text.includes(input.hashes["decisions_v1.json"]));
+    const unscreened = registrationText(input, {cpiCents:600, completionMode:"manual_review", registeredAt:"2026-10-24T20:00:00Z"});
+    assert.match(unscreened, /approval is performed through the Terac MCP/);
+    assert.match(unscreened, /without_screener/);
     writeFileSync("data/decisions_v1.json", canonicalJson(baseline.slice(1)));
     assert.throws(() => registrationInputs(), /exactly the 49/);
     writeFileSync("data/decisions_v1.json", canonicalJson(baseline));
