@@ -317,7 +317,12 @@ def plain_summary(results):
     timing = "by the registered cutoff" if results["cutoff_reached"] else "so far; collection is still in progress"
     prefix = "SYNTHETIC TEST FIXTURE. " if results["data_kind"] != "real_collection" else ""
     if not n:
-        return prefix + f"No held-out cases have two eligible prespecified reference ratings {timing}. {sample['completed_primary_reviewers']} of {sample['target_reviewers']} reviewers have completed their assigned cards. An error comparison, McNemar test and approval guardrail cannot yet be assessed. Test responses are excluded; no improvement is claimed."
+        context = ""
+        if results["cutoff_reached"]:
+            context = " The baseline, assignments and registered input hashes are verified; the human panel remains pending."
+            if any("Amendment 1" in caveat for caveat in results["caveats"]):
+                context += " Amendment 1 records the platform-required screener and screening interview before invitation."
+        return prefix + f"No held-out cases have two eligible prespecified reference ratings {timing}. {sample['completed_primary_reviewers']} of {sample['target_reviewers']} reviewers have completed their assigned cards. Error rates, McNemar, reviewer agreement, kappa and the approval guardrail are unavailable. Test responses are excluded; no improvement is claimed." + context
     comparison = results["comparison"]
     if not comparison:
         errors = results["baseline_on_consensus"]["errors"]
