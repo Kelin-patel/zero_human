@@ -2,9 +2,10 @@ import { getSql } from "./db";
 
 // Typed access to the tables shared by the app, the worker and the scripts.
 
-export type JobKind = "provision" | "evidence" | "review" | "aggregate" | "execute" | "learn";
+export type JobKind = "provision" | "decide" | "evidence" | "review" | "aggregate" | "execute" | "learn";
 export type SetName = "dev" | "eval" | "gold" | "live" | "demo";
-export type AgentVersion = "v1" | "v2";
+// v1 and v2 are the frozen evaluation runs; live decides customer and demo requests.
+export type AgentVersion = "v1" | "v2" | "live";
 export type DecisionValue = "approve" | "deny" | "out_of_scope";
 
 // The fields this module reads from a case card. Cards carry more fields; all of them are stored.
@@ -78,6 +79,8 @@ const MAX_JOB_ATTEMPTS = 5;
 const RETRY_STEP_SECONDS = 30;
 
 const json = (value: unknown) => (value === undefined ? null : JSON.stringify(value));
+// The driver returns timestamps as Date objects; views expose plain ISO strings.
+const iso = (value: unknown) => (value instanceof Date ? value.toISOString() : value == null ? null : String(value));
 
 /** Inserts a case, or updates it in place when the id already exists. */
 export async function createCase(c: CaseRecord, ctx: CaseContext = {}): Promise<void> {
@@ -119,6 +122,127 @@ export async function getCase(id: string): Promise<StoredCase | null> {
     whopPaymentId: row.whop_payment_id,
     status: row.status,
     createdAt: row.created_at,
+  };
+}
+
+export async function getPolicy(id: number): Promise<{ id: number; text: string; sha256: string } | null> {
+  const sql = getSql();
+  const [row] = await sql`SELECT id, text, sha256 FROM policies WHERE id = ${id}`;
+  return row ? { id: row.id, text: row.text, sha256: row.sha256 } : null;
+}
+
+export async function hasDecision(caseId: string, agentVersion: AgentVersion): Promise<boolean> {
+  const sql = getSql();
+  const rows = await sql`SELECT 1 FROM decisions WHERE case_id = ${caseId} AND agent_version = ${agentVersion}`;
+  return rows.length > 0;
+}
+
+export async function setCaseStatus(id: string, status: string): Promise<void> {
+  const sql = getSql();
+  await sql`UPDATE cases SET status = ${status} WHERE id = ${id}`;
+}
+
+/** Number of cases of one set created in the last `minutes` minutes. */
+export async function countRecentCases(setName: SetName, minutes: number): Promise<number> {
+  const sql = getSql();
+  const [row] = await sql`
+    SELECT count(*)::int AS n FROM cases
+    WHERE set_name = ${setName} AND created_at > now() - make_interval(mins => ${minutes})`;
+  return row.n as number;
+}
+
+// Only customer-facing cases are visible on status pages; prepared evaluation cases and their labels never are.
+const PUBLIC_SETS = ["demo", "live"];
+
+/**
+ * Accepts an appeal only for a public case whose live decision is a denial and that hasn't been appealed
+ * yet, then queues evidence gathering and the human review in the same statement. Returns false otherwise.
+ */
+export async function requestAppeal(id: string, statement: string | null): Promise<boolean> {
+  const sql = getSql();
+  const rows = await sql`
+    WITH c AS (
+      UPDATE cases SET status = 'appealed', appeal_statement = ${statement}, appealed_at = now()
+      WHERE id = ${id} AND status = 'decided' AND set_name = ANY(${PUBLIC_SETS})
+        AND EXISTS (SELECT 1 FROM decisions d
+                    WHERE d.case_id = ${id} AND d.agent_version = 'live' AND d.decision = 'deny')
+      RETURNING id
+    ), evidence_job AS (
+      INSERT INTO jobs (kind, case_id) SELECT 'evidence', id FROM c RETURNING id
+    ), review_job AS (
+      INSERT INTO jobs (kind, case_id, run_after) SELECT 'review', id, now() + interval '30 seconds' FROM c RETURNING id
+    )
+    SELECT (SELECT id FROM c) AS case_id`;
+  return rows[0]?.case_id != null;
+}
+
+export interface CaseView {
+  id: string;
+  setName: SetName;
+  status: string;
+  product: string | null;
+  amountCents: number | null;
+  purchasedAt: string | null;
+  requestedAt: string | null;
+  customerStatement: string | null;
+  appealStatement: string | null;
+  appealedAt: string | null;
+  createdAt: string;
+  decision: { decision: DecisionValue; clauses: string[]; reason: string; decidedAt: string } | null;
+  evidence: { kind: string; summary: string | null; url: string | null; httpStatus: number | null; capturedAt: string }[];
+  reviews: { decision: string; reason: string | null; createdAt: string }[];
+  execution: {
+    status: string;
+    amountCents: number | null;
+    environment: string | null;
+    blockReason: string | null;
+    createdAt: string;
+  } | null;
+}
+
+/** Everything the customer status page shows. Null for unknown ids and for non-public cases. */
+export async function getCaseView(id: string): Promise<CaseView | null> {
+  const sql = getSql();
+  const [c] = await sql`SELECT * FROM cases WHERE id = ${id} AND set_name = ANY(${PUBLIC_SETS})`;
+  if (!c) return null;
+  const [decisionRows, evidenceRows, reviewRows, executionRows] = await Promise.all([
+    sql`SELECT decision, clauses, reason, created_at FROM decisions WHERE case_id = ${id} AND agent_version = 'live'`,
+    sql`SELECT kind, summary, url, http_status, captured_at FROM evidence WHERE case_id = ${id} ORDER BY id`,
+    sql`SELECT decision, reason, created_at FROM reviews WHERE case_id = ${id} AND NOT is_gold ORDER BY id`,
+    sql`SELECT status, amount_cents, environment, block_reason, created_at FROM executions WHERE case_id = ${id}`,
+  ]);
+  const d = decisionRows[0];
+  const x = executionRows[0];
+  return {
+    id: c.id,
+    setName: c.set_name,
+    status: c.status,
+    product: c.product,
+    amountCents: c.amount_cents,
+    purchasedAt: iso(c.purchased_at),
+    requestedAt: iso(c.requested_at),
+    customerStatement: c.customer_statement,
+    appealStatement: c.appeal_statement,
+    appealedAt: iso(c.appealed_at),
+    createdAt: iso(c.created_at) as string,
+    decision: d ? { decision: d.decision, clauses: d.clauses ?? [], reason: d.reason ?? "", decidedAt: iso(d.created_at) as string } : null,
+    evidence: evidenceRows.map((e) => ({
+      kind: e.kind,
+      summary: e.summary,
+      url: e.url,
+      httpStatus: e.http_status,
+      capturedAt: iso(e.captured_at) as string,
+    })),
+    reviews: reviewRows.map((r) => ({ decision: r.decision, reason: r.reason, createdAt: iso(r.created_at) as string })),
+    execution: x
+      ? {
+          status: x.status,
+          amountCents: x.amount_cents,
+          environment: x.environment,
+          blockReason: x.block_reason,
+          createdAt: iso(x.created_at) as string,
+        }
+      : null,
   };
 }
 

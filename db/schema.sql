@@ -164,3 +164,7 @@ create unique index if not exists webhook_events_webhook_id_key on webhook_event
 
 -- Existing tables: sandbox ledger rows never count as revenue
 alter table ledger add column if not exists env text default 'live';
+
+-- Customer appeals of a denied decision
+alter table cases add column if not exists appeal_statement text;
+alter table cases add column if not exists appealed_at timestamptz;

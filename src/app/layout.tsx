@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Zero Human",
-  description: "Zero Human",
+  title: "Second Instance",
+  description: "Independent human review of AI refund decisions, with the power to correct them.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
