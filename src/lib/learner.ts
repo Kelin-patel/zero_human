@@ -36,6 +36,12 @@ export function assertLearningWindow(args: {
   }
 }
 
+export function assertDevelopmentFeedback(dryRun: boolean, devLabels: number): void {
+  if (!dryRun && devLabels < 1) {
+    throw new Error("No eligible development labels. Skip real learning and v2; no notes or model calls were made.");
+  }
+}
+
 export const HumanLabel = z.enum(["approve", "deny", "need_more_evidence"]);
 
 export interface ReviewerSlot { submissionId: string; slot: number; isTest: boolean }

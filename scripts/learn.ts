@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import { canonicalJson, sha256 } from "../src/lib/case-generation";
 import { readFrozenBundle } from "../src/lib/case-files";
 import { getSql } from "../src/lib/db";
-import { LEARNER_DRY_RUN_FILE, LearnerOutput, assertLearningWindow, learnerPrompt, renderNotes, selectLearnerInputs, validateLearnerOutput } from "../src/lib/learner";
+import { LEARNER_DRY_RUN_FILE, LearnerOutput, assertDevelopmentFeedback, assertLearningWindow, learnerPrompt, renderNotes, selectLearnerInputs, validateLearnerOutput } from "../src/lib/learner";
 import { STOP_AT } from "../src/lib/terac-data";
 import { MODEL, structured } from "../src/lib/llm";
 import { loadPreparedInputs, validateBaseline } from "../src/lib/prepared-baseline";
@@ -56,6 +56,7 @@ async function main() {
   if (!dryRun && selected.eligibleReviewers === 0) {
     throw new Error("No eligible human reviewers yet (primary slot and passed gold); nothing was stored.");
   }
+  assertDevelopmentFeedback(dryRun, selected.devLabels);
 
   let output: LearnerOutput = { notes: [], examples: [] };
   let usage = { input: 0, output: 0 };

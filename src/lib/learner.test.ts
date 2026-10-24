@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { CaseCard } from "./case-schema";
-import { assertLearningWindow, renderNotes, selectLearnerInputs, validateLearnerOutput, type LearnerOutput } from "./learner";
+import { assertDevelopmentFeedback, assertLearningWindow, renderNotes, selectLearnerInputs, validateLearnerOutput, type LearnerOutput } from "./learner";
 
 const card = (id: string): CaseCard => ({
   id, product: "Course", price_usd: 49, purchased: "2026-10-01", requested: "2026-10-10", days_since_purchase: 9,
@@ -85,6 +85,12 @@ test("the real learner waits for the cutoff or a completed-target pause while dr
   assert.doesNotThrow(() => assertLearningWindow({...base,nowMs:200}));
   assert.doesNotThrow(() => assertLearningWindow({...base,roundStatus:"paused",completedParticipants:11}));
   assert.throws(() => assertLearningWindow({...base,roundStatus:"paused",completedParticipants:10}), /collection is still open/);
+});
+
+test("real learning requires eligible development feedback even when there are no disagreements", () => {
+  assert.throws(() => assertDevelopmentFeedback(false, 0), /No eligible development labels/);
+  assert.doesNotThrow(() => assertDevelopmentFeedback(false, 1));
+  assert.doesNotThrow(() => assertDevelopmentFeedback(true, 0));
 });
 
 test("a test identifier cannot enter real learner inputs through a false test flag", () => {
