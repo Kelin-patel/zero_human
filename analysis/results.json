@@ -1,0 +1,336 @@
+{
+  "agreement": {
+    "agreements": 0,
+    "cohens_kappa": null,
+    "kappa_unavailable_reason": "No eligible reference pairs.",
+    "pairs": 0,
+    "percent": null
+  },
+  "ambiguous_cases_by_v1_cited_clause": {},
+  "baseline_on_consensus": null,
+  "caveats": [
+    "Prepared synthetic cases and a fictional store.",
+    "Small pilot; a general-population policy reference, not a legal ruling.",
+    "Only development labels may inform the learner; held-out labels are used only by this analysis.",
+    "Partial saved cards from a gold-passing reviewer remain eligible; missing gold is ineligible. Speed flags are descriptive, not additional exclusions.",
+    "Amendment 1 added a broad online-shopping screener and the platform screening interview before recruitment, which may reduce completions before cutoff."
+  ],
+  "chart_sha256": "378d5a2006c6c4a250e950ad42c8bbe846f734cdfae167b70fde30a9294522f9",
+  "comparison": null,
+  "cutoff_reached": false,
+  "data_kind": "real_collection",
+  "effective_cutoff_utc": "2026-10-24T21:30:00Z",
+  "exclusions": {
+    "test_response": 48
+  },
+  "frozen_inputs_sha256": {
+    "assignment.json": "d77b876c0cff715a9853825a59824eb476df51e56af51a0ae69455cef0d74a93",
+    "cases.frozen.json": "d48ac95bf219a98a40f9219482263f0d93a44032124c0c82fdac7d306b832662",
+    "decisions_v1.json": "e261015364c5efdfbc3064cbf0198c2f43ccc330f11883de226e01db401360db",
+    "policy.v1.md": "f7a43b279cb717b6b94d578e060bf92c5fd86f7d3d3701a870f815cb4114bf5a",
+    "prepared-review.config.json": "36815b067145b1bc1a61a1f2d4731cd0cd64ea7c8174914d18c703ad7fd6c6bd"
+  },
+  "generated_at": "2026-10-24T21:08:37.061391Z",
+  "gold": {
+    "denominator_reviewers": 0,
+    "failed": 0,
+    "invalid_metadata": 0,
+    "missing": 0,
+    "pass_rate": null,
+    "pass_rate_of_answered": null,
+    "pass_rate_of_claimed": null,
+    "passed": 0
+  },
+  "missing_reference_ratings": {
+    "unclaimed_reference_slot": 54
+  },
+  "protocol_current_commit": "a0cd8aeb53e5ba0ea1036aa939de55dbe8663889",
+  "protocol_sha256": "56426bfaf7423459684248d9308c741258cc672a5eb08802666b5d364b11811d",
+  "reference_case_coverage": [
+    {
+      "case_id": "case_eval_01",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        6,
+        11
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_02",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        3,
+        8
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_03",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        2,
+        7
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_04",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        4,
+        9
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_05",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        2,
+        8
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_06",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        4,
+        10
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_07",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        5,
+        10
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_08",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        5,
+        10
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_09",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        6,
+        11
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_10",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        1,
+        7
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_11",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        1,
+        6
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_12",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        2,
+        7
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_13",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        3,
+        8
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_14",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        4,
+        9
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_15",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        2,
+        8
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_16",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        3,
+        8
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_17",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        4,
+        9
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_18",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        1,
+        6
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_19",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        2,
+        7
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_20",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        3,
+        9
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_21",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        1,
+        6
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_22",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        5,
+        10
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_23",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        3,
+        9
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_24",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        4,
+        10
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_25",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        1,
+        7
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_26",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        5,
+        11
+      ],
+      "status": "missing"
+    },
+    {
+      "case_id": "case_eval_27",
+      "eligible_ratings": 0,
+      "reference_slots": [
+        5,
+        11
+      ],
+      "status": "missing"
+    }
+  ],
+  "registered_cutoff_utc": "2026-10-24T21:30:00Z",
+  "registration_commit": "612bf79cf285d4af61e912e8c02406ec9b8ad4ad",
+  "reviewers": [],
+  "round": {
+    "last_polled_at": "2026-10-24T21:06:33.170Z",
+    "num_participants": 11,
+    "pause_reason": null,
+    "paused_at": null,
+    "status": "launched"
+  },
+  "sample": {
+    "ambiguity_rate_planned_cases": 0.0,
+    "ambiguous_cases": 0,
+    "claimed_primary_reviewers": 0,
+    "completed_primary_reviewers": 0,
+    "consensus_cases": 0,
+    "consensus_coverage": 0.0,
+    "eligible_partial_reviewers": 0,
+    "eligible_reviewers": 0,
+    "missing_reference_cases": 27,
+    "partial_collection": true,
+    "partial_primary_reviewers": 0,
+    "planned_eval_cases": 27,
+    "target_reviewers": 11
+  },
+  "schema_version": 1,
+  "spare_third_ratings": {
+    "agrees_with_primary_consensus": 0,
+    "eligible": 0,
+    "not_comparable": 0,
+    "planned": 1,
+    "saved": 0
+  },
+  "status": "interim_collection",
+  "summary": "No held-out cases have two eligible prespecified reference ratings so far; collection is still in progress. 0 of 11 reviewers have completed their assigned cards. An error comparison, McNemar test and approval guardrail cannot yet be assessed. Test responses are excluded; no improvement is claimed.",
+  "v2": {
+    "artifact_available": false,
+    "artifact_sha256": null,
+    "complete": false,
+    "expected_cases": 27,
+    "recorded_cases": 0
+  }
+}

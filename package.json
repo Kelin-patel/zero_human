@@ -9,7 +9,7 @@
     "lint": "eslint",
     "worker": "tsx worker/index.ts",
     "desk:try": "tsx scripts/try-desk.ts",
-    "agent:run": "tsx scripts/run-agent.ts",
+    "agent:run": "tsx scripts/agent-run.ts",
     "terac:draft": "tsx scripts/terac-draft.ts",
     "terac:launch": "tsx scripts/terac-launch.ts",
     "terac:pause": "tsx scripts/terac-pause.ts",
@@ -30,7 +30,11 @@
     "task:seed": "tsx scripts/seed-task-slots.ts",
     "test:task": "node --import tsx --test src/lib/task-assignment.test.ts src/lib/task-contract.test.ts src/lib/preregistration.test.ts",
     "smoke:task": "tsx scripts/task-smoke.ts",
-    "evaluation:register": "tsx scripts/register-evaluation.ts"
+    "evaluation:register": "tsx scripts/register-evaluation.ts",
+    "learn": "tsx scripts/learn.ts",
+    "test:learn": "node --import tsx --test src/lib/learner.test.ts",
+    "evidence:check": "tsx scripts/evidence-check.ts",
+    "test:evidence": "node --import tsx --test src/lib/evidence.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

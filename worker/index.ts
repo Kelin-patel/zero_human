@@ -1,6 +1,7 @@
 import { getSql } from "../src/lib/db";
 import { decideCase } from "./handlers/decide";
 import { execute } from "./executor";
+import { evidence } from "./handlers/evidence";
 import { provision } from "./handlers/provision";
 import { review } from "./handlers/review";
 import { claimReviewWorkerJob } from "../src/lib/review-orchestration";
@@ -26,7 +27,7 @@ async function main() {
   };
   process.on("SIGINT", shutdown);
   process.on("SIGTERM", shutdown);
-  const handlers: JobHandlers = { provision, decide: decideCase, execute };
+  const handlers: JobHandlers = { provision, decide: decideCase, evidence, execute };
   console.log(`handlers: ${Object.keys(handlers).join(", ")}`);
   try {
     const enabledHandlers = { ...handlers, review };

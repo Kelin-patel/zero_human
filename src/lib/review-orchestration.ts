@@ -81,7 +81,7 @@ Do not return participant names, answers, transcripts, reasons, email addresses 
   const saved = await sql`SELECT ta.submission_id, ta.slot, ta.is_test,
     coalesce(array_agg(DISTINCT r.case_id) FILTER (WHERE r.case_id IS NOT NULL), '{}'::text[]) AS case_ids
     FROM task_assignments ta LEFT JOIN reviews r ON r.terac_submission_id = ta.submission_id AND NOT r.is_test
-    WHERE NOT ta.is_test AND ta.slot BETWEEN 1 AND ${plan.n}
+    WHERE NOT ta.is_test AND ta.submission_id IS NOT NULL AND ta.slot BETWEEN 1 AND ${plan.n}
     GROUP BY ta.submission_id, ta.slot, ta.is_test`;
   const completeIds = completedReviewerIds(assignment, saved.map(item => ({ submissionId: item.submission_id,
     slot: Number(item.slot), isTest: item.is_test, caseIds: item.case_ids })), plan.n);
