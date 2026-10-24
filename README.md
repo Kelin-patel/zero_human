@@ -21,6 +21,29 @@ Whop already provides a Resolution Center for refund requests and appeals. Its c
 5. **The executor checks authority.** A separate component checks approval, policy hash, payment ownership, dispute status and merchant limits before calling Whop. Only this component can issue a refund, using an idempotency key.
 6. **Development feedback can teach the next version.** Eligible development disagreements can produce interpretation notes and worked examples. The policy stays fixed. Held-out human answers are reserved for analysis; improvement is claimed only when the registered comparison supports it.
 
+## Try the demo
+
+The demo store, **Example Academy**, is fictional. Its orders carry no real payment, so nothing is refunded from them.
+
+1. Open [/refund](https://zero-human-peach.vercel.app/refund) and pick one of the four prepared orders. The "broken course page" order shows the evidence agents best.
+2. Write a short statement (600 characters or fewer) and submit. You land on the request's status page (`/cases/<id>`), which refreshes every 3 seconds.
+3. Within about a minute the Refund Desk's decision appears, with the policy clauses it relied on.
+4. If the request is denied, select **Request independent human review**. The page then shows the evidence: the course page's HTTP status and a screenshot from a remote browser, and the matching section of the store's [published terms](https://zero-human-peach.vercel.app/demo/terms).
+5. Open the [ledger](https://zero-human-peach.vercel.app/ledger) to see the agent's own decisions, costs and refusals in order.
+
+Decisions, evidence and refunds run on the background worker. If no worker is running, a request stays at "reading the policy" until one starts.
+
+### How a decision is made
+
+The Refund Desk makes seven Claude calls per request:
+
+1. **Fixed checks, no model call.** Amounts over the merchant's limit, disputed payments and legal or fraud language go to the merchant as out of scope.
+2. **Three readings in parallel.** The policy read literally, as a reasonable customer would read it, and as an experienced support lead would. Each returns a decision, the clauses it cited and a reason of 40 words or fewer.
+3. **Dissent.** One call argues the strongest grounded case against the majority.
+4. **Re-vote.** The three readers decide again after the dissent. Two matching votes are required; without them the desk returns no decision rather than inventing one.
+
+The customer's statement is passed as delimited, untrusted data and is never followed as an instruction.
+
 ## Architecture
 
 ```mermaid
@@ -44,6 +67,37 @@ Vercel handles short web requests. Neon stores cases, jobs, decisions, evidence,
 
 The frozen prepared-case classification limit is **$199** for both model versions. This does not authorize refunds: demo merchant execution limits remain **$100 per case and $300 per day**.
 
+### Pages and endpoints
+
+| Path | Purpose |
+|---|---|
+| [`/`](https://zero-human-peach.vercel.app/) | Product page with live Whop checkout for the Pilot and the Human Review Pack |
+| [`/refund`](https://zero-human-peach.vercel.app/refund) | Demo refund request for the fictional store |
+| `/cases/[id]` | Status timeline: request, AI decision, appeal, evidence, human verdict, outcome |
+| `/task` | Neutral reviewer page opened from Terac; eight cards per reviewer, each saved as it is answered |
+| [`/ledger`](https://zero-human-peach.vercel.app/ledger) | Public ledger of the agent's decisions and the review round's status |
+| [`/demo/course/ok`](https://zero-human-peach.vercel.app/demo/course/ok), [`/demo/course/broken`](https://zero-human-peach.vercel.app/demo/course/broken), [`/demo/terms`](https://zero-human-peach.vercel.app/demo/terms) | Fictional store pages checked by the evidence agents (the broken page returns a real 404) |
+| `POST /api/cases`, `GET /api/cases/[id]`, `POST /api/cases/[id]/appeal` | Create a request, read its status, request human review |
+| `GET /api/task/session`, `POST /api/task/response` | Reviewer assignment and per-card answers |
+| `POST /api/whop/webhook` | Signature-verified, de-duplicated Whop events (`?env=sandbox` for the sandbox) |
+| `GET /api/ledger`, `GET /api/evidence/[id]/screenshot`, `GET /api/health` | Public ledger feed, evidence screenshots for public cases, health check |
+
+### Repository layout
+
+| Path | Contents |
+|---|---|
+| `src/app/` | Pages and API routes (Next.js App Router) |
+| `src/lib/refund-desk.ts`, `src/lib/llm.ts` | The decision panel and the structured Claude call it uses |
+| `src/lib/evidence.ts` | Solari page check and Exa terms excerpt |
+| `src/lib/governor.ts`, `src/lib/review-orchestration.ts`, `src/lib/terac-*.ts` | Budget check and Terac recruitment, polling, approval and pause |
+| `src/lib/learner.ts` | Turns eligible development disagreements into interpretation notes |
+| `src/lib/repo.ts`, `src/lib/db.ts`, `db/schema.sql` | Database access and schema |
+| `worker/index.ts`, `worker/runner.ts`, `worker/handlers/` | The job loop and its handlers: `provision`, `decide`, `evidence`, `execute`, `review` |
+| `worker/executor.ts` | The only code path that issues refunds |
+| `scripts/` | Migration, seeding, case generation, baseline and v2 runs, learning, Terac and Whop setup, smoke checks |
+| `data/` | Frozen policy, cases, assignments, v1 decisions and the registered protocol |
+| `analysis/` | Read-only Python analysis, results and chart |
+
 ## What the agent decides
 
 The [ledger](https://zero-human-peach.vercel.app/ledger) records decisions, reasons, costs, receipts and refusals, including:
@@ -57,11 +111,25 @@ The [ledger](https://zero-human-peach.vercel.app/ledger) records decisions, reas
 
 The ledger shows recorded actions and attempts, not a guarantee that every operation succeeded. The public view omits internal audit metadata. Sandbox receipts are labeled and never count as live revenue. The merchant chooses the policy and spending authority; the agent does not change them.
 
+## Safety rules
+
+These are enforced in code, not left to the model:
+
+- **Refund authority.** Only `worker/executor.ts` calls Whop's refund. It re-checks the final approval, the policy hash, the per-case and daily limits, payment ownership and dispute status, and uses an idempotency key so a request is never refunded twice. Models only propose decisions.
+- **Spending.** A human review round launches only if its quoted cost fits the balance with a $10 reserve. The check is plain code.
+- **Untrusted input.** Customer statements, reviewer reasons and web pages are passed to models as delimited data, never as instructions. Evidence is stored and shown as plain text.
+- **Privacy.** Reviewers never see the AI's answer, or a customer's email, full name, card or address. Demo cases use fictional names.
+- **Learning boundary.** The learner reads only development cases, never edits the policy and refuses to store notes without eligible human feedback. Held-out answers are read only by the analysis.
+- **Frozen inputs.** Policy, cases, assignments and v1 decisions are hashed in the registered protocol; checks verify them and never regenerate them.
+- **Payments in.** Whop webhooks are signature-verified on the raw body and de-duplicated by their delivery ID before anything is recorded.
+- **Secrets.** Keys live only in the environment; [env.example](env.example) lists the names.
+
 ## Current evaluation status
 
 **0 of 11 reviewers completed by the registered 17:30 cutoff on October 24, 2026; 0 of 27 held-out cases have eligible human consensus.** Terac required the screener and screening review recorded in Amendment 1, delaying invitations. All 48 automated test responses were excluded. Error rates, McNemar, reviewer agreement, kappa and the approval guardrail are **unavailable**; this is not a zero-error result. No learned v2 comparison is available and no improvement is claimed.
 
 The baseline, assignments and registered input hashes are frozen and verified. The human panel remains pending. Answers saved after the cutoff remain outside the registered analysis, even when a late reviewer completes and is paid. See the [cutoff result](analysis/results.json), [status chart](analysis/chart.png) and [plain-language result](analysis/summary.md).
+
 ### Exploratory follow-up
 
 After the registered N=0 result, a [timestamped follow-up note](data/PREREGISTRATION.md) authorizes continuing the same prepaid eleven-place panel, with unchanged assignments, screening and eligibility. This separate window begins at the confirmed resume time and has an **18:10 ET hard stop on October 24, 2026**. Its reports use `analysis/results_followup.json` and `data/decisions_v2_followup.json`; any findings are exploratory and do not replace the registered result above. [Follow-up commands and exclusions](analysis/USAGE.md#exploratory-follow-up).
@@ -119,6 +187,18 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s analysis/tests -v
 .venv/bin/python analysis/monitor.py
 .venv/bin/python analysis/eval.py
+```
+
+Unit tests (Node's built-in runner) and service checks:
+
+```bash
+npm run test:desk      # structured calls, Refund Desk, job runner
+npm run test:review    # baseline, budget governor, Terac data, completion-based approval
+npm run test:cases     # case schema and generation
+npm run test:task      # reviewer assignment, answers, registered protocol
+npm run test:learn     # learner input selection and output checks
+npm run test:evidence  # terms excerpts and URL checks
+npm run smoke:services # live Exa and Solari checks (uses credits)
 ```
 
 See [reporting commands and eligibility rules](analysis/USAGE.md). Existing prepared inputs and v1 outputs are frozen; checks verify them without regenerating them. Real learning requires eligible development feedback after the cutoff. With no feedback, skip learning and v2. Full v2 output and a matching frozen artifact are required for a paired comparison.
