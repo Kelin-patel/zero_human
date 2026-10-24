@@ -190,6 +190,73 @@ export async function failJob(id: number, error: string): Promise<void> {
     WHERE id = ${id}`;
 }
 
+export interface WebhookEventInput {
+  webhookId: string;
+  env: "live" | "sandbox";
+  eventType: string | null;
+  payload: unknown;
+  provision?: { env: "live" | "sandbox"; paymentId: string } | null;
+  timeoutMs?: number;
+}
+
+/**
+ * Stores a verified webhook event once per `webhook-id` and, for a new payment, queues its
+ * `provision` job in the same statement. Whop retries reuse the same id, so a redelivery is a
+ * no-op, and a stored event can never be missing its job.
+ */
+export async function recordWebhookEvent(e: WebhookEventInput): Promise<{ duplicate: boolean; jobId: number | null }> {
+  const sql = getSql();
+  const rows = await sql.query(
+    `WITH ev AS (
+       INSERT INTO webhook_events (source, event_type, payload, webhook_id, env, verified)
+       VALUES ('whop', $1, $2::jsonb, $3, $4, true)
+       ON CONFLICT (webhook_id) DO NOTHING
+       RETURNING id
+     ), job AS (
+       INSERT INTO jobs (kind, payload)
+       SELECT 'provision', $5::jsonb FROM ev WHERE $5::jsonb IS NOT NULL
+       RETURNING id
+     )
+     SELECT (SELECT id FROM ev) AS event_id, (SELECT id FROM job) AS job_id`,
+    [e.eventType, json(e.payload), e.webhookId, e.env, json(e.provision ?? undefined)],
+    e.timeoutMs ? { fetchOptions: { signal: AbortSignal.timeout(e.timeoutMs) } } : undefined,
+  );
+  const row = rows[0] ?? {};
+  return { duplicate: row.event_id == null, jobId: (row.job_id as number | null) ?? null };
+}
+
+export interface OfferRow {
+  sku: string;
+  env: "live" | "sandbox";
+  checkout_config_id: string;
+  purchase_url: string;
+  price_cents: number;
+}
+
+export async function getOffer(sku: string, env: "live" | "sandbox"): Promise<OfferRow | null> {
+  const sql = getSql();
+  const [row] = await sql`SELECT * FROM offers WHERE sku = ${sku} AND env = ${env}`;
+  return (row as OfferRow | undefined) ?? null;
+}
+
+export async function upsertOffer(o: OfferRow): Promise<void> {
+  const sql = getSql();
+  await sql`
+    INSERT INTO offers (sku, env, checkout_config_id, purchase_url, price_cents)
+    VALUES (${o.sku}, ${o.env}, ${o.checkout_config_id}, ${o.purchase_url}, ${o.price_cents})
+    ON CONFLICT (sku, env) DO UPDATE SET
+      checkout_config_id = EXCLUDED.checkout_config_id, purchase_url = EXCLUDED.purchase_url,
+      price_cents = EXCLUDED.price_cents, created_at = now()`;
+}
+
+/** True when the ledger already has a sale for this Whop payment. */
+export async function saleRecorded(paymentId: string): Promise<boolean> {
+  const sql = getSql();
+  const rows = await sql`
+    SELECT 1 FROM ledger WHERE actor = 'sales' AND decision = 'sale' AND meta->>'paymentId' = ${paymentId} LIMIT 1`;
+  return rows.length > 0;
+}
+
 /** Appends one row to the public ledger. `meta.env` marks sandbox rows, which never count as revenue. */
 export async function appendLedger(e: LedgerEntry): Promise<number> {
   const sql = getSql();
