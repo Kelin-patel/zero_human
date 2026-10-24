@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import type { CaseCard } from "./case-schema";
-import { renderNotes, selectLearnerInputs, validateLearnerOutput, type LearnerOutput } from "./learner";
+import { assertLearningWindow, renderNotes, selectLearnerInputs, validateLearnerOutput, type LearnerOutput } from "./learner";
 
 const card = (id: string): CaseCard => ({
   id, product: "Course", price_usd: 49, purchased: "2026-10-01", requested: "2026-10-10", days_since_purchase: 9,
@@ -75,4 +75,23 @@ test("rendered notes omit case IDs and are empty when there is nothing to learn"
   assert.match(text, /Worked examples:\nA\. Course link returns 404\. -> approve \(§2\)/);
   assert.doesNotMatch(text, /case_dev_/);
   assert.equal(renderNotes({ notes: [], examples: [] }), "");
+});
+
+
+test("the real learner waits for the cutoff or a completed-target pause while dry runs remain available", () => {
+  const base = {dryRun:false, nowMs:100, cutoffMs:200, roundStatus:"launched", completedParticipants:0, targetParticipants:11};
+  assert.throws(() => assertLearningWindow(base), /collection is still open/);
+  assert.doesNotThrow(() => assertLearningWindow({...base,dryRun:true}));
+  assert.doesNotThrow(() => assertLearningWindow({...base,nowMs:200}));
+  assert.doesNotThrow(() => assertLearningWindow({...base,roundStatus:"paused",completedParticipants:11}));
+  assert.throws(() => assertLearningWindow({...base,roundStatus:"paused",completedParticipants:10}), /collection is still open/);
+});
+
+test("a test identifier cannot enter real learner inputs through a false test flag", () => {
+  const selected = selectLearnerInputs({...base,
+    reviewers:[{submissionId:"test_misflagged",slot:1,isTest:false}],
+    gold:[{submissionId:"test_misflagged",goldPassed:true}],
+    labels:[{submissionId:"test_misflagged",caseId:"case_dev_01",decision:"approve",reason:"This automated response must stay out of real learning.",confidence:3}]});
+  assert.equal(selected.eligibleReviewers,0);
+  assert.equal(selected.devLabels,0);
 });
