@@ -6,16 +6,19 @@ import { z } from "zod";
 import { canonicalJson, sha256 } from "../src/lib/case-generation";
 import { CaseCard } from "../src/lib/case-schema";
 import { getSql } from "../src/lib/db";
+import { FOLLOWUP_DRY_RUN_FILE, FOLLOWUP_STOP_AT, FOLLOWUP_VERSION, followupStart } from "../src/lib/followup";
 import { LEARNER_DRY_RUN_FILE } from "../src/lib/learner";
 import { MODEL, type TokenUsage } from "../src/lib/llm";
 import { BaselineEntry, baselineEntry, loadPreparedInputs, runConcurrent, validateBaseline } from "../src/lib/prepared-baseline";
 import { decide, type DeskResult } from "../src/lib/refund-desk";
 
 loadEnvConfig(process.cwd());
-const output = resolve("data/decisions_v2.json");
-const reportPath = resolve(".baseline-runs/v2-report.json");
-const lock = resolve(".baseline-runs/v2.lock");
-const USAGE = "Usage: npm run agent:run -- --version v2 --set eval [--check | --dry-run [--limit N]]";
+const followup = process.argv.includes("--follow-up");
+const version = followup ? FOLLOWUP_VERSION : "v2";
+const output = resolve(`data/decisions_${version}.json`);
+const reportPath = resolve(`.baseline-runs/${version}-report.json`);
+const lock = resolve(`.baseline-runs/${version}.lock`);
+const USAGE = "Usage: npm run agent:run -- --version v2 --set eval [--follow-up] [--check | --dry-run [--limit N]]";
 
 function parseArgs(argv: string[]) {
   if (argv[0] !== "--version" || argv[1] !== "v2" || argv[2] !== "--set" || argv[3] !== "eval") throw new Error(USAGE);
@@ -24,7 +27,7 @@ function parseArgs(argv: string[]) {
   const dryRun = rest.includes("--dry-run");
   const limitAt = rest.indexOf("--limit");
   const limit = limitAt >= 0 ? Number(rest[limitAt + 1]) : 2;
-  const known = rest.filter((arg, i) => ["--check", "--dry-run", "--limit"].includes(arg) || (i > 0 && rest[i - 1] === "--limit"));
+  const known = rest.filter((arg, i) => ["--check", "--dry-run", "--limit", "--follow-up"].includes(arg) || (i > 0 && rest[i - 1] === "--limit"));
   if (known.length !== rest.length || (check && dryRun) || (limitAt >= 0 && !dryRun) || !Number.isSafeInteger(limit) || limit < 1) throw new Error(USAGE);
   return { check, dryRun, limit };
 }
@@ -49,13 +52,13 @@ async function main() {
   const sql = getSql();
 
   // Notes come from the single stored v2 learner run, or from a local dry-run file when rehearsing.
-  let notes: { id: number | null; text: string; sha256: string };
+  let notes: { id: number | null; text: string; sha256: string; collectionWindow?: {kind:string;startedAt:string;stopAt:string} };
   if (dryRun) {
-    if (!existsSync(LEARNER_DRY_RUN_FILE)) throw new Error("Run `npm run learn -- --dry-run --include-test` first.");
-    const local = JSON.parse(readFileSync(LEARNER_DRY_RUN_FILE, "utf8")) as { notesText: string };
-    notes = { id: null, text: local.notesText, sha256: sha256(local.notesText) };
+    if (!existsSync(followup ? FOLLOWUP_DRY_RUN_FILE : LEARNER_DRY_RUN_FILE)) throw new Error(followup ? "Run `npm run learn -- --follow-up --dry-run` using genuine feedback first." : "Run `npm run learn -- --dry-run --include-test` first.");
+    const local = JSON.parse(readFileSync(followup ? FOLLOWUP_DRY_RUN_FILE : LEARNER_DRY_RUN_FILE, "utf8")) as { notesText: string; collectionWindow?: {kind:string;startedAt:string;stopAt:string} };
+    notes = { id: null, text: local.notesText, sha256: sha256(local.notesText),collectionWindow:local.collectionWindow };
   } else {
-    const rows = await sql`SELECT id, notes, source_case_ids FROM agent_notes WHERE version = 'v2' ORDER BY id`;
+    const rows = await sql`SELECT id, notes, source_case_ids FROM agent_notes WHERE version = ${version} ORDER BY id`;
     if (rows.length !== 1) throw new Error(`Expected exactly one v2 notes row, found ${rows.length}. Run \`npm run learn\` first.`);
     const sources: string[] = rows[0].source_case_ids ?? [];
     if (sources.length) {
@@ -64,13 +67,25 @@ async function main() {
     }
     notes = { id: Number(rows[0].id), text: rows[0].notes, sha256: sha256(rows[0].notes) };
   }
+  if (followup) {
+    const [round] = await sql`SELECT meta FROM terac_jobs WHERE purpose='eval_round' ORDER BY id DESC LIMIT 1`;
+    const startedAt = followupStart(round?.meta);
+    if (!dryRun) {
+      const [receipt] = await sql`SELECT meta FROM ledger WHERE actor='learner' AND decision='learn'
+        AND meta->>'agentNotesId'=${String(notes.id)} AND meta->>'agentVersion'=${version} ORDER BY id DESC LIMIT 1`;
+      notes.collectionWindow = receipt?.meta?.collectionWindow;
+    }
+    if (notes.collectionWindow?.kind !== "followup" || notes.collectionWindow.startedAt !== startedAt || notes.collectionWindow.stopAt !== FOLLOWUP_STOP_AT) {
+      throw new Error("Follow-up notes lack matching resume-time and hard-stop provenance.");
+    }
+  }
   const sourceSha256 = sha256(["src/lib/llm.ts", "src/lib/refund-desk.ts", "src/lib/prepared-baseline.ts", "scripts/run-agent-v2.ts"]
     .map(file => readFileSync(resolve(file), "utf8").replace(/\r\n/g, "\n")).join("\n"));
-  const fingerprint = sha256(canonicalJson({ configSha256: inputs.configSha256, sourceSha256, model: MODEL, agentVersion: "v2", notesSha256: notes.sha256, notesId: notes.id }));
+  const fingerprint = sha256(canonicalJson({ configSha256: inputs.configSha256, sourceSha256, model: MODEL, agentVersion: version, notesSha256: notes.sha256, notesId: notes.id }));
   const options = { ...inputs.config.decision_options, notes: notes.text || undefined };
 
   const readDecisions = () => sql`SELECT case_id, decision, clauses, reason, votes, dissent, policy_sha256, meta FROM decisions
-    WHERE agent_version = 'v2' AND case_id = ANY(${ids}::text[]) ORDER BY case_id`;
+    WHERE agent_version = ${version} AND case_id = ANY(${ids}::text[]) ORDER BY case_id`;
   function decode(rows: Awaited<ReturnType<typeof readDecisions>>) {
     for (const row of rows) {
       if (row.policy_sha256 !== inputs.policy.sha256 || row.meta?.inputFingerprint !== fingerprint) {
@@ -110,7 +125,7 @@ async function main() {
   if (spawnSync("git", ["cat-file", "-e", "origin/main:data/PREREGISTRATION.md"], { stdio: "ignore", windowsHide: true }).status !== 0) {
     throw new Error("The evaluation protocol is not registered on origin/main.");
   }
-  if (existsSync(output)) throw new Error("data/decisions_v2.json already exists. Use --check; v2 will not run again.");
+  if (existsSync(output)) throw new Error("The output artifact already exists. Use --check; v2 will not run again.");
   const stored = await sql`SELECT id, facts, policy_id, set_name FROM cases WHERE id = ANY(${ids}::text[])`;
   const cardById = new Map(cards.map(card => [card.id, card]));
   const policies = await sql`SELECT id, text FROM policies WHERE sha256 = ${inputs.policy.sha256}`;
@@ -146,20 +161,20 @@ async function main() {
       if (!result) throw new Error("No v2 result returned.");
       const entry = baselineEntry(card.id, result);
       const meta = { inputFingerprint: fingerprint, configSha256: inputs.configSha256, sourceSha256, notesSha256: notes.sha256,
-        agentNotesId: notes.id, model: MODEL, usage: result.usage, failedUsage, latencyMs: result.latencyMs, calls: result.calls,
+        agentNotesId: notes.id, collectionWindow:notes.collectionWindow, model: MODEL, usage: result.usage, failedUsage, latencyMs: result.latencyMs, calls: result.calls,
         decisionOptions: inputs.config.decision_options };
       const estimatedUsd = (4 * (result.usage.input + failedUsage.input) + 20 * (result.usage.output + failedUsage.output)) / 1_000_000;
       // Decision and audit entry are committed atomically. A resumed run cannot book the same decision twice.
       await sql`
         WITH recorded AS (
           INSERT INTO decisions (case_id, agent_version, decision, clauses, reason, votes, dissent, policy_sha256, notes_version, meta)
-          VALUES (${card.id}, 'v2', ${entry.decision}, ${entry.clauses}, ${entry.reason}, ${JSON.stringify(entry.votes)}::jsonb,
-                  ${JSON.stringify(entry.dissent)}::jsonb, ${inputs.policy.sha256}, 'v2', ${JSON.stringify(meta)}::jsonb)
+          VALUES (${card.id}, ${version}, ${entry.decision}, ${entry.clauses}, ${entry.reason}, ${JSON.stringify(entry.votes)}::jsonb,
+                  ${JSON.stringify(entry.dissent)}::jsonb, ${inputs.policy.sha256}, ${version}, ${JSON.stringify(meta)}::jsonb)
           ON CONFLICT (case_id, agent_version) DO NOTHING RETURNING case_id
         )
         INSERT INTO ledger (actor, decision, reason, cost_cents, meta, env)
         SELECT 'refund_desk', ${entry.decision}, ${entry.reason}, ${Math.ceil(estimatedUsd * 100)},
-               ${JSON.stringify({ caseId: card.id, agentVersion: "v2", estimatedUsd, ...meta })}::jsonb, 'sandbox' FROM recorded`;
+               ${JSON.stringify({ caseId: card.id, agentVersion: version, estimatedUsd, ...meta })}::jsonb, 'sandbox' FROM recorded`;
       console.log(`[v2] ${card.id}: ${entry.decision}; in=${result.usage.input} out=${result.usage.output}`);
     });
     const rows = await readDecisions();
@@ -170,12 +185,12 @@ async function main() {
       output: sum.output + row.meta.usage.output + (row.meta.failedUsage?.output ?? 0),
     }), { input: 0, output: 0 });
     const counts = Object.fromEntries(["approve", "deny", "out_of_scope"].map(decision => [decision, entries.filter(entry => entry.decision === decision).length]));
-    const report = { count: entries.length, counts, usage, estimatedUsd: (usage.input * 4 + usage.output * 20) / 1_000_000,
+    const report = { agentVersion:version, collectionWindow:notes.collectionWindow, count: entries.length, counts, usage, estimatedUsd: (usage.input * 4 + usage.output * 20) / 1_000_000,
       ratesUsdPerMillion: { input: 4, output: 20 }, sha256: sha256(text), notesSha256: notes.sha256, agentNotesId: notes.id,
       configSha256: inputs.configSha256, policySha256: inputs.policy.sha256, sourceSha256, inputFingerprint: fingerprint,
       recordedAt: new Date().toISOString() };
     writeFileSync(reportPath, canonicalJson(report));
-    const temporary = resolve(".baseline-runs/decisions_v2.json");
+    const temporary = resolve(`.baseline-runs/decisions_${version}.json`);
     writeFileSync(temporary, text);
     linkSync(temporary, output); // Cannot overwrite an already published v2 output.
     console.log(canonicalJson(report));

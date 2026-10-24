@@ -6,17 +6,21 @@ import { readFrozenBundle } from "../src/lib/case-files";
 import { getSql } from "../src/lib/db";
 import { LEARNER_DRY_RUN_FILE, LearnerOutput, assertDevelopmentFeedback, assertLearningWindow, learnerPrompt, renderNotes, selectLearnerInputs, validateLearnerOutput } from "../src/lib/learner";
 import { STOP_AT } from "../src/lib/terac-data";
+import { FOLLOWUP_DRY_RUN_FILE, FOLLOWUP_STOP_AT, FOLLOWUP_VERSION, followupStart } from "../src/lib/followup";
 import { MODEL, structured } from "../src/lib/llm";
 import { loadPreparedInputs, validateBaseline } from "../src/lib/prepared-baseline";
 
 loadEnvConfig(process.cwd());
-const DRY_RUN_NOTES = resolve(LEARNER_DRY_RUN_FILE);
 
 async function main() {
   const args = process.argv.slice(2);
-  if (args.some(arg => !["--dry-run", "--include-test"].includes(arg))) throw new Error("Usage: npm run learn [-- --dry-run [--include-test]]");
+  if (args.some(arg => !["--dry-run", "--include-test", "--follow-up"].includes(arg))) throw new Error("Usage: npm run learn [-- --follow-up] [--dry-run [--include-test]]");
   const dryRun = args.includes("--dry-run");
+  const followup = args.includes("--follow-up");
+  const version = followup ? FOLLOWUP_VERSION : "v2";
+  const dryRunNotes = resolve(followup ? FOLLOWUP_DRY_RUN_FILE : LEARNER_DRY_RUN_FILE);
   const useTestRows = args.includes("--include-test");
+  if (followup && useTestRows) throw new Error("Follow-up learning never includes test rows.");
   if (useTestRows && !dryRun) throw new Error("Test rows are not human labels; --include-test requires --dry-run.");
 
   const inputs = loadPreparedInputs();
@@ -28,23 +32,28 @@ async function main() {
   const sql = getSql();
 
   if (!dryRun) {
-    const [existing] = await sql`SELECT (SELECT count(*)::int FROM agent_notes WHERE version = 'v2') AS notes,
-      (SELECT count(*)::int FROM decisions WHERE agent_version = 'v2') AS decisions`;
+    const [existing] = await sql`SELECT (SELECT count(*)::int FROM agent_notes WHERE version = ${version}) AS notes,
+      (SELECT count(*)::int FROM decisions WHERE agent_version = ${version}) AS decisions`;
     if (existing.notes > 0 || existing.decisions > 0) throw new Error("v2 notes or decisions already exist; the learner runs once.");
   }
-  const [round] = await sql`SELECT status, num_participants, meta->>'completedSubmissions' AS completed, now() AS observed_at FROM terac_jobs WHERE purpose = 'eval_round' ORDER BY id DESC LIMIT 1`;
+  const [round] = await sql`SELECT status, num_participants, meta, meta->>'completedSubmissions' AS completed, now() AS observed_at FROM terac_jobs WHERE purpose = 'eval_round' ORDER BY id DESC LIMIT 1`;
+  const startedAt = followup ? followupStart(round?.meta) : null;
+  const stopAt = followup ? FOLLOWUP_STOP_AT : STOP_AT;
+  const collectionWindow = {kind:followup ? "followup" : "registered", startedAt, stopAt};
   assertLearningWindow({dryRun, nowMs: round?.observed_at ? new Date(round.observed_at).getTime() : Date.now(),
-    cutoffMs: Date.parse(STOP_AT), roundStatus: round?.status ?? "none",
+    cutoffMs: Date.parse(stopAt), roundStatus: round?.status ?? "none",
     completedParticipants: Number(round?.completed ?? 0), targetParticipants: Number(round?.num_participants ?? 0)});
   console.log(`[learn] review round status: ${round?.status ?? "none"}; rows: ${useTestRows ? "test" : "human"}; dry run: ${dryRun}`);
 
   // Only development and gold rows are queried. Evaluation labels never leave the database here.
   const reviewers = await sql`SELECT submission_id, slot, is_test FROM task_assignments WHERE submission_id IS NOT NULL`;
   const gold = await sql`SELECT terac_submission_id, gold_passed FROM reviews WHERE is_gold AND is_test = ${useTestRows}
-    AND (${useTestRows} OR created_at <= ${STOP_AT}::timestamptz)`;
+    AND (${useTestRows} OR created_at <= ${stopAt}::timestamptz)
+    AND (${!followup} OR created_at >= ${startedAt}::timestamptz)`;
   const labels = await sql`SELECT terac_submission_id, case_id, decision, reason, confidence FROM reviews
     WHERE case_id = ANY(${devIds}::text[]) AND NOT is_gold AND is_test = ${useTestRows}
-      AND (${useTestRows} OR created_at <= ${STOP_AT}::timestamptz)`;
+      AND (${useTestRows} OR created_at <= ${stopAt}::timestamptz)
+    AND (${!followup} OR created_at >= ${startedAt}::timestamptz)`;
   const selected = selectLearnerInputs({
     primarySlots, devCards, baseline, useTestRows,
     reviewers: reviewers.map(r => ({ submissionId: r.submission_id, slot: Number(r.slot), isTest: r.is_test })),
@@ -52,6 +61,12 @@ async function main() {
     labels: labels.map(l => ({ submissionId: l.terac_submission_id, caseId: l.case_id, decision: l.decision, reason: l.reason, confidence: l.confidence })),
   });
   console.log(`[learn] eligible reviewers=${selected.eligibleReviewers} dev labels=${selected.devLabels} agreements=${selected.agreements} disagreements=${selected.disagreements.length}`);
+  if (followup && !dryRun && (!selected.eligibleReviewers || !selected.devLabels)) {
+    await sql`INSERT INTO ledger (actor,decision,reason,cost_cents,meta,env)
+      SELECT 'learner','learn_skipped','No eligible development feedback in the exploratory follow-up window',0,
+        ${JSON.stringify({agentVersion:version,collectionWindow})}::jsonb,'sandbox'
+      WHERE NOT EXISTS (SELECT 1 FROM ledger WHERE actor='learner' AND decision='learn_skipped' AND meta->>'agentVersion'=${version})`;
+  }
   // The learner runs once. Storing empty notes without any human signal would use up that run.
   if (!dryRun && selected.eligibleReviewers === 0) {
     throw new Error("No eligible human reviewers yet (primary slot and passed gold); nothing was stored.");
@@ -78,8 +93,8 @@ async function main() {
 
   if (dryRun) {
     mkdirSync(".baseline-runs", { recursive: true });
-    writeFileSync(DRY_RUN_NOTES, canonicalJson({ notesText, notesSha256, output, useTestRows, sourceCaseIds }));
-    console.log(`[learn] dry run: nothing written to the database; notes saved to ${DRY_RUN_NOTES}`);
+    writeFileSync(dryRunNotes, canonicalJson({ notesText, notesSha256, output, useTestRows, sourceCaseIds, collectionWindow }));
+    console.log(`[learn] dry run: nothing written to the database; notes saved to ${dryRunNotes}`);
     return;
   }
 
@@ -88,15 +103,15 @@ async function main() {
     const sets = await sql`SELECT id, set_name FROM cases WHERE id = ANY(${sourceCaseIds}::text[])`;
     if (sets.length !== sourceCaseIds.length || sets.some(row => row.set_name !== "dev")) throw new Error("A note source is not a development case.");
   }
-  const meta = { model: MODEL, usage, estimatedUsd, notesSha256, sourceCaseIds, notes: output.notes,
+  const meta = { agentVersion:version, collectionWindow, model: MODEL, usage, estimatedUsd, notesSha256, sourceCaseIds, notes: output.notes,
     eligibleReviewers: selected.eligibleReviewers, devLabels: selected.devLabels, agreements: selected.agreements,
     disagreements: selected.disagreements.length, policySha256: inputs.policy.sha256 };
   const reason = `${output.notes.length} notes and ${output.examples.length} examples from ${selected.disagreements.length} development disagreements`;
   const [stored] = await sql`
     WITH inserted AS (
       INSERT INTO agent_notes (version, notes, examples, source_case_ids)
-      SELECT 'v2', ${notesText}, ${JSON.stringify(output.examples)}::jsonb, ${sourceCaseIds}::text[]
-      WHERE NOT EXISTS (SELECT 1 FROM agent_notes WHERE version = 'v2')
+      SELECT ${version}, ${notesText}, ${JSON.stringify(output.examples)}::jsonb, ${sourceCaseIds}::text[]
+      WHERE NOT EXISTS (SELECT 1 FROM agent_notes WHERE version = ${version})
       RETURNING id
     ), booked AS (
       INSERT INTO ledger (actor, decision, reason, cost_cents, meta, env)
@@ -105,7 +120,7 @@ async function main() {
     )
     SELECT (SELECT id FROM inserted) AS notes_id, (SELECT id FROM booked) AS ledger_id`;
   if (!stored?.notes_id) throw new Error("v2 notes were written concurrently by another run; nothing stored.");
-  console.log(`[learn] stored agent_notes id=${stored.notes_id} (v2) and ledger id=${stored.ledger_id}`);
+  console.log(`[learn] stored agent_notes id=${stored.notes_id} (${version}) and ledger id=${stored.ledger_id}`);
 }
 
 main().catch(error => {

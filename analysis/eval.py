@@ -11,7 +11,7 @@ from pathlib import Path
 from statistics import median
 
 from runtime import (BINARY, CUTOFF, DECISIONS, ROOT, ReportError, digest,
-                     git_commit, iso, load_inputs, read_database, timestamp, write_json)
+                     followup_window, git_commit, iso, load_inputs, read_database, timestamp, write_json)
 
 HUMAN_CHOICES = BINARY | {"need_more_evidence"}
 
@@ -64,7 +64,7 @@ def score_agent(predictions, reference):
     return {**errors, "errors": total, "cases": n, "error_rate": total/n if n else None, "error_rate_wilson_95": wilson(total, n)}
 
 
-def fetch_snapshot(inputs):
+def fetch_snapshot(inputs, followup=False):
     # Do not move this query into a shared repository helper or the live monitor.
     with read_database() as connection:
         observed = connection.execute("select now() as now").fetchone()["now"]
@@ -76,11 +76,11 @@ def fetch_snapshot(inputs):
         """, (list(inputs["cases"]),)).fetchall()
         v2 = connection.execute("""
             select case_id, decision, policy_sha256, meta from decisions
-            where agent_version='v2' and case_id = any(%s) order by case_id
-        """, (inputs["evaluation"],)).fetchall()
+            where agent_version=%s and case_id = any(%s) order by case_id
+        """, ("v2_followup" if followup else "v2", inputs["evaluation"])).fetchall()
         round_info = connection.execute("""
             select status, num_participants, meta->>'lastPolledAt' as last_polled_at,
-                   meta->>'pausedAt' as paused_at, meta->>'pauseReason' as pause_reason
+                   meta->>'pausedAt' as paused_at, meta->>'pauseReason' as pause_reason, meta->'followup' as followup
             from terac_jobs where purpose='eval_round' order by id desc limit 1
         """).fetchone()
     return {"observed_at": observed, "assignments": assignments, "reviews": reviews, "v2": v2,
@@ -119,8 +119,9 @@ def validate_v2_artifact(inputs, rows, path):
     return {"available": True, "sha256": digest(raw)}
 
 
-def analyze_snapshot(inputs, snapshot):
+def analyze_snapshot(inputs, snapshot, followup=False):
     observed = timestamp(snapshot["observed_at"])
+    window_start, planned_cutoff = followup_window(inputs, snapshot.get("round")) if followup else (None, CUTOFF)
     excluded = Counter()
     primary = {s["slot"]: s for s in inputs["primary"]}
     slots = {s["slot"]: s for s in inputs["assignment"]["slots"]}
@@ -151,6 +152,9 @@ def analyze_snapshot(inputs, snapshot):
             excluded["unassigned_card_or_task_response"] += 1
             continue
         created = timestamp(row["created_at"])
+        if window_start and created < window_start:
+            excluded["before_followup_response"] += 1
+            continue
         if created > observed:
             excluded["after_snapshot_response"] += 1
             continue
@@ -171,7 +175,7 @@ def analyze_snapshot(inputs, snapshot):
         if all(delivered):
             completion_times.append(max(timestamp(row["created_at"]) for row in delivered))
     target_stop = max(completion_times) if len(completion_times) == len(primary) else None
-    effective_cutoff = min(CUTOFF, target_stop) if target_stop else CUTOFF
+    effective_cutoff = min(planned_cutoff, target_stop) if target_stop else planned_cutoff
     window_end = min(observed, effective_cutoff)
     saved = {}
     for key, row in earliest.items():
@@ -257,6 +261,11 @@ def analyze_snapshot(inputs, snapshot):
 
     v1 = {key: row["decision"] for key, row in inputs["baseline"].items()}
     v2 = validate_v2(inputs, snapshot.get("v2", []))
+    if followup:
+        for row in snapshot.get("v2", []):
+            window = (row.get("meta") or {}).get("collectionWindow") or {}
+            if window.get("kind") != "followup" or timestamp(window.get("startedAt")) != window_start or timestamp(window.get("stopAt")) != planned_cutoff:
+                raise ReportError("A follow-up model output has different collection-window provenance.")
     baseline_metrics = score_agent(v1, reference) if reference else None
     v2_complete = len(v2) == len(inputs["evaluation"])
     artifact_available = snapshot.get("v2_artifact", {}).get("available", True)
@@ -281,6 +290,8 @@ def analyze_snapshot(inputs, snapshot):
     status = "interim_collection" if not after_cutoff else "no_consensus" if not reference else "awaiting_v2" if not v2_complete else "awaiting_v2_artifact" if not artifact_available else "complete_partial" if complete < len(primary) else "complete"
     results = {
         "schema_version": 1, "data_kind": snapshot.get("data_kind", "synthetic_fixture"), "status": status,
+        "analysis_kind": "exploratory_followup" if followup else "registered", "window_start_utc": iso(window_start),
+        "planned_cutoff_utc": iso(planned_cutoff),
         "generated_at": iso(observed), "registered_cutoff_utc": iso(CUTOFF), "effective_cutoff_utc": iso(effective_cutoff),
         "cutoff_reached": after_cutoff, "round": snapshot.get("round"),
         "frozen_inputs_sha256": inputs["hashes"], "protocol_sha256": inputs["protocol_sha256"],
@@ -295,6 +306,7 @@ def analyze_snapshot(inputs, snapshot):
                  "pass_rate_of_claimed": gold_counts["passed"]/len(main_reviewers) if main_reviewers else None},
         "agreement": agreement(pairs), "baseline_on_consensus": baseline_metrics, "comparison": comparison,
         "v2": {"recorded_cases": len(v2), "expected_cases": len(inputs["evaluation"]), "complete": v2_complete,
+               "agent_version": "v2_followup" if followup else "v2",
                "artifact_available": artifact_available, "artifact_sha256": snapshot.get("v2_artifact", {}).get("sha256")},
         "exclusions": dict(sorted(excluded.items())), "missing_reference_ratings": dict(sorted(missing_reasons.items())),
         "reference_case_coverage": case_audit, "reviewers": reviewers, "spare_third_ratings": extras,
@@ -305,6 +317,8 @@ def analyze_snapshot(inputs, snapshot):
     }
     if inputs["amendment_1"]:
         results["caveats"].append("Amendment 1 added a broad online-shopping screener and the platform screening interview before recruitment, which may reduce completions before cutoff.")
+    if followup:
+        results["caveats"].insert(0, "Exploratory follow-up after the registered cutoff. The original registered N=0 report is preserved separately; this does not replace it.")
     if snapshot.get("data_kind") != "real_collection":
         results["caveats"].insert(0, "SYNTHETIC TEST FIXTURE — not human study results.")
     results["summary"] = plain_summary(results)
@@ -314,8 +328,11 @@ def analyze_snapshot(inputs, snapshot):
 def plain_summary(results):
     sample = results["sample"]
     n = sample["consensus_cases"]
-    timing = "by the registered cutoff" if results["cutoff_reached"] else "so far; collection is still in progress"
+    followup = results.get("analysis_kind") == "exploratory_followup"
+    timing = ("by the follow-up cutoff" if followup else "by the registered cutoff") if results["cutoff_reached"] else "so far; collection is still in progress"
     prefix = "SYNTHETIC TEST FIXTURE. " if results["data_kind"] != "real_collection" else ""
+    if followup:
+        prefix += "EXPLORATORY FOLLOW-UP. "
     if not n:
         context = ""
         if results["cutoff_reached"]:
@@ -354,10 +371,13 @@ def render_chart(results, path):
         comparison = results["comparison"]
         n = results["sample"]["consensus_cases"]
         title = "Refund decision errors on held-out consensus cases"
+        followup = results.get("analysis_kind") == "exploratory_followup"
+        if followup:
+            title = "Exploratory follow-up: held-out refund decision errors"
         if results["data_kind"] != "real_collection":
             title = "SYNTHETIC TEST — " + title
         figure.suptitle(title, x=.06, ha="left", fontsize=18, fontweight="bold", color="#152b3c")
-        stage = "Registered cutoff reached" if results["cutoff_reached"] else "Interim · collection in progress"
+        stage = ("Follow-up cutoff reached" if followup else "Registered cutoff reached") if results["cutoff_reached"] else "Interim follow-up" if followup else "Interim · collection in progress"
         figure.text(.06, .88, f"{stage}  |  {n} consensus cases", fontsize=12, color="#526473")
         if n:
             metrics = [comparison["v1"], comparison["v2"]] if comparison else [results["baseline_on_consensus"]]
@@ -392,7 +412,7 @@ def render_chart(results, path):
         info.text(.04, .98, "\n".join(lines), transform=info.transAxes, va="top", fontsize=11, linespacing=1.6, color="#213f50")
         figure.text(.06, .06, "Whiskers: 95% Wilson intervals for total error rates. Prepared synthetic cases; small pilot. Test rows excluded.", fontsize=9, color="#526473")
         figure.subplots_adjust(left=.07, right=.98, top=.80, bottom=.22, wspace=.27)
-        figure.savefig(path, dpi=180, facecolor=figure.get_facecolor(), metadata={"Description": "Registered refund evaluation; " + results["status"]})
+        figure.savefig(path, dpi=180, facecolor=figure.get_facecolor(), metadata={"Description": ("Exploratory follow-up; " if followup else "Registered refund evaluation; ") + results["status"]})
     finally:
         plt.close(figure)
 
@@ -401,7 +421,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "analysis")
     parser.add_argument("--fixture", type=Path, help="Synthetic snapshot only; requires a separate output directory.")
+    parser.add_argument("--follow-up", action="store_true", help="Separate exploratory window; never overwrites registered results.")
     args = parser.parse_args()
+    if not args.follow_up and args.output_dir.resolve() == (ROOT / "analysis").resolve() and (ROOT / "analysis/results.json").exists():
+        raise ReportError("The registered report is frozen. Use --follow-up or an independent --output-dir to reproduce it.")
     inputs = load_inputs()
     if args.fixture:
         if args.output_dir.resolve().is_relative_to(ROOT):
@@ -409,9 +432,10 @@ def main():
         snapshot = json.loads(args.fixture.read_text(encoding="utf8"))
         snapshot["data_kind"] = "synthetic_fixture"
     else:
-        snapshot = fetch_snapshot(inputs)
-        snapshot["v2_artifact"] = validate_v2_artifact(inputs, snapshot["v2"], ROOT / "data/decisions_v2.json")
-    results = analyze_snapshot(inputs, snapshot)
+        snapshot = fetch_snapshot(inputs, args.follow_up)
+        artifact = "decisions_v2_followup.json" if args.follow_up else "decisions_v2.json"
+        snapshot["v2_artifact"] = validate_v2_artifact(inputs, snapshot["v2"], ROOT / "data" / artifact)
+    results = analyze_snapshot(inputs, snapshot, args.follow_up)
     results["registration_commit"] = git_commit("data/PREREGISTRATION.md", first=True)
     results["protocol_current_commit"] = git_commit("data/PREREGISTRATION.md")
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -423,7 +447,8 @@ def main():
         (staging / "summary.md").write_text(results["summary"] + "\n", encoding="utf8")
         # Publish the JSON last, after its chart is complete and checksummed.
         for name in ("chart.png", "summary.md", "results.json"):
-            os.replace(staging / name, args.output_dir / name)
+            target = name.replace(".", "_followup.", 1) if args.follow_up else name
+            os.replace(staging / name, args.output_dir / target)
     print(results["summary"])
     print(json.dumps({"status": results["status"], "consensus_cases": results["sample"]["consensus_cases"], "v2_complete": results["v2"]["complete"], "cutoff_utc": results["effective_cutoff_utc"]}, sort_keys=True))
 

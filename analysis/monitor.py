@@ -7,7 +7,7 @@ import json
 from statistics import median
 import time
 
-from runtime import CUTOFF, ROOT, ReportError, iso, load_inputs, read_database, timestamp
+from runtime import CUTOFF, ROOT, ReportError, followup_window, iso, load_inputs, read_database, timestamp
 
 ASSIGNMENTS_SQL = """
 select slot, submission_id, task_id, assigned_at, is_test
@@ -22,17 +22,17 @@ from reviews order by created_at, id
 ROUND_SQL = """
 select status, num_participants, meta->>'lastPolledAt' as last_polled_at,
        meta->>'completedSubmissions' as completed_submissions,
-       meta->>'pausedAt' as paused_at
+       meta->>'pausedAt' as paused_at, meta->'followup' as followup
 from terac_jobs where purpose='eval_round' order by id desc limit 1
 """
 
 
-def collection_health(inputs, assignments, reviews, now, stuck_minutes=10):
+def collection_health(inputs, assignments, reviews, now, stuck_minutes=10, window_start=None, cutoff=CUTOFF):
     now = timestamp(now)
     primary = {s["slot"]: s for s in inputs["primary"]}
     slots = {s["slot"]: s for s in inputs["assignment"]["slots"]}
     real = [a for a in assignments if a.get("submission_id") and not a.get("is_test") and not a["submission_id"].startswith("test_")]
-    valid = [r for r in reviews if r["case_id"] in inputs["cases"] and not r.get("is_test") and not str(r.get("terac_submission_id", "")).startswith("test_") and timestamp(r["created_at"]) <= min(now, CUTOFF)]
+    valid = [r for r in reviews if r["case_id"] in inputs["cases"] and not r.get("is_test") and not str(r.get("terac_submission_id", "")).startswith("test_") and timestamp(r["created_at"]) <= min(now, cutoff) and (not window_start or timestamp(r["created_at"]) >= window_start)]
     by_id, first = {}, {}
     for row in sorted(valid, key=lambda r: (timestamp(r["created_at"]), int(r["id"]))):
         first.setdefault((row["terac_submission_id"], row["case_id"]), row)
@@ -68,7 +68,7 @@ def collection_health(inputs, assignments, reviews, now, stuck_minutes=10):
             slot = next((a["slot"] for a in real if a["submission_id"] == submission), None)
             flags.append({"slot": slot, "case_id": case, "flag": "duplicate_response", "rows": count})
     main = [s for s in sessions if s["slot"] in primary]
-    return {"observed_at": iso(now), "cutoff_utc": iso(CUTOFF), "cutoff_reached": now >= CUTOFF,
+    return {"observed_at": iso(now), "cutoff_utc": iso(cutoff), "cutoff_reached": now >= cutoff, "analysis_kind": "exploratory_followup" if window_start else "registered", "window_start_utc": iso(window_start),
             "primary_slots_claimed": len(main), "primary_slots_total": len(primary),
             "complete_reviewers": sum(s["complete"] for s in main), "partial_reviewers": sum(not s["complete"] for s in main),
             "overflow_slots_claimed": sum(s["overflow"] for s in sessions),
@@ -80,14 +80,15 @@ def collection_health(inputs, assignments, reviews, now, stuck_minutes=10):
             "test_rows_ignored": sum(bool(r.get("is_test")) or str(r.get("terac_submission_id", "")).startswith("test_") for r in reviews)}
 
 
-def run_once():
+def run_once(followup=False):
     inputs = load_inputs()
     with read_database() as connection:
         now = connection.execute("select now() as now").fetchone()["now"]
         assignments = connection.execute(ASSIGNMENTS_SQL).fetchall()
         reviews = connection.execute(REVIEWS_SQL).fetchall()
         round_info = connection.execute(ROUND_SQL).fetchone()
-    report = collection_health(inputs, assignments, reviews, now)
+    start, cutoff = followup_window(inputs, round_info) if followup else (None, CUTOFF)
+    report = collection_health(inputs, assignments, reviews, now, window_start=start, cutoff=cutoff)
     report["round"] = dict(round_info) if round_info else None
     return report
 
@@ -97,11 +98,12 @@ def main():
     parser.add_argument("--watch", action="store_true", help="Print every ten minutes until the registered cutoff.")
     parser.add_argument("--interval", type=int, default=600)
     parser.add_argument("--output", type=str, help="Optional metadata-only JSON receipt.")
+    parser.add_argument("--follow-up", action="store_true", help="Monitor the confirmed resume-to-18:10 exploratory window.")
     args = parser.parse_args()
     if args.interval < 30:
         parser.error("Use an interval of at least 30 seconds.")
     while True:
-        report = run_once()
+        report = run_once(args.follow_up)
         text = json.dumps(report, indent=2, sort_keys=True, allow_nan=False)
         print(text, flush=True)
         if args.output:
@@ -109,7 +111,7 @@ def main():
             Path(args.output).write_text(text + "\n", encoding="utf8")
         if not args.watch or report["cutoff_reached"]:
             return
-        time.sleep(min(args.interval, max(1, (CUTOFF-datetime.now(timezone.utc)).total_seconds())))
+        time.sleep(min(args.interval, max(1, (timestamp(report["cutoff_utc"])-datetime.now(timezone.utc)).total_seconds())))
 
 
 if __name__ == "__main__":

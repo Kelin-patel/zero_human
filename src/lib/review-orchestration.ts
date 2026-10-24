@@ -22,7 +22,9 @@ export async function claimReviewWorkerJob(kinds: JobKind[]): Promise<JobRow | n
   const sql = getSql();
   const [row] = await sql`UPDATE jobs SET status = 'running', attempts = attempts + 1, locked_at = now()
     WHERE id = (SELECT id FROM jobs WHERE status = 'queued' AND run_after <= now() AND kind = ANY(${kinds})
-      AND (kind <> 'review' OR payload->>'purpose' = 'eval_round') ORDER BY id FOR UPDATE SKIP LOCKED LIMIT 1)
+      AND (kind <> 'review' OR payload->>'purpose' = 'eval_round')
+      ORDER BY CASE WHEN kind='review' AND payload->>'action'='pause' THEN 0 ELSE 1 END, id
+      FOR UPDATE SKIP LOCKED LIMIT 1)
     RETURNING *`;
   return row as JobRow | undefined ?? null;
 }

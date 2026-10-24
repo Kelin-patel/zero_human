@@ -12,7 +12,7 @@ import unittest
 
 ANALYSIS = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ANALYSIS))
-from runtime import CUTOFF, ROOT, ReportError, load_inputs
+from runtime import CUTOFF, FOLLOWUP_CUTOFF, ROOT, ReportError, followup_window, load_inputs
 import monitor
 spec = importlib.util.spec_from_file_location("registered_eval", ANALYSIS / "eval.py")
 evaluation = importlib.util.module_from_spec(spec)
@@ -48,6 +48,55 @@ def response(snapshot, slot, key):
 
 
 class EvaluationTests(unittest.TestCase):
+    def followup_fixture(self):
+        snapshot = fixture()
+        start = START+timedelta(minutes=40)
+        window = {"kind":"followup","startedAt":start.isoformat(),"stopAt":FOLLOWUP_CUTOFF.isoformat()}
+        snapshot["round"]["followup"] = window
+        snapshot["observed_at"] = FOLLOWUP_CUTOFF+timedelta(seconds=1)
+        for row in snapshot["assignments"]:
+            row["assigned_at"] += timedelta(minutes=40)
+        for row in snapshot["reviews"]:
+            row["created_at"] += timedelta(minutes=40)
+        for row in snapshot["v2"]:
+            row["meta"] = {"collectionWindow":window}
+        return snapshot
+
+    def test_followup_late_data_never_changes_registered_analysis(self):
+        snapshot = self.followup_fixture()
+        self.assertEqual(evaluation.analyze_snapshot(INPUTS, snapshot)["sample"]["consensus_cases"],0)
+        result = evaluation.analyze_snapshot(INPUTS, snapshot, followup=True)
+        self.assertEqual(result["sample"]["consensus_cases"],27)
+        self.assertEqual(result["analysis_kind"],"exploratory_followup")
+        self.assertIn("EXPLORATORY FOLLOW-UP",result["summary"])
+
+    def test_followup_includes_hard_stop_but_excludes_later_data(self):
+        snapshot = self.followup_fixture()
+        row = next(r for r in snapshot["reviews"] if r["case_id"] in INPUTS["evaluation"])
+        row["created_at"] = FOLLOWUP_CUTOFF
+        self.assertEqual(evaluation.analyze_snapshot(INPUTS,snapshot,True)["sample"]["consensus_cases"],27)
+        row["created_at"] += timedelta(microseconds=1)
+        self.assertEqual(evaluation.analyze_snapshot(INPUTS,snapshot,True)["sample"]["consensus_cases"],26)
+
+    def test_followup_requires_confirmed_resume_and_matching_model_window(self):
+        with self.assertRaises(ReportError):
+            followup_window(INPUTS,{})
+        snapshot = self.followup_fixture()
+        snapshot["v2"][0]["meta"]["collectionWindow"] = {"kind":"registered"}
+        with self.assertRaisesRegex(ReportError,"provenance"):
+            evaluation.analyze_snapshot(INPUTS,snapshot,True)
+
+    def test_followup_ignores_pre_resume_and_test_responses(self):
+        snapshot = self.followup_fixture()
+        row = next(r for r in snapshot["reviews"] if r["case_id"] in INPUTS["evaluation"])
+        row["created_at"] = START
+        result = evaluation.analyze_snapshot(INPUTS,snapshot,True)
+        self.assertEqual(result["sample"]["consensus_cases"],26)
+        self.assertEqual(result["exclusions"]["before_followup_response"],1)
+        for row in snapshot["reviews"]:
+            row["is_test"] = True
+        self.assertEqual(evaluation.analyze_snapshot(INPUTS,snapshot,True)["sample"]["consensus_cases"],0)
+
     def test_completed_database_outputs_wait_for_the_frozen_artifact(self):
         snapshot = fixture()
         snapshot["v2_artifact"] = {"available": False, "sha256": None}

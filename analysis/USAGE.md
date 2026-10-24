@@ -23,3 +23,21 @@ The comparison requires all 27 v2 predictions, so an incomplete v2 run cannot se
 The unit suite constructs synthetic labels in memory, including a known 9-to-1 discordance example, failed/missing gold, incomplete reviewers, ties, need-more-evidence, late responses, test rows and incomplete model outputs. Synthetic CLI snapshots must use `--fixture <path> --output-dir <directory-outside-repository>`; their reports are prominently labeled as synthetic tests and cannot overwrite this report bundle.
 
 Re-run the evaluation after the registered cutoff and once the frozen v2 artifact is available. Do not rerun v1 or change the frozen cases, policy, assignment or decision settings.
+
+## Exploratory follow-up
+
+The timestamped public follow-up note continues the same prepaid panel from its confirmed resume time to **18:10 ET / 22:10 UTC on October 24, 2026**, or the original target completion if earlier. Screening, primary assignments, gold eligibility and methods are unchanged. The original registered report remains N=0 and its files are frozen. A normal evaluator invocation refuses to overwrite them; use an independent `--output-dir` for reproduction.
+
+On the authenticated worker host, restart the existing single worker from updated main before using `npm run terac:resume -- --follow-up --check` and `npm run terac:resume -- --follow-up`. The command verifies the published note and worker capability, resumes the same opportunity at no additional recruitment cost, records the provider's resume time and queues the hard stop. Do not start a second worker. Task claims/saves and completion-based MCP approvals are not blocked by the old deadline. Late finished work remains payable even though out-of-window answers are excluded.
+
+```bash
+python analysis/monitor.py --follow-up
+python analysis/eval.py --follow-up
+# After the hard stop, or the completed-target pause:
+npm run learn -- --follow-up
+npm run agent:run -- --version v2 --set eval --follow-up
+npm run agent:run -- --version v2 --set eval --follow-up --check
+python analysis/eval.py --follow-up
+```
+
+Follow-up outputs are `analysis/results_followup.json`, `analysis/chart_followup.png`, `analysis/summary_followup.md` and `data/decisions_v2_followup.json`. Stored notes and predictions use `v2_followup`, independently of the registered run. Both the lower resume-time bound and upper hard stop apply to real development/gold feedback and the human reference. The learner rejects test inclusion and refuses empty feedback; if no eligible human reference exists, report N=0 and unavailable metrics. Never substitute synthetic test output. Model-output provenance must match the actual follow-up window.
