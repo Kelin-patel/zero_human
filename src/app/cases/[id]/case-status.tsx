@@ -231,7 +231,10 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
             {view.execution.status === "blocked" ? (
               <p>Refund not issued: {view.execution.blockReason}</p>
             ) : view.execution.status === "failed" ? (
-              <p>Refund not completed yet: {view.execution.blockReason}. It will be retried.</p>
+              <p>
+                All checks passed, but Whop did not complete the refund: {view.execution.blockReason}. Nothing was
+                refunded.
+              </p>
             ) : (
               <>
                 <p>
