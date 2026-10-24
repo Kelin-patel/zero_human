@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import type { CaseView } from "@/lib/repo";
 
 const POLL_MS = 3000;
@@ -64,6 +64,7 @@ function Item({
   meta,
   last = false,
   children,
+  stage,
 }: {
   title: string;
   tone: Tone;
@@ -71,9 +72,16 @@ function Item({
   meta?: React.ReactNode;
   last?: boolean;
   children?: React.ReactNode;
+  stage: string;
 }) {
+  const fresh = useContext(FreshContext);
+  const isFresh = fresh.items.includes(stage);
   return (
-    <li className={`relative pl-7 ${last ? "" : "pb-7"}`}>
+    <li
+      className={`relative pl-7 ${last ? "" : "pb-7"} ${isFresh ? "anim-reveal" : ""} ${
+        fresh.newest === stage ? "anim-flash rounded-lg" : ""
+      }`}
+    >
       {!last && <span aria-hidden className="absolute bottom-0 left-[4px] top-[18px] w-px bg-rule" />}
       <span
         aria-hidden
@@ -93,6 +101,64 @@ function Item({
         </div>
       )}
     </li>
+  );
+}
+
+function timelineOrder(view: CaseView): string[] {
+  const appealed = Boolean(view.appealedAt);
+  const verdict = view.humanVerdict;
+  const canAppeal = view.decision?.decision === "deny" && view.status === "decided" && !appealed;
+  return [
+    "request",
+    "ai",
+    (canAppeal || appealed) && "appeal",
+    (view.evidence.length > 0 || appealed) && "evidence",
+    (appealed || view.reviews.length > 0 || Boolean(verdict)) && "review",
+    (Boolean(verdict) || appealed) && "verdict",
+    (Boolean(view.execution) || (appealed && (!verdict || verdict.decision === "approve"))) && "refund",
+  ].filter(Boolean) as string[];
+}
+
+const FreshContext = createContext<{ items: string[]; newest: string | null }>({ items: [], newest: null });
+
+function Stepper({ steps, current }: { steps: { label: string; done: boolean }[]; current: number }) {
+  return (
+    <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+      <ol className="flex min-w-max items-center gap-0 py-1">
+        {steps.map((s, i) => {
+          const isCurrent = i === current;
+          return (
+            <li key={s.label} className="flex items-center">
+              {i > 0 && (
+                <span
+                  aria-hidden
+                  className={`mx-2 h-px w-8 sm:w-10 ${steps[i - 1].done && s.done ? "bg-ink" : "bg-rule-strong"}`}
+                />
+              )}
+              <span className="flex items-center gap-2" aria-current={isCurrent ? "step" : undefined}>
+                <span
+                  aria-hidden
+                  className={`h-2.5 w-2.5 shrink-0 rounded-full ${
+                    s.done
+                      ? "bg-ink"
+                      : isCurrent
+                        ? "border-2 border-brand bg-card ring-2 ring-brand/20"
+                        : "border border-rule-strong bg-card"
+                  }`}
+                />
+                <span
+                  className={`whitespace-nowrap text-xs font-medium ${
+                    s.done ? "text-ink" : isCurrent ? "text-brand" : "text-ink-3"
+                  }`}
+                >
+                  {s.label}
+                </span>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
   );
 }
 
@@ -127,6 +193,17 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
   const [note, setNote] = useState("");
   const [appealError, setAppealError] = useState<string | null>(null);
   const [appealing, setAppealing] = useState(false);
+  const [initialOrder] = useState(() => timelineOrder(initial));
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightbox(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightbox]);
 
   useEffect(() => {
     let active = true;
@@ -180,21 +257,37 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
         : "warn";
 
   // Which items are on the activity timeline, in order.
-  const showAppeal = canAppeal || appealed;
-  const showEvidence = view.evidence.length > 0 || appealed;
-  const showReview = appealed || view.reviews.length > 0 || Boolean(verdict);
-  const showVerdict = Boolean(verdict) || appealed;
-  const showRefund = Boolean(execution) || (appealed && (!verdict || verdict.decision === "approve"));
-  const order = [
-    "request",
-    "ai",
-    showAppeal && "appeal",
-    showEvidence && "evidence",
-    showReview && "review",
-    showVerdict && "verdict",
-    showRefund && "refund",
-  ].filter(Boolean) as string[];
+  const order = timelineOrder(view);
+  const showAppeal = order.includes("appeal");
+  const showEvidence = order.includes("evidence");
+  const showReview = order.includes("review");
+  const showVerdict = order.includes("verdict");
+  const showRefund = order.includes("refund");
   const lastItem = order[order.length - 1];
+  // Items that arrived after the first render (via polling) animate in; the newest one flashes.
+  const freshItems = order.filter((s) => !initialOrder.includes(s));
+  const fresh = { items: freshItems, newest: freshItems[freshItems.length - 1] ?? null };
+
+  // Stage stepper, derived from the same fields as the timeline.
+  const steps = [
+    { label: "Request", done: true },
+    { label: "AI decision", done: Boolean(decision) },
+    { label: "Review requested", done: appealed },
+    { label: "Evidence", done: view.evidence.length > 0 },
+    { label: "Human review", done: Boolean(verdict) },
+    { label: "Outcome", done: Boolean(execution) },
+  ];
+  let currentStep = steps.findIndex((s) => !s.done);
+  if (decision?.decision === "approve" && !appealed && !execution) currentStep = 5;
+
+  // Verdict stamps.
+  const aiStamp =
+    decision?.decision === "deny"
+      ? { text: "DENIED", className: "text-bad" }
+      : decision?.decision === "approve"
+        ? { text: "APPROVED", className: "text-ok" }
+        : null;
+  const overturned = Boolean(aiStamp && verdict && verdict.decision !== decision?.decision);
 
   const details: { label: string; value: React.ReactNode }[] = [
     { label: "Status", value: <span className={BADGE[status.tone]}>{status.text}</span> },
@@ -230,12 +323,36 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
           <span>/</span>
           <span className="min-w-0 truncate font-mono">{view.id}</span>
         </nav>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-[28px] font-semibold leading-tight tracking-tight text-ink">
-            {view.product ?? "Your refund request"}
-          </h1>
-          <span className={BADGE[status.tone]}>{status.text}</span>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
+            <h1 className="font-display text-[28px] font-semibold leading-tight tracking-tight text-ink">
+              {view.product ?? "Your refund request"}
+            </h1>
+            <span className={BADGE[status.tone]}>{status.text}</span>
+          </div>
+          {aiStamp && (
+            <div className="relative shrink-0 pb-3 pr-6 pt-1">
+              <span className={`inline-block ${overturned ? "opacity-40" : ""}`}>
+                <span
+                  key={`ai-${aiStamp.text}-${view.status}`}
+                  className={`stamp anim-stamp ${aiStamp.className} ${overturned ? "struck" : ""}`}
+                >
+                  {aiStamp.text}
+                </span>
+              </span>
+              {verdict && (
+                <span
+                  key={`human-${verdict.decision}-${view.status}`}
+                  className={`stamp anim-stamp absolute left-4 top-5 ${overturned ? "text-ok" : "text-ink"}`}
+                  style={{ transform: "rotate(-3deg)", animationName: "stamp-in-3" }}
+                >
+                  {overturned ? "OVERTURNED" : "UPHELD"}
+                </span>
+              )}
+            </div>
+          )}
         </div>
+        <Stepper steps={steps} current={currentStep} />
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-ink-2">
           {view.amountCents != null && <span className="font-mono text-ink">{money(view.amountCents)}</span>}
           {isDemo && <span>Example Academy (fictional)</span>}
@@ -255,8 +372,9 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
         {/* Activity */}
         <section className="panel min-w-0">
           <h2 className="border-b border-rule px-5 py-4 text-sm font-semibold text-ink sm:px-6">Activity</h2>
+          <FreshContext.Provider value={fresh}>
           <ol className="px-5 py-6 sm:px-6">
-            <Item title="Request received" tone="info" meta={day(view.requestedAt)} last={lastItem === "request"}>
+            <Item title="Request received" tone="info" meta={day(view.requestedAt)} stage="request" last={lastItem === "request"}>
               <p>
                 <span className="font-medium text-ink">{view.product}</span> ·{" "}
                 <span className="font-mono text-ink">{money(view.amountCents)}</span>
@@ -273,7 +391,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
               tone={decision ? (DECISION_LABEL[decision.decision]?.tone ?? "neutral") : "neutral"}
               pending={!decision}
               meta={decision ? time(decision.decidedAt) : undefined}
-              last={lastItem === "ai"}
+              stage="ai" last={lastItem === "ai"}
             >
               {decision ? (
                 <>
@@ -308,7 +426,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                 title={appealed ? "Independent review requested" : "Appeal"}
                 tone={appealed ? "info" : "warn"}
                 meta={appealed ? time(view.appealedAt) : undefined}
-                last={lastItem === "appeal"}
+                stage="appeal" last={lastItem === "appeal"}
               >
                 {canAppeal && (
                   <div className="flex flex-col gap-3 rounded-lg border border-rule bg-subtle p-4">
@@ -363,7 +481,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                 tone="info"
                 pending={view.evidence.length === 0}
                 meta={view.evidence.length > 0 ? time(view.evidence[0].capturedAt) : undefined}
-                last={lastItem === "evidence"}
+                stage="evidence" last={lastItem === "evidence"}
               >
                 {view.evidence.map((e, i) => {
                   const caption = (
@@ -384,15 +502,27 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                     <div key={i} className="flex min-w-0 flex-col gap-2">
                       {e.screenshotUrl ? (
                         <figure className="overflow-hidden rounded-lg border border-rule">
-                          <a href={e.screenshotUrl} target="_blank" rel="noopener noreferrer" className="block bg-subtle">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setLightbox({
+                                src: e.screenshotUrl as string,
+                                alt: `Screenshot of ${e.url ?? "the checked page"}`,
+                              })
+                            }
+                            className="block w-full cursor-zoom-in bg-subtle"
+                          >
                             {/* eslint-disable-next-line @next/next/no-img-element -- screenshot bytes are served from our own API */}
                             <img
                               src={e.screenshotUrl}
                               alt={`Screenshot of ${e.url ?? "the checked page"}`}
                               className="block max-h-[420px] w-full object-cover object-top"
                             />
-                          </a>
-                          <figcaption className="border-t border-rule bg-card px-3 py-2">{caption}</figcaption>
+                          </button>
+                          <figcaption className="flex flex-col gap-1 border-t border-rule bg-card px-3 py-2">
+                            {caption}
+                            <span className="text-xs text-ink-3">Click to enlarge</span>
+                          </figcaption>
                         </figure>
                       ) : (
                         caption
@@ -414,7 +544,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                 title="Independent human review · Terac"
                 tone={view.reviews.length > 0 || verdict ? "info" : "warn"}
                 meta={view.reviews.length > 0 ? time(view.reviews[view.reviews.length - 1].createdAt) : undefined}
-                last={lastItem === "review"}
+                stage="review" last={lastItem === "review"}
               >
                 {appealed && view.reviews.length === 0 && !verdict && (
                   <p>Queued for independent review by verified people through Terac. The evidence is gathered first.</p>
@@ -434,7 +564,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                 tone={verdict ? (DECISION_LABEL[verdict.decision]?.tone ?? "neutral") : "neutral"}
                 pending={!verdict}
                 meta={verdict ? time(verdict.decidedAt) : undefined}
-                last={lastItem === "verdict"}
+                stage="verdict" last={lastItem === "verdict"}
               >
                 {verdict && (
                   <>
@@ -462,7 +592,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                 tone={executionTone}
                 pending={!execution}
                 meta={execution ? time(execution.createdAt) : undefined}
-                last={lastItem === "refund"}
+                stage="refund" last={lastItem === "refund"}
               >
                 {execution &&
                   (execution.status === "blocked" ? (
@@ -492,6 +622,7 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
               </Item>
             )}
           </ol>
+          </FreshContext.Provider>
         </section>
 
         {/* Details */}
@@ -511,6 +642,36 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
       <p className="text-xs text-ink-3">
         You keep all your other rights, including Whop&apos;s Resolution Center and your card issuer.
       </p>
+      {lightbox && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.alt}
+          className="anim-reveal fixed inset-0 z-50 flex items-center justify-center bg-ink/70 p-4"
+          onClick={() => setLightbox(null)}
+        >
+          <div
+            className="flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-lg bg-card shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="min-h-0 overflow-auto bg-subtle">
+              {/* eslint-disable-next-line @next/next/no-img-element -- screenshot bytes are served from our own API */}
+              <img src={lightbox.src} alt={lightbox.alt} className="block h-auto w-full" />
+            </div>
+            <div className="flex items-center justify-between gap-3 border-t border-rule px-4 py-3 text-sm">
+              <span className="min-w-0 truncate text-ink-3">{lightbox.alt}</span>
+              <span className="flex shrink-0 items-center gap-4">
+                <a href={lightbox.src} target="_blank" rel="noopener noreferrer" className="link">
+                  Open original
+                </a>
+                <button type="button" onClick={() => setLightbox(null)} className="btn-secondary">
+                  Close
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

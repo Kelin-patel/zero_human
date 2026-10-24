@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { decisionTone, humanize, TONE_BADGE } from "./tone";
 
 export type FeedRow = {
@@ -14,7 +14,42 @@ export type FeedRow = {
   env: string;
   date: string;
   time: string;
+  exact: string;
+  ts: number;
 };
+
+function Chevron({ open }: { open: boolean }) {
+  return (
+    <svg
+      className={`text-ink-3 transition-transform duration-150 ${open ? "rotate-90" : ""}`}
+      width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden
+    >
+      <path d="m9 6 6 6-6 6" />
+    </svg>
+  );
+}
+
+function Detail({ r }: { r: FeedRow }) {
+  const facts: [string, string][] = [
+    ["Timestamp", r.exact],
+    ["Row id", `#${r.id}`],
+    ["Cost", r.costCents > 0 ? money(r.costCents) : "none"],
+    [r.env === "sandbox" ? "Sandbox amount (not revenue)" : "Revenue", r.revenueCents > 0 ? money(r.revenueCents) : "none"],
+  ];
+  return (
+    <div className="anim-reveal flex flex-col gap-3 bg-subtle/60 px-4 py-4">
+      <p className="whitespace-pre-wrap break-words text-sm leading-relaxed text-ink">{r.reason || "No reason recorded."}</p>
+      <dl className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
+        {facts.map(([label, value]) => (
+          <div key={label}>
+            <dt className="text-xs text-ink-3">{label}</dt>
+            <dd className="font-mono text-[13px] tabular-nums text-ink">{value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  );
+}
 
 const money = (cents: number) => `$${(cents / 100).toFixed(2)}`;
 
@@ -50,6 +85,24 @@ function Env({ env }: { env: string }) {
 
 export function LedgerFeed({ rows }: { rows: FeedRow[] }) {
   const [actor, setActor] = useState<string | null>(null);
+  const [open, setOpen] = useState<Set<number>>(() => new Set());
+  // Rows that arrive after a live refresh get a brief highlight.
+  const [seen, setSeen] = useState<Set<number>>(() => new Set(rows.map((r) => r.id)));
+  const [fresh, setFresh] = useState<Set<number>>(() => new Set());
+  const [prevRows, setPrevRows] = useState(rows);
+  if (rows !== prevRows) {
+    setPrevRows(rows);
+    const arrived = rows.filter((r) => !seen.has(r.id)).map((r) => r.id);
+    setFresh(new Set(arrived));
+    if (arrived.length > 0) setSeen(new Set([...seen, ...arrived]));
+  }
+  const toggle = (id: number) =>
+    setOpen((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   const actors = useMemo(() => {
     const counts = new Map<string, { label: string; count: number }>();
@@ -93,6 +146,7 @@ export function LedgerFeed({ rows }: { rows: FeedRow[] }) {
         <table className="w-full table-fixed text-left">
           <thead className="bg-subtle text-xs font-medium text-ink-3">
             <tr>
+              <th className="w-10 py-2.5 pl-3" aria-label="Details" />
               <th className="w-[7.5rem] px-4 py-2.5 font-medium">Time</th>
               <th className="w-[11rem] px-4 py-2.5 font-medium">Actor</th>
               <th className="px-4 py-2.5 font-medium">Event</th>
@@ -102,8 +156,19 @@ export function LedgerFeed({ rows }: { rows: FeedRow[] }) {
             </tr>
           </thead>
           <tbody>
-            {visible.map((r) => (
-              <tr key={r.id} className="border-t border-rule align-top transition-colors duration-150 hover:bg-subtle/60">
+            {visible.map((r) => {
+              const isOpen = open.has(r.id);
+              return (
+              <Fragment key={r.id}>
+              <tr
+                className={`cursor-pointer border-t border-rule align-top transition-colors duration-150 hover:bg-subtle/60 ${fresh.has(r.id) ? "anim-flash" : ""}`}
+                onClick={() => toggle(r.id)}
+              >
+                <td className="py-3 pl-3">
+                  <button type="button" aria-expanded={isOpen} aria-label={`Details for entry ${r.id}`} className="rounded p-1 hover:bg-subtle">
+                    <Chevron open={isOpen} />
+                  </button>
+                </td>
                 <td className="px-4 py-3">
                   <div className="font-mono text-[13px] tabular-nums text-ink">{r.time}</div>
                   <div className="font-mono text-xs tabular-nums text-ink-3">{r.date} · #{r.id}</div>
@@ -119,18 +184,33 @@ export function LedgerFeed({ rows }: { rows: FeedRow[] }) {
                 <td className="px-4 py-3 text-right"><Amount r={r} /></td>
                 <td className="px-4 py-3"><Env env={r.env} /></td>
               </tr>
-            ))}
+              {isOpen && (
+                <tr className="border-t border-rule">
+                  <td colSpan={7} className="p-0"><Detail r={r} /></td>
+                </tr>
+              )}
+              </Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
       {/* Stacked list below md */}
       <ol className="panel overflow-hidden md:hidden">
-        {visible.map((r, i) => (
-          <li key={r.id} className={`flex flex-col gap-2 px-4 py-3.5 ${i > 0 ? "border-t border-rule" : ""}`}>
+        {visible.map((r, i) => {
+          const isOpen = open.has(r.id);
+          return (
+          <li key={r.id} className={`${i > 0 ? "border-t border-rule" : ""} ${fresh.has(r.id) ? "anim-flash" : ""}`}>
+          <div className="flex cursor-pointer flex-col gap-2 px-4 py-3.5" onClick={() => toggle(r.id)}>
             <div className="flex items-center justify-between gap-3">
               <Actor label={r.actorLabel} />
-              <span className="font-mono text-xs tabular-nums text-ink-3">{r.date} {r.time}</span>
+              <span className="flex items-center gap-1 font-mono text-xs tabular-nums text-ink-3">
+                {r.date} {r.time}
+                <button type="button" aria-expanded={isOpen} aria-label={`Details for entry ${r.id}`} className="rounded p-1">
+                  <Chevron open={isOpen} />
+                </button>
+              </span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-sm font-medium text-ink">{humanize(r.decision)}</span>
@@ -141,8 +221,11 @@ export function LedgerFeed({ rows }: { rows: FeedRow[] }) {
             {(r.costCents > 0 || r.revenueCents > 0) && (
               <div className="flex justify-start [&>span]:items-start"><Amount r={r} /></div>
             )}
+          </div>
+          {isOpen && <Detail r={r} />}
           </li>
-        ))}
+          );
+        })}
       </ol>
     </div>
   );
