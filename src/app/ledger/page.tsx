@@ -4,7 +4,8 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { getSql } from "@/lib/db";
 import { LedgerFeed, type FeedRow } from "./ledger-feed";
-import { decisionTone, TONE_BADGE } from "./tone";
+import { LiveRefresh } from "./live-refresh";
+import { decisionTone, TONE_BADGE, type Tone } from "./tone";
 
 export const metadata: Metadata = {
   title: "Public ledger | Second Instance",
@@ -29,6 +30,11 @@ const timeEt = (value: Date) =>
   value.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false });
 const dateEt = (value: Date) =>
   value.toLocaleDateString("en-US", { timeZone: "America/New_York", month: "short", day: "numeric" });
+const exactEt = (value: Date) =>
+  value.toLocaleString("en-US", {
+    timeZone: "America/New_York", year: "numeric", month: "short", day: "numeric",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false, timeZoneName: "short",
+  });
 const money = (cents: number | null) => (cents == null ? "" : `$${(cents / 100).toFixed(2)}`);
 
 function Metric({ label, value, tone, note, index }: { label: string; value: string; tone?: string; note?: string; index: number }) {
@@ -40,6 +46,45 @@ function Metric({ label, value, tone, note, index }: { label: string; value: str
       <span className={`font-display text-[28px] font-semibold leading-none tracking-tight tabular-nums ${tone ?? "text-ink"}`}>{value}</span>
       {note && <span className="text-xs text-ink-3">{note}</span>}
     </div>
+  );
+}
+
+const DOT: Record<Tone, string> = { ok: "bg-ok", bad: "bg-bad", warn: "bg-warn", neutral: "bg-ink-3" };
+
+/** One dot per loaded event, placed on a track from the first to the last event time. */
+function ActivityStrip({ rows }: { rows: FeedRow[] }) {
+  if (rows.length === 0) return null;
+  const times = rows.map((r) => r.ts);
+  const first = Math.min(...times);
+  const last = Math.max(...times);
+  const span = last - first;
+  const firstRow = rows.find((r) => r.ts === first)!;
+  const lastRow = rows.find((r) => r.ts === last)!;
+  return (
+    <section className="panel p-5">
+      <h2 className="mb-3 text-sm font-medium text-ink">Today&apos;s activity</h2>
+      <div className="relative h-10 rounded-md bg-subtle">
+        <span className="absolute inset-x-3 top-1/2 h-px -translate-y-1/2 bg-rule-strong" aria-hidden />
+        <div className="absolute inset-x-3 inset-y-0">
+          {rows.map((r) => {
+            const left = span > 0 ? ((r.ts - first) / span) * 100 : 50;
+            return (
+              <span
+                key={r.id}
+                title={`${r.time} ET · ${r.actorLabel} · ${r.decision}`}
+                className={`absolute top-1/2 h-[7px] w-[7px] -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-subtle transition-transform duration-150 hover:z-10 hover:scale-[1.8] ${DOT[decisionTone(r.decision)]}`}
+                style={{ left: `${left}%` }}
+              />
+            );
+          })}
+        </div>
+      </div>
+      <div className="mt-2 flex justify-between font-mono text-xs tabular-nums text-ink-3">
+        <span>{firstRow.date} {firstRow.time}</span>
+        <span>{rows.length} events</span>
+        <span>{lastRow.date} {lastRow.time}</span>
+      </div>
+    </section>
   );
 }
 
@@ -103,6 +148,8 @@ async function Entries({ searchParams }: { searchParams: Promise<{ view?: string
       env: r.env == null ? "" : String(r.env),
       date: dateEt(at),
       time: timeEt(at),
+      exact: exactEt(at),
+      ts: at.getTime(),
     };
   });
 
@@ -137,6 +184,8 @@ async function Entries({ searchParams }: { searchParams: Promise<{ view?: string
           <Metric key={m.label} index={i} {...m} />
         ))}
       </div>
+
+      <ActivityStrip rows={feed} />
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <nav className="inline-flex gap-1 rounded-lg bg-subtle p-1">
@@ -173,7 +222,10 @@ export default function LedgerPage({ searchParams }: PageProps<"/ledger">) {
           buying human reviews within a budget, refusing or pausing, executing refunds and booking sales. Rows marked
           sandbox are prepared demo or evaluation activity and never count as revenue.
         </p>
-        <p className="text-sm text-ink-3">Updated as the agent acts</p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <p className="text-sm text-ink-3">Updated as the agent acts</p>
+          <LiveRefresh />
+        </div>
       </header>
       <Suspense fallback={<Skeleton label="Loading the review round…" />}>
         <Round />

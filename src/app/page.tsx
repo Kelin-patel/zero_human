@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { getSql } from "@/lib/db";
 import { getOffer } from "@/lib/repo";
+import { CaseReplay } from "./_landing/case-replay";
+import { decisionTone, humanize, TONE_BADGE } from "./ledger/tone";
 
 const OFFERS = [
   {
@@ -69,16 +72,6 @@ const GUARANTEES = [
   "A budget governor keeps a $10 reserve before hiring people.",
 ];
 
-type Dot = "ink" | "bad" | "warn" | "ok" | "info";
-
-const DOT: Record<Dot, string> = {
-  ink: "bg-ink-3",
-  bad: "bg-bad",
-  warn: "bg-warn",
-  ok: "bg-ok",
-  info: "bg-info",
-};
-
 function Check({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={`h-4 w-4 shrink-0 ${className}`}>
@@ -99,106 +92,60 @@ function SectionTitle({ kicker, title, children }: { kicker: string; title: stri
   );
 }
 
-function TimelineEvent({
-  time,
-  dot,
-  title,
-  last = false,
-  children,
-}: {
-  time: string;
-  dot: Dot;
-  title: React.ReactNode;
-  last?: boolean;
-  children?: React.ReactNode;
-}) {
-  return (
-    <li className="relative flex gap-3 pb-5 last:pb-0">
-      {!last && <span aria-hidden="true" className="absolute top-3 bottom-0 left-[3.5px] w-px bg-rule" />}
-      <span aria-hidden="true" className={`relative mt-[6px] h-2 w-2 shrink-0 rounded-full ${DOT[dot]}`} />
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-          <div className="flex min-w-0 flex-wrap items-center gap-2 text-sm text-ink">{title}</div>
-          <span className="font-mono text-xs text-ink-3">{time}</span>
-        </div>
-        {children}
-      </div>
-    </li>
-  );
-}
+const ACTOR_LABELS: Record<string, string> = {
+  governor: "Budget governor",
+  orchestrator: "Review orchestrator",
+  research_registry: "Evaluation registry",
+  learner: "Learner",
+  executor: "Refund executor",
+  sales: "Sales",
+  refund_desk: "Refund Desk",
+};
 
-function CaseScreenshot() {
+const timeEt = (value: Date) =>
+  value.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "2-digit", minute: "2-digit", hour12: false });
+
+const clip = (text: string, max = 70) => (text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text);
+
+/** The latest public ledger entries, scrolling under the hero. Renders nothing if the ledger is unreachable. */
+async function LedgerTicker() {
+  await connection();
+  let rows: { id: string; actor: string; decision: string; reason: string; createdAt: Date }[];
+  try {
+    const sql = getSql();
+    const result = await sql`SELECT id, actor, decision, reason, created_at FROM ledger ORDER BY id DESC LIMIT 14`;
+    rows = result.map((r) => ({
+      id: String(r.id),
+      actor: ACTOR_LABELS[r.actor] ?? String(r.actor),
+      decision: String(r.decision),
+      reason: r.reason == null ? "" : String(r.reason),
+      createdAt: new Date(r.created_at),
+    }));
+  } catch {
+    return null;
+  }
+  if (rows.length === 0) return null;
+  const items = [...rows, ...rows];
   return (
-    <div className="panel overflow-hidden">
-      <div className="flex items-center justify-between gap-3 border-b border-rule bg-subtle px-4 py-2.5">
-        <span className="min-w-0 truncate text-xs text-ink-3">
-          Case <span className="font-mono">case_7Hq2Lw</span> · Example Academy (fictional)
-        </span>
-        <span className="badge badge-neutral">Illustrative example</span>
+    <section className="border-t border-rule bg-card" aria-label="Live from the public ledger">
+      <div className="container-page flex items-center gap-4 py-3">
+        <Link href="/ledger" className="shrink-0 text-xs font-medium text-brand hover:underline hover:underline-offset-4">
+          Live from the public ledger
+        </Link>
+        <div className="ticker min-w-0 flex-1">
+          <ul className="anim-ticker flex w-max items-center gap-8">
+            {items.map((row, i) => (
+              <li key={`${row.id}-${i}`} aria-hidden={i >= rows.length} className="flex items-center gap-2 text-xs whitespace-nowrap">
+                <span className="font-mono text-ink-3">{timeEt(row.createdAt)} ET</span>
+                <span className="font-medium text-ink">{row.actor}</span>
+                <span className={TONE_BADGE[decisionTone(row.decision)]}>{humanize(row.decision)}</span>
+                {row.reason && <span className="text-ink-2">{clip(row.reason)}</span>}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
-      <div className="grid md:grid-cols-[1fr_240px]">
-        <ol className="p-5 sm:p-6">
-          <TimelineEvent time="14:02" dot="ink" title={<span>Refund requested · <span className="font-mono">$59.00</span> · Intro to Product Photography</span>} />
-          <TimelineEvent
-            time="14:02"
-            dot="bad"
-            title={
-              <>
-                <span>AI support decision</span>
-                <span className="badge badge-bad">Denied</span>
-                <span className="text-xs text-ink-3">
-                  cites <span className="font-mono">§4</span>
-                </span>
-              </>
-            }
-          />
-          <TimelineEvent time="14:05" dot="ink" title="Customer requested independent review" />
-          <TimelineEvent time="14:06" dot="info" title="Evidence attached: course page returned 404">
-            <div className="flex h-[70px] w-[120px] flex-col items-center justify-center gap-1 rounded-md border border-rule bg-subtle">
-              <span className="h-1 w-14 rounded-full bg-rule-strong" />
-              <span className="font-mono text-[10px] text-ink-2">404 · Not Found</span>
-            </div>
-          </TimelineEvent>
-          <TimelineEvent
-            time="14:07"
-            dot="warn"
-            title={
-              <>
-                <span>Sent to 2 independent reviewers</span>
-                <span className="badge badge-warn">In review</span>
-              </>
-            }
-          />
-          <TimelineEvent
-            time="14:31"
-            dot="ok"
-            title={
-              <>
-                <span>Decision corrected</span>
-                <span className="badge badge-ok">Refund approved</span>
-              </>
-            }
-          />
-          <TimelineEvent time="14:31" dot="ok" title="Refund issued via Whop" last>
-            <span className="font-mono text-xs text-ink-3">re_4kP9…x2Tq</span>
-          </TimelineEvent>
-        </ol>
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-4 border-t border-rule bg-card p-5 text-sm sm:p-6 md:grid-cols-1 md:border-t-0 md:border-l">
-          {[
-            ["Order", <span key="o" className="font-mono text-xs">ord_2Ld8…</span>],
-            ["Amount", <span key="a" className="font-mono">$59.00</span>],
-            ["Store", "Example Academy (fictional)"],
-            ["Policy", <span key="p" className="font-mono text-xs">v1 · 3f9a…</span>],
-            ["Limit", "$100 per case"],
-          ].map(([label, value]) => (
-            <div key={label as string} className="flex flex-col gap-0.5">
-              <dt className="text-xs text-ink-3">{label}</dt>
-              <dd className="text-ink">{value}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </div>
+    </section>
   );
 }
 
@@ -288,9 +235,13 @@ export default function Home() {
             </div>
             <p className="text-sm text-ink-3">Operated by an AI agent · Payments by Whop · Reviewers via Terac</p>
           </div>
-          <CaseScreenshot />
+          <CaseReplay />
         </div>
       </section>
+
+      <Suspense fallback={null}>
+        <LedgerTicker />
+      </Suspense>
 
       {/* Facts */}
       <section className="border-y border-rule bg-card">

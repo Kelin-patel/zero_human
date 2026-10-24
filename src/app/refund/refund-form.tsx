@@ -62,7 +62,7 @@ export default function RefundForm({ orders, maxChars }: { orders: OrderOption[]
           return (
             <label
               key={order.id}
-              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors duration-150 focus-within:ring-2 focus-within:ring-brand/30 ${
+              className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-[background-color,border-color,box-shadow,transform] duration-150 hover:-translate-y-px hover:shadow-sm focus-within:ring-2 focus-within:ring-brand/30 ${
                 selected ? "border-ink bg-card ring-1 ring-ink" : "border-rule bg-card hover:bg-subtle"
               }`}
             >
@@ -101,8 +101,18 @@ export default function RefundForm({ orders, maxChars }: { orders: OrderOption[]
           placeholder="Explain why you'd like a refund. Please don't include contact or card details."
           className="block w-full resize-y rounded-lg border border-rule-strong bg-card p-3 text-[15px] leading-relaxed text-ink transition-colors duration-150 placeholder:text-ink-3 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20"
         />
-        <span className="self-end font-mono text-xs tabular-nums text-ink-3">
-          {statement.length}/{maxChars}
+        <span className="flex items-center gap-3">
+          <span aria-hidden className="h-[2px] flex-1 overflow-hidden rounded-full bg-rule">
+            <span
+              className={`block h-full transition-[width,background-color] duration-150 ${
+                statement.length >= maxChars * 0.9 ? "bg-warn" : "bg-ink"
+              }`}
+              style={{ width: `${Math.min(100, (statement.length / maxChars) * 100)}%` }}
+            />
+          </span>
+          <span className="shrink-0 font-mono text-xs tabular-nums text-ink-3">
+            {statement.length}/{maxChars}
+          </span>
         </span>
       </label>
 
