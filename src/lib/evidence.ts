@@ -98,7 +98,11 @@ export function excerptTerms(text: string, clauses: string[], maxChars = 1_200):
     .map((n) => sections.find((s) => new RegExp(`^#{1,3}\\s*§${n}(?!\\d)`, "u").test(s)))
     .filter((s): s is string => Boolean(s));
   const chosen = matches.length ? matches : sections.filter((s) => /refund/iu.test(s) && /^#{1,3}\s*§/u.test(s)).slice(0, 1);
-  const body = (chosen.length ? chosen : sections.slice(0, 1)).join("\n\n");
+  // Excerpts are shown as plain text, so markdown markers are removed after the sections are matched.
+  const body = (chosen.length ? chosen : sections.slice(0, 1)).join("\n\n")
+    .replace(/^#{1,3}\s*(.*)$/gmu, "$1:")
+    .replace(/\*\*|__/gu, "")
+    .replace(/[ \t]+\n/gu, "\n");
   const excerpt = body.length > maxChars ? `${body.slice(0, maxChars - 1).trimEnd()}…` : body;
   return { excerpt, clauses: matches.length ? wanted.map((n) => `§${n}`) : [] };
 }
