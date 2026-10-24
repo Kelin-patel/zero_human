@@ -32,7 +32,9 @@
     "smoke:task": "tsx scripts/task-smoke.ts",
     "evaluation:register": "tsx scripts/register-evaluation.ts",
     "learn": "tsx scripts/learn.ts",
-    "test:learn": "node --import tsx --test src/lib/learner.test.ts"
+    "test:learn": "node --import tsx --test src/lib/learner.test.ts",
+    "evidence:check": "tsx scripts/evidence-check.ts",
+    "test:evidence": "node --import tsx --test src/lib/evidence.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",

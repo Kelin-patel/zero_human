@@ -189,7 +189,14 @@ export interface CaseView {
   appealedAt: string | null;
   createdAt: string;
   decision: { decision: DecisionValue; clauses: string[]; reason: string; decidedAt: string } | null;
-  evidence: { kind: string; summary: string | null; url: string | null; httpStatus: number | null; capturedAt: string }[];
+  evidence: {
+    kind: string;
+    summary: string | null;
+    url: string | null;
+    httpStatus: number | null;
+    screenshotUrl: string | null;
+    capturedAt: string;
+  }[];
   reviews: { decision: string; reason: string | null; createdAt: string }[];
   execution: {
     status: string;
@@ -207,7 +214,7 @@ export async function getCaseView(id: string): Promise<CaseView | null> {
   if (!c) return null;
   const [decisionRows, evidenceRows, reviewRows, executionRows] = await Promise.all([
     sql`SELECT decision, clauses, reason, created_at FROM decisions WHERE case_id = ${id} AND agent_version = 'live'`,
-    sql`SELECT kind, summary, url, http_status, captured_at FROM evidence WHERE case_id = ${id} ORDER BY id`,
+    sql`SELECT kind, summary, url, http_status, screenshot_url, captured_at FROM evidence WHERE case_id = ${id} ORDER BY id`,
     sql`SELECT decision, reason, created_at FROM reviews WHERE case_id = ${id} AND NOT is_gold ORDER BY id`,
     sql`SELECT status, amount_cents, environment, block_reason, created_at FROM executions WHERE case_id = ${id}`,
   ]);
@@ -231,6 +238,7 @@ export async function getCaseView(id: string): Promise<CaseView | null> {
       summary: e.summary,
       url: e.url,
       httpStatus: e.http_status,
+      screenshotUrl: e.screenshot_url,
       capturedAt: iso(e.captured_at) as string,
     })),
     reviews: reviewRows.map((r) => ({ decision: r.decision, reason: r.reason, createdAt: iso(r.created_at) as string })),
