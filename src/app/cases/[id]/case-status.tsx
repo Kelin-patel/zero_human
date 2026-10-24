@@ -124,6 +124,13 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                 )}
               </div>
               <p>{decision.reason}</p>
+              {decision.decision === "approve" && !view.execution && (
+                <p className="text-zinc-500">
+                  {view.hasPayment
+                    ? "Approved. The refund is being issued on Whop within the store's limits…"
+                    : "Approved. This demo order has no real payment, so nothing is refunded."}
+                </p>
+              )}
             </>
           ) : (
             <p className="text-zinc-500">Three AI reviewers and a devil&apos;s advocate are reading the policy. This usually takes under a minute.</p>
@@ -164,7 +171,9 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                   </blockquote>
                 )}
                 {view.reviews.length === 0 && !verdict && (
-                  <p className="text-zinc-500">Finding an independent reviewer…</p>
+                  <p className="text-zinc-500">
+                    Queued for independent review by verified people through Terac. The evidence is gathered first.
+                  </p>
                 )}
               </>
             )}
