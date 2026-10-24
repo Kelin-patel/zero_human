@@ -91,7 +91,25 @@ export function privacyIssues(card: CaseCard): string[] {
   const prose = [card.customer_statement, card.store_position, ...card.evidence.map(item => item.text)]
     .join("\n").replaceAll(card.product, "").replaceAll("Example Academy", "")
     .replaceAll("Resolution Center", "").replace(/https?:\/\/\S+/g, "");
-  if (/\b\p{Lu}\p{Ll}+(?:\s+(?:van|von|de))?[ '-]\p{Lu}\p{Ll}+\b/u.test(prose)) issues.push("possible full name");
+  const introductions = [...prose.matchAll(/\b(my name is|i am|i'm|signed[,:]|signed by|sincerely[,:]?|customer(?:'s)? name[: ]*)\s+([\p{L}'’-]+)\s+([\p{L}'’-]+)/giu)];
+  const explicitlyNamed = introductions.some(match => !/^(i am|i'm)$/i.test(match[1]) ||
+    (/^\p{Lu}/u.test(match[2]) && /^\p{Lu}/u.test(match[3])));
+  const pairs = prose.match(/\b\p{Lu}\p{Ll}+(?:(?:[ ]+(?:van|von|de))?[ '-]\p{Lu}\p{Ll}+)+\b/gu) ?? [];
+  // Course terminology and calendar dates are not people's names. Explicit self-identification
+  // still wins over this vocabulary, and unfamiliar capitalized pairs are rejected.
+  const courseWords = new Set([
+    "module", "lesson", "course", "video", "bonus", "file", "download", "certificate", "access",
+    "research", "design", "pricing", "email", "marketing", "automation", "client", "contracts",
+    "membership", "community", "workshop", "resources", "toolkit", "unit", "chapter", "intro",
+    "introduction", "advanced", "basics", "essentials", "pack", "bundle", "report", "support",
+    "fundamentals", "tax", "scrum", "spreadsheet", "spreadsheets", "photography", "animation",
+    "editing", "portfolio", "agreement", "agreements", "dashboard", "analytics", "sales",
+    "january", "february", "march", "april", "may", "june", "july", "august", "september",
+    "october", "november", "december", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+  ]);
+  if (explicitlyNamed || pairs.some(pair => !pair.toLowerCase().split(/[ '-]+/).some(word => courseWords.has(word)))) {
+    issues.push("possible full name");
+  }
   return issues;
 }
 
