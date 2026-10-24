@@ -12,7 +12,8 @@ test("completion requires every assigned ID, and rejects missing or extra cards"
 });
 test("test submissions, unassigned reviewers and overflow slots never authorize payment", () => {
   for (const row of [{ ...complete, isTest: true }, { ...complete, submissionId: "test_fake" },
-    { ...complete, slot: 2 }, { ...complete, slot: 12, caseIds: ["case_eval_01"] }]) {
+    { ...complete, slot: 2 }, { ...complete, slot: 12, caseIds: ["case_eval_01"] },
+    { ...complete, submissionId: null, caseIds: [] }]) {
     assert.equal(completedReviewerIds(assignment, [row], 11).size, 0);
   }
 });
