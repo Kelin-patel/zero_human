@@ -49,3 +49,7 @@ __pycache__/
 solari-smoke.png
 *.png.local
 .mplconfig/
+.desk-checks/
+.case-generation.lock
+.case-generation/
+data/.case-generation-*/

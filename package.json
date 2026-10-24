@@ -8,10 +8,18 @@
     "start": "next start",
     "lint": "eslint",
     "worker": "tsx worker/index.ts",
+    "desk:try": "tsx scripts/try-desk.ts",
+    "test:desk": "node --import tsx --test src/lib/llm.test.ts src/lib/refund-desk.test.ts worker/runner.test.ts",
+    "smoke:worker": "tsx scripts/worker-smoke.ts",
     "script": "tsx",
     "smoke:exa": "tsx scripts/exa-smoke.ts",
     "smoke:solari": "tsx scripts/solari-smoke.ts",
-    "smoke:services": "npm run smoke:exa && npm run smoke:solari"
+    "smoke:services": "npm run smoke:exa && npm run smoke:solari",
+    "cases:generate": "tsx scripts/gen-cases.ts",
+    "cases:check": "tsx scripts/gen-cases.ts --check",
+    "cases:seed": "tsx scripts/gen-cases.ts --seed-only",
+    "seed:demo": "tsx scripts/seed-demo-merchant.ts",
+    "test:cases": "node --import tsx --test src/lib/case-schema.test.ts src/lib/case-generation.test.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
