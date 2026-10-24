@@ -83,15 +83,16 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
   }
 
   const decision = view.decision;
+  const verdict = view.humanVerdict;
   const appealed = Boolean(view.appealedAt);
   const canAppeal = decision?.decision === "deny" && view.status === "decided" && !appealed;
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
-        {view.setName === "demo" && (
+        {(view.publicNote || view.setName === "demo") && (
           <p className="w-fit rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-900 dark:bg-amber-900/40 dark:text-amber-200">
-            Prepared demo · fictional store · no real money
+            {view.publicNote ?? "Prepared demo · fictional store · no real money"}
           </p>
         )}
         <h1 className="text-2xl font-semibold tracking-tight">Your refund request</h1>
@@ -129,8 +130,8 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
           )}
         </Step>
 
-        {(canAppeal || appealed) && (
-          <Step title="Independent human review" done={view.reviews.length > 0}>
+        {(canAppeal || appealed || verdict) && (
+          <Step title="Independent human review" done={Boolean(verdict) || view.reviews.length > 0}>
             {canAppeal && (
               <div className="flex flex-col gap-3 rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
                 <p>
@@ -162,8 +163,26 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
                     {view.appealStatement}
                   </blockquote>
                 )}
-                {view.reviews.length === 0 && <p className="text-zinc-500">Finding an independent reviewer…</p>}
+                {view.reviews.length === 0 && !verdict && (
+                  <p className="text-zinc-500">Finding an independent reviewer…</p>
+                )}
               </>
+            )}
+            {verdict && (
+              <div className="flex flex-col gap-2">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Badge decision={verdict.decision} />
+                  <span>{verdict.reason}</span>
+                </div>
+                {verdict.reviewers.map((r, i) => (
+                  <div key={i} className="flex flex-col gap-1 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-900">
+                    <span className="text-xs text-zinc-500">
+                      Reviewer {r.reviewer} · {DECISION_LABEL[r.decision]?.text ?? r.decision}
+                    </span>
+                    {r.reason && <p>&ldquo;{r.reason}&rdquo;</p>}
+                  </div>
+                ))}
+              </div>
             )}
             {view.reviews.map((review, i) => (
               <div key={i} className="flex flex-col gap-1">
@@ -199,14 +218,21 @@ export default function CaseStatus({ initial }: { initial: CaseView }) {
         )}
 
         {view.execution && (
-          <Step title="Outcome" done>
+          <Step title="Outcome" done={view.execution.status === "succeeded"}>
             {view.execution.status === "blocked" ? (
               <p>Refund not issued: {view.execution.blockReason}</p>
+            ) : view.execution.status === "failed" ? (
+              <p>Refund not completed yet: {view.execution.blockReason}. It will be retried.</p>
             ) : (
-              <p>
-                Refund of {money(view.execution.amountCents)} {view.execution.status}
-                {view.execution.environment === "sandbox" ? " (sandbox, no real money)" : ""}.
-              </p>
+              <>
+                <p>
+                  Refund of {money(view.execution.amountCents)} {view.execution.status} on Whop
+                  {view.execution.environment === "sandbox" ? " (sandbox, no real money)" : ""}.
+                </p>
+                {view.execution.whopRefundId && (
+                  <p className="text-zinc-500">Whop refund ID {view.execution.whopRefundId}</p>
+                )}
+              </>
             )}
           </Step>
         )}
