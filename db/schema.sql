@@ -178,3 +178,7 @@ alter table reviews add column if not exists is_test boolean not null default fa
 alter table task_responses add column if not exists is_test boolean not null default false;
 
 alter table task_assignments add column if not exists enabled boolean not null default true;
+
+-- Customer appeals of a denied decision
+alter table cases add column if not exists appeal_statement text;
+alter table cases add column if not exists appealed_at timestamptz;
