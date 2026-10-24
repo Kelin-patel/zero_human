@@ -1,0 +1,3235 @@
+[
+  {
+    "card": {
+      "customer_statement": "I bought this course thinking it would cover advanced scripting, but after watching a few lessons I realized it's more basic than I need. Nothing is wrong with the course itself; I just changed my mind. I never downloaded the bonus templates. I'd like a refund please.",
+      "days_since_purchase": 13,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress log shows 39 of 200 lesson-minutes completed (19.5%) as of the request date. Last lesson opened 2026-10-14.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Bonus file bundle (spreadsheet templates ZIP) has zero download events on this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single charge of 49.00 USD on 2026-10-03; refund request submitted 2026-10-16, 13 days after purchase. No prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_01",
+      "price_usd": 49,
+      "product": "Intro to Spreadsheet Automation (video course)",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-16T09:42:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 19.5
+      },
+      "requested": "2026-10-16",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've only been in the course for four days and I've decided photography isn't for me right now. I watched the first module and that's it. I didn't download any of the bonus presets. Since it's well within two weeks, I'd like my money back.",
+      "days_since_purchase": 4,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows exactly 20.0% complete: all 6 lessons of Module 1 (60 of 300 lesson-minutes) marked finished on 2026-10-10 and 2026-10-11.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Bonus preset pack has no download events on this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single charge of 129.00 USD on 2026-10-08; request received 2026-10-12. No access problems reported; access check returned 200.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_02",
+      "price_usd": 129,
+      "product": "Portrait Photography Fundamentals (video course)",
+      "purchased": "2026-10-08",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-12T14:05:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 20
+      },
+      "requested": "2026-10-12",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this yesterday and barely started it. I grabbed the bonus swipe file to look through it, but honestly I realized I already have similar material from another course. I only watched one lesson. It's been one day, so I'd like a full refund.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows 8% complete (1 of 12 lessons finished) on 2026-10-10.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Bonus swipe-file bundle (PDF and editable templates) downloaded once on 2026-10-10, about two hours after purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single charge of 79.50 USD on 2026-10-10; request received 2026-10-11. Course pages and files load normally; no defect reports on file.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_03",
+      "price_usd": 79.5,
+      "product": "Freelance Copywriting Starter Kit (video course)",
+      "purchased": "2026-10-10",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-11T08:30:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 8
+      },
+      "requested": "2026-10-11",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've decided to hire an accountant instead of doing my own books, so I don't need this course anymore. I watched a couple of the intro lessons. I clicked on the bonus resources page to see what was there, but I don't think I downloaded anything. Today is two weeks since I bought it, so I hope I'm still in time.",
+      "days_since_purchase": 14,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows 12% complete (3 of 25 lessons finished), last activity 2026-10-09.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Bonus resources page was viewed once on 2026-10-09; no file download events are recorded for the bonus workbook or spreadsheet templates.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single charge of 199.00 USD on 2026-10-05; request submitted 2026-10-19, 14 calendar days after purchase. No prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_04",
+      "price_usd": 199,
+      "product": "Small Business Bookkeeping Masterclass (video course)",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-19T17:50:00-05:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-19",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this course for a new role, but the role fell through, so I no longer need it. I've only gone through maybe 15% of it, so I should be under the 20% limit. I never touched the bonus scripts. It's been just over a week, so I'd like a full refund.",
+      "days_since_purchase": 8,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows 21.0% complete: 63 of 300 lesson-minutes finished. Modules 1 and 2 are fully marked complete, with the last lesson finished on 2026-10-18.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "The bonus negotiation scripts bundle (PDF and editable documents) has zero download events on this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "A single charge of 89.99 USD was made on 2026-10-12, and the request was received on 2026-10-20. No defect reports are on file, and the access check returned 200. There are no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_05",
+      "price_usd": 89.99,
+      "product": "Negotiation Skills for New Managers (video course)",
+      "purchased": "2026-10-12",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T11:15:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 21
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've realized I prefer working with acrylics, so this course isn't a good fit for me. I watched a few lessons and downloaded the color mixing chart that's attached to lesson 3, but I didn't download the bonus reference photo pack. I'd like a refund since it's only been a week.",
+      "days_since_purchase": 7,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows 14% complete (3 of 21 lessons finished). The last lesson was finished on 2026-10-17.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "One download is recorded on 2026-10-16: the lesson 3 color mixing chart. This file is core lesson material attached to the lesson page and is not part of the bonus bundle. The bonus bundle (40 printable reference photos) has zero download events.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "A single charge of 59.00 USD was made on 2026-10-14, and the request was submitted on 2026-10-21, 7 days after purchase. There are no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_06",
+      "price_usd": 59,
+      "product": "Watercolor Landscapes for Beginners (video course)",
+      "purchased": "2026-10-14",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T19:20:00-06:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 14
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this right before a work trip and only got back to it this week. After watching the first lesson, I decided podcast editing isn't something I want to pursue. I barely used it and never downloaded the bonus sound packs. I'm asking for a refund now that I've had a chance to look at it.",
+      "days_since_purchase": 15,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows 5% complete (1 of 20 lessons finished, on 2026-10-15).",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "The bonus sound effects and music bed packs have zero download events on this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "A single charge of 149.50 USD was made on 2026-10-02, and the request was submitted on 2026-10-17, 15 calendar days after purchase. No access problems or content complaints have been reported, and the access check returned 200.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_07",
+      "price_usd": 149.5,
+      "product": "Podcast Editing Essentials (video course)",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-17T08:05:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 5
+      },
+      "requested": "2026-10-17",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I want a refund because I found that my company already provides a similar course for free. Honestly, I skipped around and opened a lot of lessons, so I might be around a quarter of the way through, and I'm not sure if that still qualifies. I didn't download the bonus notebooks.",
+      "days_since_purchase": 10,
+      "evidence": [
+        {
+          "kind": "progress_record",
+          "text": "Account progress shows 17.9% complete: 43 of 240 lesson-minutes finished. Nine lessons were opened, but only five are marked finished. The last activity was on 2026-10-15.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "The bonus Jupyter notebook bundle and sample datasets have zero download events on this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "A single charge of 34.99 USD was made on 2026-10-07, and the request was received on 2026-10-17, 10 days after purchase. There are no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C1_08",
+      "price_usd": 34.99,
+      "product": "Data Visualization with Python (video course)",
+      "purchased": "2026-10-07",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-17T13:40:00+05:30",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 17.9
+      },
+      "requested": "2026-10-17",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C1",
+      "designer_clause": "§1, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this course on a whim and worked through a good chunk of it over the first week, but my team just switched to a different tool, so I no longer need these skills. Everything worked fine, I just changed my mind. I'm still inside the 14 days, so I'd like a full refund.",
+      "days_since_purchase": 8,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 14 of 34 lessons marked complete (41%). Lessons were completed between 2026-10-03 and 2026-10-09.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "No downloads of the bonus macro workbook pack are recorded for this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check on 2026-10-11 returned HTTP 200; all lessons and files load normally. No defect report was filed.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page for the standard refund window and usage limits.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_01",
+      "price_usd": 89,
+      "product": "Spreadsheet Automation Fundamentals",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-11T09:20:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 41
+      },
+      "requested": "2026-10-11",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've decided painting isn't for me right now and would like a refund. I should mention that I clicked into the bonus files page and scrolled through the brush preset and reference photo previews, so I'm worried that counts as downloading them. I never saved anything to my computer though.",
+      "days_since_purchase": 10,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 3 of 25 lessons complete (12%).",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "page_view_log",
+          "text": "Bonus files page was viewed twice on 2026-10-07. That page displays in-browser thumbnail previews of the brush presets and reference photos; viewing it does not transfer the files.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Download log shows zero download requests for the bonus preset pack or the reference photo archive.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page for the standard refund window conditions.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_02",
+      "price_usd": 64.5,
+      "product": "Watercolor Landscapes Masterclass",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-15T14:05:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-15",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I barely started the lessons and realized I don't have time for this right now. I only previewed the bonus session templates to see what they looked like, I never actually downloaded them. My progress is well under 20%, so this should qualify for a full refund.",
+      "days_since_purchase": 6,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 2 of 28 lessons complete (7%).",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Bonus session templates archive was downloaded in full twice on 2026-10-11, both transfers completed at 100% of the file size. This is separate from the in-browser preview page.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check on 2026-10-16 returned HTTP 200; no delivery problem or defect report on file.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page covering bonus file downloads and how records are weighed.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_03",
+      "price_usd": 129,
+      "product": "Podcast Editing Bootcamp",
+      "purchased": "2026-10-10",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-16T11:40:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 7
+      },
+      "requested": "2026-10-16",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've changed my mind and found a course that fits my job better. Before buying I watched several of the free preview lessons on the sales page, and since then I've done a few lessons in my account. I know I'm close to the limit, but I haven't downloaded any of the bonus notebooks.",
+      "days_since_purchase": 13,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 19% complete (lesson progress counted only after purchase). Last lesson activity 2026-10-19.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "preview_log",
+          "text": "Four free preview lessons were watched from the public sales page on 2026-10-06 and 2026-10-07, before purchase. Public previews are not counted in account progress.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "No downloads of the bonus notebook bundle are recorded.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page for the 14-day window and the 20% usage limit.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_04",
+      "price_usd": 149.99,
+      "product": "Intro to Data Visualization with Python",
+      "purchased": "2026-10-08",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T16:30:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 19
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've decided this course isn't the right fit for me. I did a few lessons in the first week, and I never touched the bonus templates. I'm well within the 14 days and only used about a fifth of the course, so I'd like my money back.",
+      "days_since_purchase": 9,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 6 of 30 lessons complete (20% exactly). Lessons were completed between 2026-10-06 and 2026-10-12.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "No download requests for the bonus email template pack are recorded for this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check on 2026-10-15 returned HTTP 200; all lessons load normally. No defect report or not-as-described complaint is on file.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page describing the standard window and the less-than-20% usage condition.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_05",
+      "price_usd": 74,
+      "product": "Business Writing Essentials",
+      "purchased": "2026-10-06",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-15T10:12:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 20
+      },
+      "requested": "2026-10-15",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I changed my mind about this course and would like a refund. I want to be upfront: I downloaded the worksheet PDFs attached to the first couple of lessons so I could follow along. I didn't open the separate bonus section with the spreadsheet toolkit. I'm not sure whether the lesson worksheets count as bonus files.",
+      "days_since_purchase": 11,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 3 of 20 lessons complete (15%). Last lesson activity on 2026-10-05.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Two lesson worksheet PDFs were downloaded on 2026-10-03 from the lesson pages for lessons 1 and 2. These worksheets are part of the core lessons and are listed separately from the bonus materials.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "The bonus spreadsheet toolkit, which is the course's only bonus file pack, shows zero download requests.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page for the 14-day window, usage limit, and bonus file condition.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_06",
+      "price_usd": 49.99,
+      "product": "Home Budgeting Made Simple",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-13T18:45:00-05:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 15
+      },
+      "requested": "2026-10-13",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this three days ago and have only watched the welcome lesson. I grabbed one small cheat sheet from the bonus pack to try it out, but I didn't take the editing presets or anything else. It's just one file, so I hope that doesn't stop a refund. I've simply changed my mind.",
+      "days_since_purchase": 3,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress shows 1 of 24 lessons complete (4%).",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "On 2026-10-19 the customer completed a full download of the composition cheat sheet PDF, one of five files in the bonus pack. The other four bonus files show no download requests.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check on 2026-10-21 returned HTTP 200; all lessons and bonus files load normally. No defect report on file.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page for the standard window and bonus file condition.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_07",
+      "price_usd": 39,
+      "product": "Mobile Photography Quickstart",
+      "purchased": "2026-10-18",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T08:30:00-06:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 4
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I'd like a refund because my plans changed and I won't be freelancing after all. I've only done a couple of lessons. I did download a bonus pack this month, but that was for the other course I own from you, not this one. I haven't downloaded any bonus files for this pricing course.",
+      "days_since_purchase": 12,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Account progress for this course shows 2 of 22 lessons complete (9%).",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Bonus downloads for this course: none. The proposal and rate calculator bonus pack has zero download requests.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "A bonus pack download on 2026-10-11 is recorded on the account, but it belongs to a separately purchased portfolio design course, not this product.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "policy_reference",
+          "text": "Refund policy page for the 14-day window and per-course bonus download condition.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C2_08",
+      "price_usd": 112.5,
+      "product": "Freelance Pricing Strategy",
+      "purchased": "2026-10-09",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T13:05:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 9
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C2",
+      "designer_clause": "§1, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Module 5 stopped loading on 2026-10-05. Every lesson link returns a not-found page. I reported it to support that same morning and got an automated reply, but nothing has changed in three days. I can't finish the course, so I would like a refund.",
+      "days_since_purchase": 6,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-05 at 09:12 UTC: the customer says all Module 5 lesson links return a not-found error. Only an automated acknowledgment was sent; no engineer response is logged.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-08 at 15:10 UTC: the Module 5 route returned HTTP 404. No repair or deployment is logged between 2026-10-05 and 2026-10-08, about 78 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "platform_status",
+          "text": "Internal hosting log shows the Module 5 video folder was unlinked during a 2026-10-04 content migration on the store's side. The log notes no customer-side cause.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C3_01",
+      "price_usd": 89,
+      "product": "Spreadsheet Automation Masterclass",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-08T15:10:00+00:00",
+          "http_status": 404,
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 45
+      },
+      "requested": "2026-10-08",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The videos won't play for me. I get a spinning wheel and then a blocked-content message. I reported it on 2026-10-12 and support told me the course works fine, but it doesn't work for me. I want my money back because I can't watch the lessons.",
+      "days_since_purchase": 5,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Report received 2026-10-12 at 14:05 local time. Support replied within 3 hours and asked for a screenshot. The screenshot shows a network filter page from the customer's workplace, titled 'This site is blocked by your organization's network policy.'",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access checks on 2026-10-12, 2026-10-13 and 2026-10-15 all returned HTTP 200, and test playback of every lesson succeeded. No other customer reported a playback problem during this period.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "account_activity",
+          "text": "Account logs show 30% lesson progress recorded from a home connection on 2026-10-10 and 2026-10-11. The bonus lighting-diagram pack was downloaded on 2026-10-11.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C3_02",
+      "price_usd": 129.5,
+      "product": "Portrait Photography Lighting Course",
+      "purchased": "2026-10-10",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-15T11:40:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 30
+      },
+      "requested": "2026-10-15",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§6b, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The project files for lesson 7 were corrupted and wouldn't open. I reported it on 2026-10-09. It's working now, but the hassle put me off and I no longer trust the course, so I'd like a full refund.",
+      "days_since_purchase": 9,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-09 at 10:00 UTC: the lesson 7 project ZIP failed to extract. Support confirmed the file was corrupted on the store's server.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "repair_log",
+          "text": "A replacement ZIP was uploaded and verified on 2026-10-10 at 06:00 UTC, 20 hours after the report. The customer was notified by ticket reply at 06:15 UTC the same day.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-12 returned HTTP 200. The lesson 7 files download and extract correctly. Bonus files were downloaded on 2026-10-04, and progress is 35%.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C3_03",
+      "price_usd": 59,
+      "product": "Intro to Podcast Editing",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-12T08:25:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-12",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The pages load, but the Module 4 videos have no audio at all. The instructor's mouth moves but there is silence. I tried two different devices and both had the same problem. I reported it on 2026-10-14 and support said they would look into it, but I haven't heard anything since.",
+      "days_since_purchase": 17,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-14 at 16:20 UTC: Module 4 videos play with no audio, tested on a laptop and a phone. Support acknowledged the report and escalated it. No resolution reply is logged as of 2026-10-18.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-18 returned HTTP 200 for the Module 4 page. The automated check confirms only that the page and video files load. It does not verify whether the audio tracks are present, so it cannot confirm or rule out the problem.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "repair_log",
+          "text": "No re-encode, re-upload or audio fix for Module 4 is recorded between 2026-10-14 and 2026-10-18, more than 96 hours after the report. The original upload log notes that the audio was 'pending final mix'.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C3_04",
+      "price_usd": 74.99,
+      "product": "Watercolor Landscapes Fundamentals",
+      "purchased": "2026-10-01",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-18T19:30:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 60
+      },
+      "requested": "2026-10-18",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "On 2026-10-19 the whole course dashboard showed an error and none of the lessons would open. I reported it right away. It only started working again today, more than two days later. I lost my study window for this week and want a refund.",
+      "days_since_purchase": 6,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-19 at 09:00 UTC: the course dashboard returns a not-found error for every lesson. Support confirmed the outage was caused by an expired content-hosting configuration on the store's side.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "repair_log",
+          "text": "The fix was deployed on 2026-10-21 at 11:00 UTC, 50 hours after the customer's report. Access checks run between the report and the fix returned HTTP 404.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-21 after the fix returned HTTP 200. The course now loads normally. Progress is 25%, and no bonus files have been downloaded.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C3_05",
+      "price_usd": 149,
+      "product": "Freelance Copywriting Bootcamp",
+      "purchased": "2026-10-15",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T13:05:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 25
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I was working through the course steadily, but the last two modules (8 and 9) disappeared. The lesson list still shows them, but every video opens to a not-found page. I reported it on 2026-10-17 and was told it would be fixed soon. Six days later it is still broken, and I can't finish the course I paid for.",
+      "days_since_purchase": 21,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-17 at 14:30 UTC: the customer says the videos in Modules 8 and 9 return a not-found page. Support replied at 16:05 UTC confirming that the video files were missing from the store's hosting bucket and promised a fix. No further reply is logged.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "repair_log",
+          "text": "No re-upload or relink of the Module 8 or 9 videos is recorded between 2026-10-17 and 2026-10-23, more than 140 hours after the report. An internal note dated 2026-10-18 says the source files are 'being located from backup'.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-23 at 10:15 UTC: Module 8 and Module 9 lesson routes returned HTTP 404. Modules 1 to 7 load normally. The customer's 70% progress covers only Modules 1 to 7. Bonus templates were downloaded on 2026-10-03.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        }
+      ],
+      "id": "candidate_C3_06",
+      "price_usd": 164,
+      "product": "Bookkeeping for Small Studios",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-23T10:15:00+00:00",
+          "http_status": 404,
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 70
+      },
+      "requested": "2026-10-23",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The exercise workbook that every lesson after lesson 3 depends on downloads as an empty file. I tried on two computers and two networks and got the same zero-byte file each time. I reported it on 2026-10-09 and attached a screenshot. Nobody has responded, so I can't continue the course.",
+      "days_since_purchase": 7,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-09 at 18:00 UTC with a screenshot showing the workbook ZIP at 0 bytes in a file browser. The ticket was auto-acknowledged. No staff reply, investigation note or fix is logged through 2026-10-13, about 87 hours later.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-13 returned HTTP 200 for the course page and the workbook download link. The automated check confirms only that the link responds. It does not verify the file size or contents, so it cannot confirm or rule out an empty file.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "server_log",
+          "text": "File-server download logs for 2026-10-08 through 2026-10-12 were removed by routine log rotation, so the store cannot see what file size was served to the customer. No checksum verification of the workbook is recorded. The account shows a download attempt on 2026-10-09 and 15% lesson progress.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C3_07",
+      "price_usd": 99.99,
+      "product": "Data Visualization with Python",
+      "purchased": "2026-10-06",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-13T09:45:00-05:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 15
+      },
+      "requested": "2026-10-13",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Since 2026-10-14 I get a message saying my account has been locked for too many active sessions, and I can't open any lessons. I reported it right away. I share a laptop with a couple of teammates, but that shouldn't block me from a course I paid for. The course is inaccessible, so I want a refund.",
+      "days_since_purchase": 5,
+      "evidence": [
+        {
+          "kind": "security_log",
+          "text": "On 2026-10-13 and 2026-10-14 the account was signed in at the same time from three different devices in three different cities. The automatic account-sharing protection locked the account on 2026-10-14 at 07:50 UTC.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "support_ticket",
+          "text": "Report received 2026-10-14 at 08:10 UTC. Support replied at 09:40 UTC, explained that the lock was triggered by concurrent logins, and sent password-reset steps that remove the lock. The ticket shows the customer has not completed the reset.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access checks on 2026-10-14 and 2026-10-16 returned HTTP 200. All lessons load for unlocked accounts, and no platform outage or content fault is recorded. Progress is 40%.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C3_08",
+      "price_usd": 49,
+      "product": "Social Media Video Editing",
+      "purchased": "2026-10-11",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-16T17:20:00+05:30",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 40
+      },
+      "requested": "2026-10-16",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§6b, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I decided to give this course a second try and bought it again. Now Module 2 won't load at all. Every lesson gives a not-found error. I reported it on 2026-10-14 and it still isn't fixed five days later. This is the store's problem, not mine, so I should get my money back.",
+      "days_since_purchase": 15,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Defect report received 2026-10-14 at 13:00 UTC: all Module 2 lesson links return not-found. Support confirmed a broken content path on the store's side after a course restructure. No fix is logged through 2026-10-19, more than 48 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access check on 2026-10-19 returned HTTP 404 for the Module 2 lesson routes. Other modules load normally.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "order_history",
+          "text": "Order records show the customer bought this same course before and received a full refund for that earlier purchase. The current order is the customer's second purchase of the course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C3_09",
+      "price_usd": 119,
+      "product": "UX Research Essentials",
+      "purchased": "2026-10-04",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-19T12:00:00-03:00",
+          "http_status": 404,
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 1,
+        "progress_pct": 30
+      },
+      "requested": "2026-10-19",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§2, §6c",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Module 3 hasn't loaded for me since 2026-10-12. The videos just won't start. I told support on 2026-10-15 and it's been days, so the 48 hours have clearly passed. I want a full refund because the course is broken.",
+      "days_since_purchase": 12,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Report received 2026-10-15 at 11:00 UTC with no screenshot or error details. Support replied at 11:45 UTC asking which lesson, device and browser were affected. The customer did not reply before filing this refund request.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "account_activity",
+          "text": "Lesson logs from this account show Module 3 lessons 1 to 4 played to completion on 2026-10-13, and lessons 5 and 6 played to completion on 2026-10-16. Both dates fall within the period the customer says Module 3 would not load.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_check",
+          "text": "Store access checks on 2026-10-15, 2026-10-16 and 2026-10-20 returned HTTP 200, and test playback of all Module 3 videos succeeded. No error spikes or other customer reports are recorded for Module 3.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C3_10",
+      "price_usd": 39.5,
+      "product": "Guitar Theory for Beginners",
+      "purchased": "2026-10-08",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T20:30:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 65
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C3",
+      "designer_clause": "§7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The sales page said this course had over 12 hours of video lessons. I have gone through most of it and the whole thing adds up to about four and a half hours. Everything loads fine, there is just far less content than I paid for. I would like a refund because this is not what was advertised.",
+      "days_since_purchase": 18,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page copy at time of purchase (unchanged since 2026-09-15): '12+ hours of step-by-step video lessons across 9 modules.'",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player inventory: 9 modules, 38 lessons, total video runtime 4 h 31 min. No lessons flagged as missing or unpublished.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_note",
+          "text": "Support confirmed on 2026-10-20 that all published lessons play correctly and the runtime total matches the course build; no additional content is scheduled.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_01",
+      "price_usd": 149,
+      "product": "Freelance Copywriting Fundamentals",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T15:12:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 61
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "This course is not what I expected. The instructor talks slowly and spends a lot of time on theory, and the videos look a bit dated compared to the preview clip. I prefer a faster, more modern teaching style. I want my money back because it does not feel like the course on the sales page.",
+      "days_since_purchase": 21,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page promised 8 modules (materials, color mixing, skies, water, trees, mountains, composition, final project) and about 6 hours of video.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows all 8 listed modules published, 31 lessons, total runtime 6 h 12 min. Preview clip on the sales page is an excerpt from module 3 of the same recording.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_log",
+          "text": "Lessons load normally; no access errors were reported or logged for this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_02",
+      "price_usd": 79,
+      "product": "Watercolor Landscapes for Beginners",
+      "purchased": "2026-10-01",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T09:40:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 46
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this mainly for the module on client contracts and negotiation that the sales page listed. The course only has seven modules and the contracts module is not there at all. The other lessons work, but the part I needed most is missing, so I am asking for a refund.",
+      "days_since_purchase": 10,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page lists 8 modules, including 'Module 6: Client Contracts and Negotiation' with 5 lessons and a contract template pack.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows 7 published modules; modules are numbered 1-5, 7 and 8. Module 6 has no published lessons and the contract template pack is not in the course files.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_note",
+          "text": "Internal note dated 2026-10-15: module 6 was never uploaded during the course build; no release date set.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_03",
+      "price_usd": 119.5,
+      "product": "Pricing Your Design Services",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-15T11:25:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-15",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The email automation module that was advertised is missing from the course. I paid for a complete program and it skips straight past automation. Please refund me since the course does not include what the sales page promised.",
+      "days_since_purchase": 15,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page lists 'Module 5: Email Automation' among 7 modules, described as 6 lessons on welcome sequences and abandoned-cart flows.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows 'Module 5: Email Automation' published with 6 lessons, total runtime 1 h 48 min, matching the sales page description.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "progress_log",
+          "text": "Account progress records show the customer completed lessons 5.1, 5.2 and 5.3 of the automation module between 2026-10-14 and 2026-10-17.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_04",
+      "price_usd": 89,
+      "product": "Email Marketing for Small Shops",
+      "purchased": "2026-10-08",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-23T18:05:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 72
+      },
+      "requested": "2026-10-23",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3, §7, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "When I bought this, the sales page said it included 12 real-world case studies with sample datasets. The course only has 4 case studies, and now the sales page says 4 as well, so it looks like it was changed after I purchased. The case studies were the main reason I bought it. I would like a refund.",
+      "days_since_purchase": 21,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Current sales page states '4 real-world case studies with sample datasets'. Page edit log shows the copy was edited on 2026-10-10; the previous text was not retained and no snapshot from 2026-10-03 exists.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows 4 case study lessons with 4 dataset files. No other case studies are published or in draft.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_note",
+          "text": "Support could not confirm or rule out the customer's account of the earlier sales page wording; the editor who changed it left no note on what was revised.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C4_05",
+      "price_usd": 64.99,
+      "product": "Data Visualization with Spreadsheets",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T13:30:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 50
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The sales page promised a full module on quarterly tax estimates with several lessons and worksheets. When I opened that module there is only one short video saying the lessons are coming soon. Nothing else in it. Tax estimates were a big reason I bought this course, so I would like a refund.",
+      "days_since_purchase": 13,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page at time of purchase (unchanged since 2026-09-20) lists 'Module 6: Quarterly Tax Estimates', described as 6 lessons (about 90 minutes) plus two estimate worksheets.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows Module 6 published with a single 3 min 10 s lesson titled 'Coming soon'. No worksheets are attached to the module. All other modules match the sales page.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_note",
+          "text": "Support note dated 2026-10-19: the remaining Module 6 lessons were never recorded and there is no scheduled release date.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_06",
+      "price_usd": 99,
+      "product": "Intro to Bookkeeping for Freelancers",
+      "purchased": "2026-10-06",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-19T10:15:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 55
+      },
+      "requested": "2026-10-19",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I know I downloaded the bonus pack, but that is exactly the problem. The sales page said the course came with a library of 50 editable templates. The download only has 8 templates in it. The videos are fine, but the template library was the main thing being sold and most of it is not there. I am asking for a refund.",
+      "days_since_purchase": 12,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page headline unchanged since 2026-09-28: 'Includes a library of 50 editable post, story and banner templates.'",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course files contain one bonus archive with 8 template files. No other template files are published or stored in drafts for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "download_log",
+          "text": "Download log shows the customer downloaded the bonus archive once on 2026-10-10; the archive size and file count have not changed since the course launched.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_07",
+      "price_usd": 59,
+      "product": "Social Media Graphics Template Kit Course",
+      "purchased": "2026-10-09",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T16:40:00-05:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 40
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The sales page said about 10 hours of content and I counted a little under that. The instructor also uses a dark screen theme and plain slides that look different from the colorful thumbnails on the sales page, and he jokes around more than I like. It just feels different from what I pictured, so I want a refund.",
+      "days_since_purchase": 14,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page promised 'about 10 hours of video' across 7 modules: room setup, microphones, interfaces, recording software, vocals, instruments and mixing basics.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows all 7 listed modules published, 42 lessons, total runtime 9 h 41 min. Sales page thumbnails are promotional artwork; lesson visuals use the instructor's standard slide style.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_log",
+          "text": "All lessons and bonus files load normally; no access errors were reported or logged for this purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_08",
+      "price_usd": 129.99,
+      "product": "Home Recording Studio Basics",
+      "purchased": "2026-10-04",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-18T20:05:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 68
+      },
+      "requested": "2026-10-18",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I finished the course and got the certificate, but afterwards I realized the module on agile and scrum that was on the sales page was never in the course. I went back and checked and it is really missing. Since part of what I paid for was not delivered, I think I should get a refund.",
+      "days_since_purchase": 22,
+      "evidence": [
+        {
+          "kind": "sales_page",
+          "text": "Sales page lists 'Module 8: Agile and Scrum Fundamentals' among 9 modules, described as 5 lessons.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "course_inventory",
+          "text": "Course player shows 8 published modules; Module 8 has no published lessons. Support confirmed on 2026-10-23 that the module was never uploaded.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "certificate_record",
+          "text": "Completion certificate issued to the customer's account on 2026-10-20 after all published lessons were marked complete.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C4_09",
+      "price_usd": 179,
+      "product": "Project Management Essentials",
+      "purchased": "2026-10-01",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-23T08:30:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": true,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 100
+      },
+      "requested": "2026-10-23",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C4",
+      "designer_clause": "§3, §6d",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I reported on 2026-10-15 that modules 4 through 7 return an error page and the videos will not load. Support said it would be looked into, but nearly a week later the lessons are still broken and I cannot continue the course. I know it has been more than 14 days since I bought it, but I am asking for a refund because the content I paid for is not available.",
+      "days_since_purchase": 18,
+      "evidence": [
+        {
+          "kind": "support_log",
+          "text": "Support ticket opened 2026-10-15 at 14:05 UTC: customer reports modules 4-7 show an error page. Agent reproduced the error the same day and escalated it to the content team. No repair has been logged as of 2026-10-21.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-21 for the module 4 lesson route returned HTTP 404. The route was also logged as 404 on 2026-10-17, more than 48 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-03 for 89.00 USD. Progress 35%, bonus files downloaded on 2026-10-05, no certificate, no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_01",
+      "price_usd": 89,
+      "product": "Practical Spreadsheet Automation",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T09:40:00+00:00",
+          "http_status": 404,
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§2, §6a",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this course at the start of the month but got busy and only watched a couple of lessons. I have barely used it and never downloaded the extra files, so I would like my money back. Nothing is wrong with the course itself, I just do not have time for it right now.",
+      "days_since_purchase": 23,
+      "evidence": [
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-01 for 49.00 USD. Refund request received 2026-10-24, 23 days after purchase. Progress 12%, no bonus downloads, no certificate.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check on 2026-10-24 returned HTTP 200; all lessons load normally. No defect reports exist for this course in October.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_log",
+          "text": "No prior support contact from the customer. The request cites lack of time; no claim of missing, broken or misdescribed content.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_02",
+      "price_usd": 49,
+      "product": "Watercolor Landscapes for Beginners",
+      "purchased": "2026-10-01",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T16:20:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§6a, §1",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The sales page said the masterclass had 8 modules and about 12 hours of video, including a full module on pricing and client contracts. What I got is 5 modules and roughly 4.5 hours total. The pricing and contracts module does not exist anywhere in the course. Everything that is there plays fine, but it is not what I paid for.",
+      "days_since_purchase": 16,
+      "evidence": [
+        {
+          "kind": "sales_page_snapshot",
+          "text": "Archived sales page (version live on 2026-10-06) lists 8 modules, approximately 12 hours of video, and names Module 7 as pricing and client contracts.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "content_inventory",
+          "text": "Course catalog record shows 5 published modules with a total runtime of 4 hours 31 minutes. No module on pricing or client contracts is published or scheduled.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-06 for 129.00 USD. Progress 60%, bonus files downloaded, no certificate, no prior refunds.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_03",
+      "price_usd": 129,
+      "product": "Freelance Copywriting Masterclass",
+      "purchased": "2026-10-06",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T11:05:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 60
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§3, §6a",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Back on 2026-10-10 the project files for the mixing lessons were corrupted and would not open. That set me back and I lost motivation, so I want a refund now. I know the files work now, but the course was broken when I needed it.",
+      "days_since_purchase": 19,
+      "evidence": [
+        {
+          "kind": "support_log",
+          "text": "Customer reported corrupted project files on 2026-10-10 at 08:15 UTC. Replacement files were uploaded and the fix confirmed with the customer on 2026-10-11 at 10:40 UTC, about 26 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check on 2026-10-23 returned HTTP 200; all lessons and project files open normally. Download log shows the customer retrieved the replacement files on 2026-10-11.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-04 for 74.50 USD. Refund requested 2026-10-23, 19 days after purchase. Progress 48%, bonus files downloaded, no certificate.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_04",
+      "price_usd": 74.5,
+      "product": "Home Studio Audio Mixing",
+      "purchased": "2026-10-04",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-23T13:30:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 48
+      },
+      "requested": "2026-10-23",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§6a, §2",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Since 2026-10-14 the lesson videos keep freezing and spinning after a few seconds, so I cannot get through the course. I reported it right away and support told me the course works on their end, but it still does not work for me. It has been five days of this, so I consider the course broken and I want a full refund even though it is past 14 days.",
+      "days_since_purchase": 17,
+      "evidence": [
+        {
+          "kind": "support_log",
+          "text": "Ticket opened 2026-10-14 at 18:20 UTC: customer reports videos stall after a few seconds. Agent played modules 1-6 in three browsers on 2026-10-14 and 2026-10-15 without errors. On 2026-10-15 the customer confirmed the same lessons play normally on a phone using mobile data and stall only on a shared campus network.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "playback_log",
+          "text": "Server-side playback logs show stalled sessions only from the customer's campus network connection, where measured throughput was below the minimum video bitrate. Sessions from the customer's mobile connection on 2026-10-15 completed normally. No platform incidents were recorded for this course between 2026-10-01 and 2026-10-19.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-02 for 119.00 USD. Refund requested 2026-10-19, 17 days after purchase. Progress 22%, no bonus downloads, no certificate, no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_05",
+      "price_usd": 119,
+      "product": "Data Visualization with Python",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-19T10:15:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 22
+      },
+      "requested": "2026-10-19",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§6a, §6b, §2",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "This course is not what I expected. The time-blocking method is something I already knew, the examples feel dated, and the instructor's calm, slow style is not for me. I was hoping for more advanced techniques. I feel it was not as described, so I would like a refund even though I am past the 14 days.",
+      "days_since_purchase": 19,
+      "evidence": [
+        {
+          "kind": "sales_page_snapshot",
+          "text": "Archived sales page live on 2026-10-05 lists 6 modules, about 5 hours of video, a printable planner pack, and labels the course as beginner level. It names time-blocking as the core method taught in modules 2 and 3.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "content_inventory",
+          "text": "Course catalog shows 6 published modules with titles matching the sales page and a total runtime of 5 hours 12 minutes. The printable planner pack is published and was downloaded by the customer on 2026-10-07.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-05 for 59.00 USD. Refund requested 2026-10-24, 19 days after purchase. Progress 70%, bonus files downloaded, no certificate, no defect reports on file.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_06",
+      "price_usd": 59,
+      "product": "Mindful Productivity System",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-24T14:10:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 70
+      },
+      "requested": "2026-10-24",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§6a, §3",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "On 2026-10-08 I reported that all of the module 3 videos were missing, which blocked the rest of the course because later lessons build on it. The videos were only restored more than three days later. They work now, but the course was unusable for longer than it should have been and I lost my study schedule. I am requesting a full refund for the content that was not delivered in time.",
+      "days_since_purchase": 20,
+      "evidence": [
+        {
+          "kind": "support_log",
+          "text": "Ticket opened 2026-10-08 at 09:30 UTC: customer reports module 3 shows no videos. Agent confirmed the videos were missing from the hosting library the same day. Restoration was logged on 2026-10-11 at 16:10 UTC, about 79 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Access check logged on 2026-10-10 at 12:00 UTC for module 3 returned HTTP 404, more than 48 hours after the report. Access check on 2026-10-23 returned HTTP 200 for all modules.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-03 for 149.00 USD. Refund requested 2026-10-23, 20 days after purchase. Progress 40%, bonus files downloaded, no certificate, no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_07",
+      "price_usd": 149,
+      "product": "Intro to 3D Modeling in Blender",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-23T15:00:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 40
+      },
+      "requested": "2026-10-23",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§2, §6a",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "When I bought this course the sales page promised a printable recipe book with 40 bread formulas and a full module on gluten-free loaves. What I received is a recipe file with 12 formulas and no gluten-free module at all. I noticed the sales page has since been changed. The lessons play fine, but a big part of what I paid for is missing.",
+      "days_since_purchase": 15,
+      "evidence": [
+        {
+          "kind": "sales_page_record",
+          "text": "The current sales page, edited on 2026-10-12, lists a 12-formula recipe file and makes no mention of gluten-free content. The page edit log confirms copy changes on 2026-10-12 but does not store the previous text. No archived snapshot exists for 2026-10-01 through 2026-10-11 due to a snapshot outage, so the page version live on the purchase date cannot be retrieved.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "content_inventory",
+          "text": "Course catalog shows 7 published modules, none covering gluten-free baking, and one bonus recipe file containing 12 formulas. No gluten-free module is published or scheduled.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "order_record",
+          "text": "Single purchase on 2026-10-07 for 39.99 USD. Refund requested 2026-10-22, 15 days after purchase. Progress 55%, bonus files downloaded, no certificate, no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C5_08",
+      "price_usd": 39.99,
+      "product": "Sourdough Baking Fundamentals",
+      "purchased": "2026-10-07",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T08:45:00-05:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 55
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C5",
+      "designer_clause": "§3, §7, §6a",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I just checked my card statement and saw that I was charged twice for this course on the day I bought it. The checkout page froze, so I clicked the button again. I'm happy with the course and want to keep it. I only want the second charge returned.",
+      "days_since_purchase": 10,
+      "evidence": [
+        {
+          "kind": "billing_log",
+          "text": "Two completed charges of 89.00 USD for Video Editing Essentials on 2026-10-03, at 14:02 and 14:03 (UTC-4), from the same checkout session. Only one enrollment was created, and both charges are still settled.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "usage_record",
+          "text": "The single enrollment shows 45% lesson progress and bonus files downloaded on 2026-10-06. Usage applies to one course seat. The second charge has no separate seat or access attached to it.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_ticket",
+          "text": "The refund request was received on 2026-10-13, about 10 days (roughly 235 hours) after the duplicate charge. The request asks only for the extra 89.00 USD charge to be returned.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C6_01",
+      "price_usd": 89,
+      "product": "Video Editing Essentials",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-13T09:20:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "duplicate_charge": true,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 45
+      },
+      "requested": "2026-10-13",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C6",
+      "designer_clause": "§4",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Late last night I meant to buy the beginner spreadsheet course, but I bought the advanced one by mistake. I noticed when the receipt arrived this morning. I haven't opened it at all. Please refund this purchase.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "billing_log",
+          "text": "One charge of 149.00 USD for Advanced Spreadsheet Modeling was made at 2026-10-08T22:40-04:00. No other purchases were made on this account that day.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_log",
+          "text": "No lesson opens, video plays or file downloads were recorded for this course between the purchase and 2026-10-09T10:30-04:00. Progress is 0%.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_ticket",
+          "text": "The refund request was received at 2026-10-09T10:15-04:00, 11 hours 35 minutes after the charge. The customer reported it as an accidental purchase of the wrong course level.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C6_02",
+      "price_usd": 149,
+      "product": "Advanced Spreadsheet Modeling",
+      "purchased": "2026-10-08",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-09T10:30:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 0
+      },
+      "requested": "2026-10-09",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C6",
+      "designer_clause": "§4",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "This was an accidental purchase. I never meant to buy it and I've never opened it. I only noticed the charge now while going through my bank statement, so I want the full amount back.",
+      "days_since_purchase": 18,
+      "evidence": [
+        {
+          "kind": "billing_log",
+          "text": "One charge of 59.00 USD for Podcast Launch Blueprint was made on 2026-10-02 at 19:12 (UTC-4). No second or duplicate charge appears for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_log",
+          "text": "Seven lessons were opened between 2026-10-02 and 2026-10-11, with lesson progress reaching 35%. No bonus files were downloaded.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_ticket",
+          "text": "The refund request was received at 2026-10-20T14:50-04:00, about 18 days (roughly 428 hours) after the charge. No earlier contact about this purchase is on file.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C6_03",
+      "price_usd": 59,
+      "product": "Podcast Launch Blueprint",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T15:05:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C6",
+      "designer_clause": "§4, §6a, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "My banking app showed two 119 dollar entries for this course on the day I bought it, so I was charged twice. I'm enjoying the lessons, but I want the duplicate payment refunded.",
+      "days_since_purchase": 16,
+      "evidence": [
+        {
+          "kind": "billing_log",
+          "text": "On 2026-10-04 a payment attempt at 16:20 (UTC-4) created a pending authorization hold of 119.00 USD. The checkout timed out and the hold was voided and never settled. A second attempt at 16:21 (UTC-4) settled as the only completed charge of 119.00 USD for Watercolor Landscapes Masterclass.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "payment_processor_note",
+          "text": "The processor confirms that the voided hold was released back to the card on 2026-10-06. As of 2026-10-20, only one settled charge exists for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "usage_record",
+          "text": "The enrollment shows 62% lesson progress, and bonus files were downloaded on 2026-10-07. The request was received on 2026-10-20, 16 days (about 379 hours) after purchase.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C6_04",
+      "price_usd": 119,
+      "product": "Watercolor Landscapes Masterclass",
+      "purchased": "2026-10-04",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T11:40:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 62
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C6",
+      "designer_clause": "§4, §6a, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I bought this by accident while browsing on my phone last night. I tapped the wrong button and didn't mean to purchase anything. I haven't really opened it. Please reverse the charge since I reported it the next day.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "billing_log",
+          "text": "One charge of 39.99 USD for Intro to Home Coffee Roasting was made at 2026-10-12T20:05-04:00. No duplicate charge exists.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_log",
+          "text": "The first lesson was opened at 2026-10-12T20:09-04:00, and the second lesson was played at 20:11. The bonus roast-profile files were downloaded at 20:14. Lesson progress is 8%.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_ticket",
+          "text": "The refund request was received at 2026-10-13T18:30-04:00, 22 hours 25 minutes after the charge. The customer described it as an accidental purchase that had not been opened.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C6_05",
+      "price_usd": 39.99,
+      "product": "Intro to Home Coffee Roasting",
+      "purchased": "2026-10-12",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-13T18:45:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "duplicate_charge": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 8
+      },
+      "requested": "2026-10-13",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C6",
+      "designer_clause": "§4, §1, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I already owned this course. Last week I clicked a promo link and checked out again without realizing it was the same course. Now I've been charged for it twice. I'm still working through my original enrollment and want to keep it. I only want the second payment refunded.",
+      "days_since_purchase": 21,
+      "evidence": [
+        {
+          "kind": "billing_log",
+          "text": "There are two settled charges of 179.00 USD for Practical Python for Analysts on this account. The first was made on 2026-10-01 at 09:48 (UTC-4), and the second on 2026-10-15 at 21:30 (UTC-4) through a promotional checkout link.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "enrollment_record",
+          "text": "The second charge did not create a new seat. It was merged into the existing enrollment from 2026-10-01. No lessons or downloads are attributed to the second purchase. All progress (70%) and bonus downloads (2026-10-05) belong to the original enrollment.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_ticket",
+          "text": "The request was received at 2026-10-22T12:55-04:00, about 6 days 15 hours (roughly 159 hours) after the second charge. It asks only for the 2026-10-15 charge to be refunded.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C6_06",
+      "price_usd": 179,
+      "product": "Practical Python for Analysts",
+      "purchased": "2026-10-01",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T13:10:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "duplicate_charge": true,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 70
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C6",
+      "designer_clause": "§4",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "My membership renewed yesterday morning and I meant to cancel before it did. I have not watched anything or posted in the community since the renewal. Could I please get this month's charge refunded? I will cancel the membership now.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Monthly membership renewal charge of 39.00 USD processed 2026-10-03T09:00:00+00:00. Refund request received 2026-10-04T15:02:00+00:00, about 30 hours after the renewal charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Activity since renewal: 0 lessons opened, 0 community posts, 0 community comments, no logins recorded. Last lesson opened 2026-09-27; overall progress 42% unchanged since then.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_01",
+      "price_usd": 39,
+      "product": "Example Academy Monthly Membership",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-04T15:10:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-03T09:00:00+00:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 42
+      },
+      "requested": "2026-10-04",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I was renewed without realizing it and I have not used the membership at all this month. I did not watch a single lesson after the charge went through. Please refund the renewal.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Monthly membership renewal charge of 49.00 USD processed 2026-10-07T06:00:00-04:00. Refund request received 2026-10-08T11:18:00-04:00, about 29 hours after the renewal charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Activity since renewal: 0 lessons opened. One community post published 2026-10-07T21:42:00-04:00 in the members discussion board asking for feedback on a project draft, followed by one reply comment at 2026-10-07T22:05:00-04:00.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_02",
+      "price_usd": 49,
+      "product": "Example Academy Monthly Membership",
+      "purchased": "2026-10-07",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-08T11:25:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-07T06:00:00-04:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 18
+      },
+      "requested": "2026-10-08",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I logged in after the renewal only to find the cancel button and check my billing page. I did not open any lessons or post anything. I'd like a refund for the renewal that just went through.",
+      "days_since_purchase": 2,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Monthly membership renewal charge of 29.99 USD processed 2026-10-12T22:00:00+00:00. Refund request received 2026-10-14T18:05:00+00:00, about 44 hours after the renewal charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Activity since renewal: one login 2026-10-13T08:14:00+00:00 with page views limited to the dashboard and account billing settings for about 3 minutes. 0 lessons opened, 0 community posts, 0 community comments. Overall progress 63% unchanged since 2026-10-05.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_03",
+      "price_usd": 29.99,
+      "product": "Example Academy Monthly Membership",
+      "purchased": "2026-10-12",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-14T18:20:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-12T22:00:00+00:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 63
+      },
+      "requested": "2026-10-14",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The renewal charged me two days ago and I haven't touched the membership since. It's only been two days, so I think this should still count as within the refund period. Please refund it.",
+      "days_since_purchase": 2,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Monthly membership renewal charge of 59.00 USD processed 2026-10-18T08:00:00+00:00. Refund request received 2026-10-20T14:30:00+00:00, about 54.5 hours after the renewal charge. No earlier support contact on file for this renewal.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Activity since renewal: no logins, 0 lessons opened, 0 community posts, 0 community comments. Overall progress 27% unchanged since 2026-10-11.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_04",
+      "price_usd": 59,
+      "product": "Example Academy Monthly Membership",
+      "purchased": "2026-10-18",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T14:40:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-18T08:00:00+00:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 27
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5, §6a",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "My membership renewed yesterday and I want a refund. I clicked a lesson link in the weekly newsletter by mistake and closed the tab almost immediately. I did not actually watch or learn anything, and I have not posted in the community. Please refund this month's renewal.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Monthly membership renewal charge of 79.00 USD processed 2026-10-21T07:00:00+00:00. Refund request received 2026-10-22T10:15:00+00:00, about 27 hours after the renewal charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Activity since renewal: one login 2026-10-21T20:31:00+00:00 via a newsletter link. Lesson 'Module 4, Lesson 2' opened 2026-10-21T20:33:00+00:00 with the video player active for 2 minutes 10 seconds before the session ended. 0 community posts, 0 community comments. Overall progress 35%, rounded value unchanged.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_05",
+      "price_usd": 79,
+      "product": "Example Academy Monthly Membership",
+      "purchased": "2026-10-21",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T10:30:00+00:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-21T07:00:00+00:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I forgot to cancel before the renewal. The app is still installed on my phone, but I haven't opened any lessons or posted anything since the charge. I'm sending this before the two days are up. Please refund the renewal and I'll cancel.",
+      "days_since_purchase": 2,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Monthly membership renewal charge of 44.50 USD processed 2026-10-09T23:30:00-07:00. Refund request received 2026-10-11T22:50:00-07:00, about 47 hours 20 minutes after the renewal charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Activity since renewal: one automatic mobile app session refresh 2026-10-10T06:12:00-07:00 recorded as a background token renewal with no screens viewed. 0 lessons opened, 0 community posts, 0 community comments. Last lesson opened 2026-09-30; overall progress 12% unchanged since then.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_06",
+      "price_usd": 44.5,
+      "product": "Example Academy Monthly Membership",
+      "purchased": "2026-10-09",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-11T23:00:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-09T23:30:00-07:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-11",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I was finishing a lesson on the morning my membership renewed and logged off right before noon. I only noticed the renewal charge afterwards. I have not opened anything or posted since the charge went through. I would like the renewal refunded.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "billing_record",
+          "text": "Pro monthly membership renewal charge of 129.00 USD processed 2026-10-16T12:00:00+02:00. Refund request received 2026-10-17T09:00:00+02:00, about 21 hours after the renewal charge.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "activity_log",
+          "text": "Last lesson opened 2026-10-16T11:40:00+02:00, video ended 11:52:00+02:00, session logged out 11:58:00+02:00, all before the renewal charge. Activity since renewal: no logins, 0 lessons opened, 0 community posts, 0 community comments. Overall progress 58% unchanged since 11:52:00+02:00 on 2026-10-16.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C7_07",
+      "price_usd": 129,
+      "product": "Example Academy Pro Monthly Membership",
+      "purchased": "2026-10-16",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-17T09:20:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "disputed": false,
+        "duplicate_charge": false,
+        "membership_renewal_at": "2026-10-16T12:00:00+02:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 58
+      },
+      "requested": "2026-10-17",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C7",
+      "designer_clause": "§5",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "The lesson videos stopped playing for me last week. I get a black screen with a spinning wheel on every lesson. Your platform is clearly broken, so I want a full refund. I have tried for days and cannot continue the course.",
+      "days_since_purchase": 20,
+      "evidence": [
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-22 loaded the course page and played the first three lesson videos without error (HTTP 200). No outage or video delivery incident was logged between 2026-10-02 and 2026-10-22.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "support_log",
+          "text": "Support troubleshooting on 2026-10-22: the customer confirmed that videos play normally on a phone and on a second browser, but not in their main desktop browser. The customer reported a recently installed ad-blocking extension; support identified it as blocking the video player script. No defect report was filed before this date.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "purchase_record",
+          "text": "Purchased 2026-10-02; refund requested 2026-10-22 (20 days after purchase). Lesson progress 35%. Bonus files not downloaded. No prior refunds or certificate.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C8_01",
+      "price_usd": 79,
+      "product": "Spreadsheet Automation Fundamentals (digital course)",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T10:15:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C8",
+      "designer_clause": "§6b, §6a, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Module 4 will not load at all. I thought it was probably my home wifi, since my connection is not great, so I reported it and waited. It still does not work, even from a cafe connection. I have already watched part of the course and downloaded the project files, but I cannot finish without Module 4. I would like a refund.",
+      "days_since_purchase": 6,
+      "evidence": [
+        {
+          "kind": "defect_report",
+          "text": "Customer reported on 2026-10-06 at 09:00 that all Module 4 lessons fail to load. Support acknowledged the report the same day and opened an internal ticket for a missing video source.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-09 at 14:40 for the Module 4 lesson route returned HTTP 404 from the store's own server, independent of the customer's network. No fix had been deployed at that time, more than 72 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "purchase_record",
+          "text": "Purchased 2026-10-03; refund requested 2026-10-09 (6 days after purchase). Lesson progress 30% (Modules 1 to 3 only). Bonus project files downloaded on 2026-10-04. No certificate, no prior refunds.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C8_02",
+      "price_usd": 149,
+      "product": "Intro to Audio Mixing (digital course)",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-09T14:40:00+01:00",
+          "http_status": 404,
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 30
+      },
+      "requested": "2026-10-09",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C8",
+      "designer_clause": "§2, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I barely used this course myself. I let a colleague log in with my details so we could split the cost, and they watched most of it and grabbed the templates. Now the account keeps logging me out. Since I personally only watched a couple of lessons, I am still within 14 days and should get a refund.",
+      "days_since_purchase": 7,
+      "evidence": [
+        {
+          "kind": "session_log",
+          "text": "Account activity from 2026-10-08 to 2026-10-14 shows simultaneous active sessions from two different devices in separate regions on five separate days. The platform's single-session protection ended the older session each time, which produced the logouts the customer describes.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-15 loaded all course modules and template downloads normally (HTTP 200). No delivery incidents were logged for this course during the purchase period.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "purchase_record",
+          "text": "Purchased 2026-10-08; refund requested 2026-10-15 (7 days after purchase). Lesson progress on the account is 64%. Bonus template pack downloaded on 2026-10-09. No certificate, no prior refunds.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C8_03",
+      "price_usd": 59.99,
+      "product": "Freelance Copywriting Bootcamp (digital course)",
+      "purchased": "2026-10-08",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-15T08:30:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 64
+      },
+      "requested": "2026-10-15",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C8",
+      "designer_clause": "§6b, §1, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Module 2 videos never start for me. I assumed my old laptop was just too slow, so I reported it and said it was probably my fault. I have since tried my partner's newer laptop and my phone and it is exactly the same, the lesson page says the video is unavailable. I already downloaded the brush guide and watched Module 1. I would like a refund because I cannot get past Module 2.",
+      "days_since_purchase": 11,
+      "evidence": [
+        {
+          "kind": "defect_report",
+          "text": "Customer reported on 2026-10-12 at 10:30 that every Module 2 lesson shows a video unavailable message. Support logged the report the same day and noted the customer suspected their own laptop.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-16 at 11:00 from the store's own monitoring server requested the Module 2 lesson route and received HTTP 404. Internal ticket shows the Module 2 video files were missing from the hosting library after a re-upload on 2026-10-11. No fix had been deployed by the time of the check, about 96 hours after the report.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "purchase_record",
+          "text": "Purchased 2026-10-05; refund requested 2026-10-16 (11 days after purchase). Lesson progress 22% (Module 1 only). Bonus brush guide downloaded on 2026-10-06. No certificate, no prior refunds.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C8_04",
+      "price_usd": 119,
+      "product": "Watercolor Landscapes Masterclass (digital course)",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-16T11:00:00-05:00",
+          "http_status": 404,
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 22
+      },
+      "requested": "2026-10-16",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C8",
+      "designer_clause": "§2, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I will be honest, the course itself seems fine. The problem is my old phone, which is the only device I have right now. The coding exercises do not fit on the screen and the videos stutter. I know this is my own device and not your fault, but I cannot use the course this way and would like my money back. I only watched the first couple of lessons and never downloaded the practice files.",
+      "days_since_purchase": 5,
+      "evidence": [
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-19 loaded the course page, played lesson videos and opened the exercise editor normally (HTTP 200). No delivery incident was logged for this course between 2026-10-14 and 2026-10-19.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "usage_record",
+          "text": "Lesson progress is 8%: two of twenty-five lessons opened, all from a single mobile device. The bonus practice file pack shows no downloads. No sharing or simultaneous-session activity recorded.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "purchase_record",
+          "text": "Purchased 2026-10-14; refund requested 2026-10-19 (5 days after purchase). No certificate, no prior refunds for this course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C8_05",
+      "price_usd": 49.5,
+      "product": "Beginner Python for Data Analysis (digital course)",
+      "purchased": "2026-10-14",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-19T16:20:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 8
+      },
+      "requested": "2026-10-19",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C8",
+      "designer_clause": "§1, §6b",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "My membership renewed yesterday and I want that charge refunded. I have not touched the membership since it renewed. A relative sometimes borrows my login on their tablet, so if anything shows up on the account that was them, not me. I personally did not use it, so this should count as unused and be refunded under the renewal rule.",
+      "days_since_purchase": 1,
+      "evidence": [
+        {
+          "kind": "session_log",
+          "text": "After the renewal charge on 2026-10-20 at 06:00, the account opened three lessons between 2026-10-20 19:10 and 20:05 from a tablet session, and published one community post on 2026-10-20 at 20:12. A second session from a desktop browser was active on the same evening.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "Automated access check on 2026-10-21 loaded the membership library and community normally (HTTP 200). No outage or delivery incident was logged on 2026-10-20 or 2026-10-21.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "billing_record",
+          "text": "Monthly renewal charged 2026-10-20 at 06:00; refund requested 2026-10-21 at 09:30 (within 48 hours of the charge). Single charge only, no duplicate. No prior refunds on this membership.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C8_06",
+      "price_usd": 39,
+      "product": "Example Academy Monthly Membership (renewal)",
+      "purchased": "2026-10-20",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-21T09:45:00-06:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "membership_renewal_at": "2026-10-20T06:00:00-06:00",
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-21",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C8",
+      "designer_clause": "§5, §6b, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I went through the whole course over the past week, but honestly it was more basic than I hoped for my level. I'm still inside the 14-day window, so I'd like a full refund. I did get the certificate at the end, but I don't really need it.",
+      "days_since_purchase": 10,
+      "evidence": [
+        {
+          "kind": "progress_log",
+          "text": "Store records show all 24 lessons marked complete between 2026-10-04 and 2026-10-11, for 100% lesson progress. The bonus template pack was downloaded on 2026-10-05.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "certificate_record",
+          "text": "A completion certificate for this course was generated and issued to the customer's account on 2026-10-11 after the final quiz was passed.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_check",
+          "text": "An access check on the request date returned a working course page. The customer reported no delivery problem and no difference from the sales page.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C9_01",
+      "price_usd": 89,
+      "product": "Practical Spreadsheet Modeling",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-13T10:15:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": true,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 100
+      },
+      "requested": "2026-10-13",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C9",
+      "designer_clause": "§6d",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I've only watched a couple of lessons and haven't downloaded anything, so I'd like a full refund. Earlier this week support sent back part of my payment because my promo code didn't apply at checkout, but that was just fixing the price, not a real refund, so it shouldn't count against me.",
+      "days_since_purchase": 7,
+      "evidence": [
+        {
+          "kind": "refund_record",
+          "text": "On 2026-10-04 the store issued a partial refund of 30.00 USD against this course purchase, processed through the refund system, after the customer reported that a promo code was not applied at checkout.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "progress_log",
+          "text": "Store records show 3 of 25 lessons opened (12% progress). No bonus files have been downloaded and no certificate has been issued.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "An access check on the request date returned a working course page. The customer raised no delivery or content complaint.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C9_02",
+      "price_usd": 149,
+      "product": "Intro to Watercolor Landscapes",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-09T14:40:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 1,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-09",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C9",
+      "designer_clause": "§6c",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I finished the course and got my certificate, and I'm happy with it. While checking my card statement I noticed I was billed twice on the day I bought it. I'm not asking for the course itself back, just the second charge.",
+      "days_since_purchase": 17,
+      "evidence": [
+        {
+          "kind": "payment_record",
+          "text": "Store payment records show two successful charges of 59.00 USD for this same course on 2026-10-05, two minutes apart. Only one enrollment was created, and the second charge has not been refunded.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "certificate_record",
+          "text": "The single enrollment reached 100% progress, the bonus files were downloaded on 2026-10-06, and a completion certificate was issued on 2026-10-19.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "An access check on the request date returned a working course page.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C9_03",
+      "price_usd": 59,
+      "product": "Podcast Audio Editing Basics",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T09:05:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": true,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 100
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C9",
+      "designer_clause": "§4",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I realized this course overlaps too much with what I already know, so I'd like a refund. I've only opened the first couple of lessons and haven't downloaded the bonus files. I did get a refund from the academy earlier this month, so I hope that doesn't block this one.",
+      "days_since_purchase": 5,
+      "evidence": [
+        {
+          "kind": "refund_record",
+          "text": "The customer's only earlier refund was issued on 2026-10-03 for a different product, a spreadsheet course. No refund has ever been issued for this Python course.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "progress_log",
+          "text": "Store records show 2 of 25 lessons opened (8% progress). No bonus files have been downloaded and no certificate has been issued.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "access_check",
+          "text": "An access check on the request date returned a working course page.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C9_04",
+      "price_usd": 39.5,
+      "product": "Beginner Python for Data Cleaning",
+      "purchased": "2026-10-14",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-19T18:30:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 8
+      },
+      "requested": "2026-10-19",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C9",
+      "designer_clause": "§1, §6c",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "On October 8 I reported that every video in Module 3 showed an error page. I waited and checked again on October 10 and they were still broken, so I could not continue the course. They seem to work now, but I lost days of progress and I do not believe it was fixed within 48 hours. I would like a full refund.",
+      "days_since_purchase": 9,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Support ticket opened 2026-10-08 at 14:05 (UTC-4) reporting that Module 3 videos would not load. A support agent tested the Module 3 link the same day and it returned a 404 error, confirming the fault was on the store's side.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/broken"
+        },
+        {
+          "kind": "hosting_change_log",
+          "text": "The hosting change log shows the Module 3 video files were re-uploaded in a maintenance batch, but the batch is only dated as running between 2026-10-09 and 2026-10-11. Server logs for that period were lost to a retention gap, so the records cannot establish whether the repair finished before or after the 48-hour mark (2026-10-10 at 14:05). Support never sent the customer a 'fixed' notice.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "access_check",
+          "text": "An access check on the request date (2026-10-12) returned 200 for the course. This shows content works now, but it says nothing about when it was repaired.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C10_01",
+      "price_usd": 89,
+      "product": "Video Editing Foundations",
+      "purchased": "2026-10-03",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-12T10:15:00-04:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 45
+      },
+      "requested": "2026-10-12",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C10",
+      "designer_clause": "§2, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "I am within 14 days and have watched only a few lessons. I never downloaded the bonus files. I only opened the bonus page to see what was included and then closed it. Please refund me under the standard window.",
+      "days_since_purchase": 6,
+      "evidence": [
+        {
+          "kind": "download_log",
+          "text": "The download log records a completed download of the full bonus file pack (templates zip, 100% of bytes transferred) on 2026-10-06 at 20:12 (UTC+1) from the customer's signed-in session. The log separates page views from file downloads, and this entry is a download.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "progress_record",
+          "text": "Lesson progress is 12%, which is under the 20% limit. Purchase date 2026-10-05 is within 14 days of the request.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "verification_note",
+          "text": "The customer offered no screenshot or other detail that could be checked against the download record. No other sign-ins or devices appear on the account, so there is no indication of a logging error or account misuse.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C10_02",
+      "price_usd": 49,
+      "product": "Spreadsheet Automation Starter",
+      "purchased": "2026-10-05",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-11T09:40:00+01:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 12
+      },
+      "requested": "2026-10-11",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C10",
+      "designer_clause": "§1, §7",
+      "designer_intent": "deny"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "When I bought this course the sales page said it had 12 hours of video. The whole course is under 8 hours. That is a lot less than I paid for. Now the page says 8 hours, so it looks like it was changed after I bought it. I have a screenshot of the 12 hour claim.",
+      "days_since_purchase": 18,
+      "evidence": [
+        {
+          "kind": "catalog_runtime",
+          "text": "The course catalog shows 9 modules with a total video runtime of 7 hours 40 minutes. No modules were removed after the purchase date.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "sales_page_history",
+          "text": "The sales page edit history shows the runtime line was edited on 2026-10-04, two days after purchase. The previous wording was not retained, so the store cannot confirm or rule out that it said 12 hours on 2026-10-02. The current page states '8 hours of video'.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        },
+        {
+          "kind": "customer_screenshot",
+          "text": "The customer submitted a screenshot of the sales page stating '12 hours of step-by-step video'. The screenshot has no visible date. Its layout matches the page design used before 2026-10-04, but this cannot be verified against stored records.",
+          "url": "https://zero-human-peach.vercel.app/demo/terms"
+        }
+      ],
+      "id": "candidate_C10_03",
+      "price_usd": 149,
+      "product": "Brand Photography Masterclass",
+      "purchased": "2026-10-02",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-20T16:30:00-07:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": true,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 35
+      },
+      "requested": "2026-10-20",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C10",
+      "designer_clause": "§3, §7",
+      "designer_intent": "approve"
+    }
+  },
+  {
+    "card": {
+      "customer_statement": "Since October 15 none of the lessons will load for me. I contacted support that day and nothing was fixed. The course has been unusable for a week, so I want a full refund because you did not deliver the content.",
+      "days_since_purchase": 12,
+      "evidence": [
+        {
+          "kind": "support_ticket",
+          "text": "Ticket opened 2026-10-15 saying lessons 'won't load'. Support replied within 3 hours asking for the lesson name, browser and any error message. The customer did not reply, and support could not reproduce a fault when testing the course on 2026-10-15.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "playback_log",
+          "text": "The playback log shows the customer's account fully streamed 4 lessons after the reported date: two on 2026-10-16 and two on 2026-10-18. Progress rose from 18% to 30% over that time.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        {
+          "kind": "uptime_monitoring",
+          "text": "Automated monitoring recorded no errors for this course between 2026-10-10 and 2026-10-22. The access check on 2026-10-22 returned 200. The records cannot show what the customer saw on their own device, but they contradict an outage on the store's side.",
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        }
+      ],
+      "id": "candidate_C10_04",
+      "price_usd": 119,
+      "product": "Podcast Launch Blueprint",
+      "purchased": "2026-10-10",
+      "records": {
+        "access_check": {
+          "checked_at": "2026-10-22T11:05:00+02:00",
+          "http_status": 200,
+          "url": "https://zero-human-peach.vercel.app/demo/course/ok"
+        },
+        "bonus_files_downloaded": false,
+        "certificate_issued": false,
+        "prior_refunds_for_this_course": 0,
+        "progress_pct": 30
+      },
+      "requested": "2026-10-22",
+      "store_position": "The store has not approved this refund."
+    },
+    "hidden": {
+      "category": "C10",
+      "designer_clause": "§2, §7",
+      "designer_intent": "deny"
+    }
+  }
+]

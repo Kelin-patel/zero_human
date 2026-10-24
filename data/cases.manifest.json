@@ -1,0 +1,405 @@
+{
+  "algorithm": "mulberry32; largest remainder with category-order tie breaking; Fisher-Yates shuffle",
+  "base_url": "https://zero-human-peach.vercel.app",
+  "candidate_to_case": [
+    {
+      "candidate_id": "candidate_C1_05",
+      "case_id": "case_dev_01"
+    },
+    {
+      "candidate_id": "candidate_C4_04",
+      "case_id": "case_dev_02"
+    },
+    {
+      "candidate_id": "candidate_C6_01",
+      "case_id": "case_dev_03"
+    },
+    {
+      "candidate_id": "candidate_C5_04",
+      "case_id": "case_dev_04"
+    },
+    {
+      "candidate_id": "candidate_C9_02",
+      "case_id": "case_dev_05"
+    },
+    {
+      "candidate_id": "candidate_C2_06",
+      "case_id": "case_dev_06"
+    },
+    {
+      "candidate_id": "candidate_C7_02",
+      "case_id": "case_dev_07"
+    },
+    {
+      "candidate_id": "candidate_C6_03",
+      "case_id": "case_dev_08"
+    },
+    {
+      "candidate_id": "candidate_C3_02",
+      "case_id": "case_dev_09"
+    },
+    {
+      "candidate_id": "candidate_C8_05",
+      "case_id": "case_dev_10"
+    },
+    {
+      "candidate_id": "candidate_C1_08",
+      "case_id": "case_dev_11"
+    },
+    {
+      "candidate_id": "candidate_C10_02",
+      "case_id": "case_dev_12"
+    },
+    {
+      "candidate_id": "candidate_C1_01",
+      "case_id": "case_dev_13"
+    },
+    {
+      "candidate_id": "candidate_C4_09",
+      "case_id": "case_dev_14"
+    },
+    {
+      "candidate_id": "candidate_C3_06",
+      "case_id": "case_dev_15"
+    },
+    {
+      "candidate_id": "candidate_C2_02",
+      "case_id": "case_dev_16"
+    },
+    {
+      "candidate_id": "candidate_C8_06",
+      "case_id": "case_dev_17"
+    },
+    {
+      "candidate_id": "candidate_C2_04",
+      "case_id": "case_dev_18"
+    },
+    {
+      "candidate_id": "candidate_C3_10",
+      "case_id": "case_dev_19"
+    },
+    {
+      "candidate_id": "candidate_C7_04",
+      "case_id": "case_dev_20"
+    },
+    {
+      "candidate_id": "candidate_C4_08",
+      "case_id": "case_dev_21"
+    },
+    {
+      "candidate_id": "candidate_C5_03",
+      "case_id": "case_dev_22"
+    },
+    {
+      "candidate_id": "candidate_C2_01",
+      "case_id": "case_eval_01"
+    },
+    {
+      "candidate_id": "candidate_C5_06",
+      "case_id": "case_eval_02"
+    },
+    {
+      "candidate_id": "candidate_C1_06",
+      "case_id": "case_eval_03"
+    },
+    {
+      "candidate_id": "candidate_C6_05",
+      "case_id": "case_eval_04"
+    },
+    {
+      "candidate_id": "candidate_C2_08",
+      "case_id": "case_eval_05"
+    },
+    {
+      "candidate_id": "candidate_C5_08",
+      "case_id": "case_eval_06"
+    },
+    {
+      "candidate_id": "candidate_C3_09",
+      "case_id": "case_eval_07"
+    },
+    {
+      "candidate_id": "candidate_C3_05",
+      "case_id": "case_eval_08"
+    },
+    {
+      "candidate_id": "candidate_C4_05",
+      "case_id": "case_eval_09"
+    },
+    {
+      "candidate_id": "candidate_C7_05",
+      "case_id": "case_eval_10"
+    },
+    {
+      "candidate_id": "candidate_C1_02",
+      "case_id": "case_eval_11"
+    },
+    {
+      "candidate_id": "candidate_C4_02",
+      "case_id": "case_eval_12"
+    },
+    {
+      "candidate_id": "candidate_C6_02",
+      "case_id": "case_eval_13"
+    },
+    {
+      "candidate_id": "candidate_C1_07",
+      "case_id": "case_eval_14"
+    },
+    {
+      "candidate_id": "candidate_C10_04",
+      "case_id": "case_eval_15"
+    },
+    {
+      "candidate_id": "candidate_C10_03",
+      "case_id": "case_eval_16"
+    },
+    {
+      "candidate_id": "candidate_C3_03",
+      "case_id": "case_eval_17"
+    },
+    {
+      "candidate_id": "candidate_C3_08",
+      "case_id": "case_eval_18"
+    },
+    {
+      "candidate_id": "candidate_C5_05",
+      "case_id": "case_eval_19"
+    },
+    {
+      "candidate_id": "candidate_C7_01",
+      "case_id": "case_eval_20"
+    },
+    {
+      "candidate_id": "candidate_C8_04",
+      "case_id": "case_eval_21"
+    },
+    {
+      "candidate_id": "candidate_C4_03",
+      "case_id": "case_eval_22"
+    },
+    {
+      "candidate_id": "candidate_C2_03",
+      "case_id": "case_eval_23"
+    },
+    {
+      "candidate_id": "candidate_C7_06",
+      "case_id": "case_eval_24"
+    },
+    {
+      "candidate_id": "candidate_C8_03",
+      "case_id": "case_eval_25"
+    },
+    {
+      "candidate_id": "candidate_C9_04",
+      "case_id": "case_eval_26"
+    },
+    {
+      "candidate_id": "candidate_C9_03",
+      "case_id": "case_eval_27"
+    }
+  ],
+  "category_counts": {
+    "C1": {
+      "candidates": 8,
+      "dev": 3,
+      "eligible": 8,
+      "eval": 3,
+      "selected": 6
+    },
+    "C10": {
+      "candidates": 4,
+      "dev": 1,
+      "eligible": 4,
+      "eval": 2,
+      "selected": 3
+    },
+    "C2": {
+      "candidates": 8,
+      "dev": 3,
+      "eligible": 8,
+      "eval": 3,
+      "selected": 6
+    },
+    "C3": {
+      "candidates": 10,
+      "dev": 3,
+      "eligible": 10,
+      "eval": 4,
+      "selected": 7
+    },
+    "C4": {
+      "candidates": 9,
+      "dev": 3,
+      "eligible": 9,
+      "eval": 3,
+      "selected": 6
+    },
+    "C5": {
+      "candidates": 8,
+      "dev": 2,
+      "eligible": 8,
+      "eval": 3,
+      "selected": 5
+    },
+    "C6": {
+      "candidates": 6,
+      "dev": 2,
+      "eligible": 6,
+      "eval": 2,
+      "selected": 4
+    },
+    "C7": {
+      "candidates": 7,
+      "dev": 2,
+      "eligible": 7,
+      "eval": 3,
+      "selected": 5
+    },
+    "C8": {
+      "candidates": 6,
+      "dev": 2,
+      "eligible": 6,
+      "eval": 2,
+      "selected": 4
+    },
+    "C9": {
+      "candidates": 4,
+      "dev": 1,
+      "eligible": 4,
+      "eval": 2,
+      "selected": 3
+    }
+  },
+  "counts": {
+    "candidates": 70,
+    "dev": 22,
+    "eval": 27,
+    "gold": 4
+  },
+  "generation": {
+    "calls": [
+      {
+        "category": "C1",
+        "input": 3654,
+        "output": 3037,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C1",
+        "input": 6157,
+        "output": 3843,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C2",
+        "input": 3655,
+        "output": 3645,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C2",
+        "input": 6254,
+        "output": 3607,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C3",
+        "input": 3661,
+        "output": 4296,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C3",
+        "input": 7037,
+        "output": 5742,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C4",
+        "input": 3649,
+        "output": 4550,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C4",
+        "input": 6802,
+        "output": 3726,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C5",
+        "input": 3655,
+        "output": 3345,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C5",
+        "input": 6358,
+        "output": 4930,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C6",
+        "input": 3658,
+        "output": 2794,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C6",
+        "input": 5596,
+        "output": 3110,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C7",
+        "input": 3651,
+        "output": 3346,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C7",
+        "input": 6063,
+        "output": 3024,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C8",
+        "input": 3653,
+        "output": 2928,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C8",
+        "input": 5780,
+        "output": 3463,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C9",
+        "input": 3655,
+        "output": 3700,
+        "stop_reason": "end_turn"
+      },
+      {
+        "category": "C10",
+        "input": 3653,
+        "output": 4217,
+        "stop_reason": "end_turn"
+      }
+    ],
+    "effort": "high",
+    "fallbacks": "default",
+    "requested_model": "claude-opus-5-5",
+    "total_input_tokens": 86591,
+    "total_output_tokens": 67303
+  },
+  "policy_sha256": "f7a43b279cb717b6b94d578e060bf92c5fd86f7d3d3701a870f815cb4114bf5a",
+  "rejected": [],
+  "seed": 20261024,
+  "sha256": {
+    "cases.candidates.json": "1f7c01041304b134657648a0d394e936eeb36aa696f740f81a46c07a67e20faa",
+    "cases.frozen.json": "d48ac95bf219a98a40f9219482263f0d93a44032124c0c82fdac7d306b832662",
+    "gold-cases.json": "6b4890db4cd67e03cec25276b11d80121c76c09f48eb11c176e3e4fed216ef28"
+  }
+}
